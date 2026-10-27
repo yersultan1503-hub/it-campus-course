@@ -1,0 +1,8 @@
+**/.DS_Store
+**/node_modules/
+**/.vercel/
+**/.env*
+**/dist/
+04_Қызметтік/
+05_YouTube_видеолар/
+*.webloc

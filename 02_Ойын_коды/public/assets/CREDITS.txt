@@ -1,0 +1,15 @@
+Pavement: Concrete Pavement 03, Poly Haven, CC0. https://polyhaven.com/a/concrete_pavement_03
+Powered by Poly Haven (asset discovery API).
+Human animation prototype: Soldier.glb from official three.js examples, Mixamo model/animations. https://github.com/mrdoob/three.js/tree/dev/examples/models/gltf
+This is a prototype guide avatar, not a custom student model.
+
+VRoid AvatarSample_A/B/C — pixiv Inc. Authored anime student models, original VRM metadata retained. Not CC0.
+Terms: https://vroid.pixiv.help/hc/en-us/articles/4402394424089-VRoidPreset-A-Z
+Distribution source: https://github.com/madjin/vrm-samples/tree/master/vroid/stable
+Runtime: @pixiv/three-vrm (MIT).
+
+RobotExpressive — Tomas Laulhe (Quaternius), CC0 1.0. Converted/modified by Don McCurdy.
+https://github.com/mrdoob/three.js/tree/dev/examples/models/gltf/RobotExpressive
+Fox — model by PixelMannen (CC0); rigging and animation by tomkranis (CC BY 4.0); glTF conversion by AsoboStudio and scurest (CC BY 4.0). Used with original mesh and clips, scaled for campus.
+https://github.com/KhronosGroup/glTF-Sample-Assets/tree/main/Models/Fox
+https://creativecommons.org/licenses/by/4.0/
