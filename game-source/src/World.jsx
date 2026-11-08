@@ -9,16 +9,17 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
 import {createOcclusionFade} from './cameraOcclusion';
 import { LESSONS } from './content';
-import { createCameraActions, wheelIntent } from './cameraControls';
+import { createCameraActions, wheelIntent, districtOverview } from './cameraControls';
 import { movementKey, slideMove } from './movement';
 import { animateWalk } from './walkAnimation';
 import {Q1,routePose,roundedPatrol} from './districts/q1';
 const PATROLS=Object.fromEntries(Object.entries(Q1.routes).map(([id,route])=>[id,roundedPatrol(route)]));
 import {buildNetworkDistrict} from './NetworkDistrict';
+import {createObservatoryAtmosphere} from './observatoryAtmosphere';
 
-export function World({ avatar='engineer', follow, artifacts, started, selected, completed, low, reduced, paused, onSelect, onNear, onReady, onStart, cameraRef }) {
- const host=useRef(null), engine=useRef(null), props=useRef({avatar,follow,artifacts,started,selected,completed,low,reduced,paused,onSelect,onNear,onReady,onStart});
- props.current={avatar,follow,artifacts,started,selected,completed,low,reduced,paused,onSelect,onNear,onReady,onStart};
+export function World({ theme='dark', avatar='engineer', follow, artifacts, started, selected, completed, low, reduced, paused, onSelect, onNear, onReady, onStart, cameraRef }) {
+ const host=useRef(null), engine=useRef(null), props=useRef({theme,avatar,follow,artifacts,started,selected,completed,low,reduced,paused,onSelect,onNear,onReady,onStart});
+ props.current={theme,avatar,follow,artifacts,started,selected,completed,low,reduced,paused,onSelect,onNear,onReady,onStart};
  const [failure,setFailure]=useState(false);
  useEffect(()=>{
   const el=host.current;let renderer;
@@ -26,12 +27,12 @@ export function World({ avatar='engineer', follow, artifacts, started, selected,
   renderer.setPixelRatio(Math.min(devicePixelRatio,1.85));renderer.setSize(el.clientWidth,el.clientHeight);renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=.92;
   el.appendChild(renderer.domElement);renderer.domElement.setAttribute('aria-label','Байланыс зерттеу ауданы: талшықты желі, зертхана және жоспарланған аймақтар');
   const scene=new THREE.Scene();scene.background=new THREE.Color('#dce9f2');scene.fog=new THREE.Fog('#dce9f2',110,190);
-  const camera=new THREE.PerspectiveCamera(55,el.clientWidth/el.clientHeight,.1,210);camera.position.set(...Q1.view.position);
-  const controls=new OrbitControls(camera,renderer.domElement);controls.target.set(...Q1.view.target);controls.enableDamping=true;controls.dampingFactor=.09;controls.rotateSpeed=.65;controls.panSpeed=.8;controls.zoomSpeed=.85;controls.maxPolarAngle=Math.PI*.485;controls.minPolarAngle=.06;controls.minDistance=2.2;controls.maxDistance=80;controls.enablePan=true;controls.screenSpacePanning=false;controls.mouseButtons={LEFT:THREE.MOUSE.ROTATE,MIDDLE:THREE.MOUSE.DOLLY,RIGHT:THREE.MOUSE.PAN};controls.touches={ONE:THREE.TOUCH.ROTATE,TWO:THREE.TOUCH.DOLLY_PAN};controls.update();
-  const cameraActions=createCameraActions(camera,controls,()=>el.clientHeight,Q1.view);cameraRef.current=cameraActions;
+  const camera=new THREE.PerspectiveCamera(55,el.clientWidth/el.clientHeight,.1,210);camera.position.set(...districtOverview(Q1.view,camera.aspect).position);
+  const controls=new OrbitControls(camera,renderer.domElement);controls.target.set(...districtOverview(Q1.view,camera.aspect).target);controls.enableDamping=true;controls.dampingFactor=.09;controls.rotateSpeed=.65;controls.panSpeed=.8;controls.zoomSpeed=.85;controls.maxPolarAngle=Math.PI*.485;controls.minPolarAngle=.06;controls.minDistance=2.2;controls.maxDistance=160;controls.enablePan=true;controls.screenSpacePanning=false;controls.mouseButtons={LEFT:THREE.MOUSE.ROTATE,MIDDLE:THREE.MOUSE.DOLLY,RIGHT:THREE.MOUSE.PAN};controls.touches={ONE:THREE.TOUCH.ROTATE,TWO:THREE.TOUCH.DOLLY_PAN};controls.update();
+  const cameraActions=createCameraActions(camera,controls,()=>el.clientHeight,()=>districtOverview(Q1.view,camera.aspect));cameraRef.current=cameraActions;
   function wheel(e){if(props.current.paused)return;const intent=wheelIntent(e,el.clientHeight);if(intent.zoom)return;e.preventDefault();e.stopImmediatePropagation();cameraActions.pan(intent.x,intent.y);}
   renderer.domElement.addEventListener('wheel',wheel,{capture:true,passive:false});
-  scene.add(new THREE.HemisphereLight('#e4f0ff','#7b887c',1.1));
+  const hemisphere=new THREE.HemisphereLight('#e4f0ff','#7b887c',1.1);scene.add(hemisphere);
   const sun=new THREE.DirectionalLight('#fff1dc',3.1);sun.position.set(-18,19,12);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-30;sun.shadow.camera.right=30;sun.shadow.camera.top=30;sun.shadow.camera.bottom=-30;sun.shadow.normalBias=.025;sun.shadow.bias=-.00015;scene.add(sun);
   const back=new THREE.DirectionalLight('#c2ddf3',.4);back.position.set(12,10,-20);scene.add(back);
   const pmrem=new THREE.PMREMGenerator(renderer),room=new RoomEnvironment();
@@ -49,7 +50,8 @@ export function World({ avatar='engineer', follow, artifacts, started, selected,
   function sign(p,text,w=2.7,h=1.8,x=0,y=2,z=1.8,bg='#163047'){
    const can=document.createElement('canvas');can.width=512;can.height=256;const c=can.getContext('2d');c.fillStyle=bg;c.fillRect(0,0,512,256);c.fillStyle='#f5f5e9';c.textAlign='center';c.textBaseline='middle';c.font=`700 ${text.length>5?65:125}px Arial`;c.fillText(text,256,135,480);const t=new THREE.CanvasTexture(can);t.colorSpace=THREE.SRGBColorSpace;const o=mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({map:t}),p,x,y,z);o.castShadow=false;return o;
   }
-  const {stationGroups,markers,doors,trees,lamps,signals,colliders,cameraOccluders}=buildNetworkDistrict(scene,LESSONS,sign,{surfaceTextures});
+  const {stationGroups,markers,doors,trees,lamps,signals,colliders,cameraOccluders,setTheme:districtTheme}=buildNetworkDistrict(scene,LESSONS,sign,{surfaceTextures});
+  const atmosphere=createObservatoryAtmosphere(scene);let lightingTheme='';
   // Articulated hips, knees, ankles, shoulders and elbows share a distance-driven gait.
   function person(x,z,color='#244c70',scale=1,variant=0){
    const g=group(scene,x,.1,z);g.scale.setScalar(scale);const rig=group(g),body=group(rig,0,.78,0);
@@ -143,10 +145,12 @@ export function World({ avatar='engineer', follow, artifacts, started, selected,
   let focusTarget=null,focusPosition=null,lastSelected=-1,lastFollow=null;const previousPlayer=new THREE.Vector3(),occlusion=createOcclusionFade();
   const cancelFocus=()=>{focusTarget=null;focusPosition=null;};controls.addEventListener('start',cancelFocus);
   let raf,previous=performance.now(),lastNear=-1,elapsed=0;const projected=new THREE.Vector3();
-  function resize(){const w=el.clientWidth,h=el.clientHeight;camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h);}
+  function resize(){const w=el.clientWidth,h=el.clientHeight;camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h);if(!props.current.started){const view=districtOverview(Q1.view,camera.aspect);camera.position.set(...view.position);controls.target.set(...view.target);controls.update();}}
   const ro=new ResizeObserver(resize);ro.observe(el);
   engine.current={scene,renderer,camera,player,target};props.current.onReady();
   function animate(now){raf=requestAnimationFrame(animate);if(now-previous<(props.current.paused?200:1000/(props.current.low?30:60)))return;const dt=Math.min((now-previous)/1000,.05);previous=now;elapsed+=dt;const p=props.current;controls.enabled=!p.paused;renderer.shadowMap.enabled=!p.low;const ratio=Math.min(devicePixelRatio,p.low?1:1.85);if(renderer.getPixelRatio()!==ratio)renderer.setPixelRatio(ratio);
+   if(lightingTheme!==p.theme){lightingTheme=p.theme;const night=p.theme!=='light';scene.background.set(night?'#051321':'#dce9f2');scene.fog.color.copy(scene.background);scene.fog.near=night?80:110;scene.fog.far=night?175:190;hemisphere.color.set(night?'#8cb2e4':'#e4f0ff');hemisphere.groundColor.set(night?'#18372e':'#7b887c');hemisphere.intensity=night?.65:1.1;sun.color.set(night?'#aacbff':'#fff1dc');sun.intensity=night?.85:3.1;back.intensity=night?.3:.4;scene.environmentIntensity=night?.16:.45;renderer.toneMappingExposure=night?1:.92;}
+   districtTheme(p.theme,p.low);atmosphere.update(p.theme,p.low);
    if(p.paused){sprint=false;keys.clear();tapUntil.clear();if(keyboardMove){target.copy(player.g.position);keyboardMove=false;}}
    previousPlayer.copy(player.g.position);let movedDistance=0;
    if(p.started&&!p.paused){const pressed=key=>keys.has(key)||(tapUntil.get(key)||0)>now;let dx=Number(pressed('right'))-Number(pressed('left')),dz=Number(pressed('back'))-Number(pressed('forward'));

@@ -1,152 +1,112 @@
-# Q1 render polish · интеграция және кейіпкер аудиті
+# Q1 обсерваториясы және жылдық ойын интеграциясы
 
-Күні: 2026-11-08. Күйі: **жарық/материал/қозғалыс build ДАЙЫН; нақты сұралған кейіпкерлерді ауыстыру үшін архивтер жетіспейді**. Оқшау build, жарияланған жоқ.
+Күні: 2026-11-08. Күйі: **іске асырылған; соңғы build және 44/44 тест дайын**. Жариялау/commit жасалған жоқ. Түпнұсқа Desktop IT_CAMPUS, production және интеграцияның year-pilot файлдары өзгертілмеді.
 
-Ең соңғы тексеру: **33/33 тест өтті**, камера кедергісінің түзетуі де қосылған. Алдыңғы аудан қайта құруының сипаттамасы төменде сақталған; жаңа render polish және актив аудитінің нақты мәртебесі файл соңындағы бөлімде.
+## Ата-чатқа берілетін артефакт
 
-## Қайдан алу және қалай біріктіру
+Canonical build: `/Users/ersultan/Documents/Codex/2026-11-08/it-campus-year-game/outputs/game-source/dist/client`.
 
-- Source: `/Users/ersultan/Documents/Codex/2026-11-08/it-campus-year-game/outputs/game-source`.
-- Жаңартылған static build: `/Users/ersultan/Documents/Codex/2026-11-08/it-campus-year-game/outputs/game-build`.
-- Ортақ чат game-build ішін пилоттың `public/game/` ішіне көшіреді. Осы тапсырмадағы «жергілікті жоймау» талабы бойынша файлдар жойылмады; жаңа index.html ағымдағы bundle-ға сілтейді. Ескі build hash файлдары қолданылмай қалуы мүмкін.
-- Кіру: `/game/?lesson=q1-network-01`; қайту: `/?lesson=q1-network-01#result`.
-- `/api/*` ортақ same-origin серверге берілуі тиіс. Static build жеке өзі аутентификация/бағалау сервері емес. `dist/server`, `.openai` және Sites worker файлдары ортақ Python пилотына көшірілмейді.
+Осы каталогтың ішін ортақ сервердің `public/game/` ішіне ата-чат көшіреді. Build base `/game/`. Бұл итерацияда ескі `outputs/game-build` жаңартылмады: соңғы нұсқа **game-source/dist/client** ішінде. `dist/server`/`.openai` retained Sites packaging артефакттары Python серверге қосылмайды.
 
-Desktop IT_CAMPUS түпнұсқасы, production, бөлек standalone ойын және басқа чат файлдары өзгертілмеді. Бұл нұсқа тек own game-source/game-build ішінде дайындалды. Мектептің қазіргі Q3 материалына өзгеріс жоқ.
+Build `--emptyOutDir false` арқылы орындалды, жергілікті файлдар жойылған жоқ. HTML ағымдағы hashed JS/CSS-ке ғана сілтейді; ескі hashed файлдар сақталуы мүмкін. Source ішіндегі `work/` — preview config және оқшау QA деректері; public build-ке немесе GitHub-қа қоспау керек. `.gitignore` оларды, node_modules пен dist-ті қамтиды. Жұмыс қалтасындағы SQLite QA fixture ортақ оқушы базасы емес.
 
-## Q1 енді Q3 көрінісін қайталамайды
+## Q1: нақты Three.js обсерваториясы
 
-Бұрынғы шеңберлі қалашық, субұрқақ/глобус, қос канал, алтын бағаналар және бір пішінді сегіз ғимарат алынды. Олардың орнына:
+Референс: ата-чаттың `public/assets/observatory-night.png` суреті тек оқылды; оның өзі фон ретінде көшірілген жоқ. Көрініс нақты Three.js объектілерімен жасалды:
 
-- 46×40 м шамасындағы сұр инженерлік алаң, түзу магистраль, асимметриялы зерттеу блоктары, қызмет жолдары және бөлек кіреберіс қақпасы.
-- Негізгі sawtooth шатырлы, әйнек қасбетті желі зертханасы; бір еңісті шеберхана; биік address tower; DNS күмбезі; қос блокты қауіпсіздік қақпасы; қабырғалы шифрлау vault; сәйкестендіру порталы; қоршалған кеңею алаңы. Бұлар түсі ғана ауысқан бір модель емес, сегіз геометриялық пішін.
-- Көрінетін оптикалық кабель магистралі мен тармақтар, сыртқы patch-rack шкафтары, күй индикаторлары, үстіңгі utility bridge, антенналы байланыс мұнарасы. Кабельдегі жарық бөлшектері — әлемнің түсіндірмелік декоры, сервер растаған миссия нәтижесі емес.
-- Жол/кіреберісті бос қалдыратын жоспарлы rain garden, жіңішке ағаштар, аласа бұталар, LED көше шамдары, шағын жұмыс орындықтары және алыстағы жасыл жер бедері. Бұрынғы кездейсоқ тығыз ағаш сақинасы жоқ.
-- Бір ғана желі миссиясы ойнатылады. Қалған нысандарда КЕЙІН маңдайшасы бар, сабақ ашылмайды. Болашақ floating белгілер таңдаусыз кезде ықшам нөмір түрінде; толық атауы accessible name/title ішінде, таңдағанда атауы көрінеді.
+- Негізгі зертхана төбесіндегі ашық күмбез, металл меридиан қабырғалары, жиек сақинасы, телескоп түтігі және жылы ішкі жарық.
+- Түнгі аспан, 1050 жұлдыз нүктесі, ай, артқы тау силуэттері. Бұлар физикалық сахнада орналасқан, ауыр postprocessing жоқ.
+- Алдыңғы/бүйір қасбеттердегі жылы emissive терезелер; биік ғимараттағы жарық қабаттар; cyan fibre магистралі, корпус жиектері және бар packet анимациясы.
+- 72 instanced ағаш діңі және 216 тәж деңгейі бар периметр; бар rain garden-дерге қосымша жапырақ/бұта/гүл детальдары.
+- Төрт shadowless path light + күмбездің бір жарығы; арзан shader ground pools. Жеңіл режимде екі path light, жарты орман, 350 жұлдыз, ground pools және көлеңке сөндіріледі.
+- Бояу/металл/PBR paving профилі, қолданыстағы normal/roughness текстуралары, bevel қырлар сақталды. Күн/түнде material түстері мен emissive мөлшері нақты өзгереді.
 
-## Кейіпкерлер және қозғалыс
+Сахна күн/түн таңдауы сайтпен ортақ **localStorage `campus-theme`: `light` / `dark`** кілтін пайдаланады. Storage event басқа беттен келген таңдауды да қабылдайды. Кілт болмаса Q1 әдепкіде түнгі көрініспен ашылады. Q3-те бұл таңдау тек сыртқы панель түсіне қатысты деп аталады; түпнұсқа legacy renderer өзгертілмеген.
 
-Q1 негізгі аватары — бұрынғы cyan әскери guide моделі емес, авторлық VRoid civilian `student-B.vrm`. Кіреберістегі не settings ішіндегі таңдау:
+Бұл иллюстрацияның pixel-perfect/photorealistic көшірмесі деген мәлімдеме емес. Нақты FPS мектеп құрылғысында өлшенген жоқ. High нысанасы 60 FPS/DPR cap 1.85, low 30 FPS/DPR 1; VRM/Optimus көлемі және үлкен JS chunk әлі өнімділік факторы.
 
-1. Желі инженері — `student-B.vrm`.
-2. Зерттеуші — `student-A.vrm`.
-3. Сервис роботы — `campus-robot.glb`.
+## Кейіпкерлер мен камера сақталды
 
-NPC құрамы: екі азаматтық зерттеуші (`student-A`, `student-C`) және бір авторлық сервис роботы. Fox/әскери guide Q1 сахнасында жүктелмейді. Олардың бұрын көшірілген public активтері түпнұсқа кітапханада қалды, бірақ қолданылмайды. Бұл жаңа авторлық/custom персонаждар деген мәлімдеме емес; бар лицензияланған активтердің Q1-ге сай таңдауы. Авторлар/лицензия сілтемесі settings ішінде сақталған.
+Ата-чат қосқан **нақты** `naruto.glb`, `jerry.glb`, `tom.glb`, `optimus.glb` және CREDITS өзгертілмеді. `guestCharacters.js` өзгертілмеді:
 
-Зерттеушілер тікбұрышты жаяу жолмен, робот қызмет дәлізімен жүреді; орталық субұрқақты айналмайды. VRM skeleton IK, қашықтыққа тәуелді қадам, тізе/тобық, қарама-қарсы қол қозғалысы, idle кезіндегі тоқтау және жыпылықтау сақталды. Робот нақты Idle/Walking clips пайдаланады; жеке Run клипі жоқ, sprint кезінде Walking қарқыны бейімделеді. Reduced-motion фондық сапарды тоқтатады, player негізгі жүрісі сақталады.
+`71e3b4e6d224bea2faac6839843e97252e3b1ee09d4adeebf33aa4e7553ecf87`
 
-Модель жүктеліп жатқанда primitive алмастырғыш көрсетілмейді; басталған ойында жүктелу белгісі бар. Авторлық модельді жүктеу сәтсіз болса ғана articulated жеңіл avatar қолданылады. Avatar таңдауы бағаға/миссия дәлеліне әсер етпейді; камера, NPC-лер және миссия қайта құрылмайды.
+Naruto/Jerry player және NPC таңдаулары, Naruto idle/run blend пен horizontal root-motion removal, Jerry gait, Tom (-5,-11) қонағы және Optimus transform көрінісі сақталған. Tom/Optimus-қа жалған walk clip қосылған жоқ. Бұрынғы asset-audit-тегі «файл алынбаған» қорытындысы осы ата-чат импортынан кейін runtime күйін сипаттамайды; қазіргі active файлдар — public/assets ішіндегі нақты GLB-лер.
 
-## Тоқсандарды бөлу
+WASD/ЦФЫВ/бағыт, Shift, trackpad orbit/pan/pinch, follow/overview және camera obstruction fade сақталған. Fade theme өзгергенде де түпнұсқа материалдың түсі/emissive мәнімен жаңарады. Кедергі камераны/ойыншыны жылжытпай, нақты баған/ғимарат бөлшегін уақытша мөлдірлейді.
 
-Толық келісім: `DISTRICTS.md`.
+Portrait overview ауданға орын қалдыру үшін кеңейтіледі және жоғары кадрға орналастырылады; follow камерасының бастапқы қашықтығы өзгермеген. Mobile белгілерінің көрінетін көлемі кемінде 34px, қосымша hit area бар. 390×844 шолуда сегізі де кадрға сыйды; толық атаулар accessible name/title ішінде.
 
-- `src/districts/q1.js` — Q1 жоспары, ғимарат footprint/entry/бағыты, bounds, camera view, кейіпкер активтері, маршруттар және инфрақұрылым коллайдерлері.
-- `src/NetworkDistrict.js` — тек Q1 архитектура/ландшафт scene factory.
-- Shared camera/movement/gait/API қайта қолданылуы мүмкін. Q2/Q3/Q4 үшін жеке кеңістік жоспары, архитектура, орта және кейіпкер құрамы бекітілуі тиіс. Q1 қаласын тұтас көшіріп, түсін ғана ауыстыру қабылданбайды.
-- Q2/Q4 іске асырылған жоқ; мазмұны түгенделмей бекітілмеді. `districtFor` Q1-ді ғана қолдайды, белгісіз тоқсанды Q1 ретінде үнсіз көрсетпейді. Бұл build Q1 пилоты болып қалады.
+## Q1: 12 оқу миссиясы
 
-## Өзгерген файлдар
+Ойын ID-лері: `q1-network-01`, `q1-02`, `q1-03`, `q1-04`, `q1-05`, `q1-06`, `q1-08`, `q1-09`, `q1-10`, `q1-11`, `q1-12`, `q1-14`.
 
-Жаңа: `src/districts/q1.js`, `src/NetworkDistrict.js`, `tests/district.test.mjs`, `tests/district-assets.test.mjs`, `DISTRICTS.md`.
+**q1-07 / q1-13 / q1-15 бағалау ресурстары ойынға қосылмайды.** БЖБ/ТЖБ сайтта қалады. Тоқсанның дайын емес сабақтары ойдан қосылған жоқ.
 
-Өзгерген: `src/World.jsx` (сахна/аватар/NPC), `src/content.js` (бір координаттар көзі), `src/App.jsx` (Q1 кіреберісі/аватар таңдауы), `src/styles.css` (инженерлік UI), `src/movement.js` (аудан bounds және rectangle footprint, legacy default сақталған), `src/cameraControls.js` (ауданға сай reset view, legacy default сақталған), `src/campusAudio.js` (субұрқақ орнына баяу желдеткіш фоны), `tests/camera-controls.test.mjs` (Q1 reset тексеруі).
+Қаланың сегіз орны — зертхана бағыттары, сабақ нөмірлері емес. Алғашқы жетеуі желі/қауіпсіздікке, соңғысы санау жүйелері мен логиканың бес сабағына бағыттайды. Бұрынғы бос expansion pad енді функционал Logic Observatory корпусына ауысты. «Сабақтар» панелінде екі Q1 топ бар, сервер тізіліміндегі атаулар/locked/progress күйлері `/api/course` арқылы жаңарады. Ашық екені туралы шешім клиентте қабылданбайды: кез келген миссияны ашқанда сервер қайта тексереді.
 
-Алдыңғы layout түзетулері сақталған: мәтіндік балама intro card ішінде CTA астында, settings оң жақта; басталғандағы мәтіндік тапсырма quest card ішінде. Оқушы UI-да internal mission ID жоқ.
+Алғашқы `NetworkMission` және оның exact evidence келісімі өзгерген жоқ. Hash-тер:
 
-## Миссия/API сақталған
+- `NetworkMission.jsx`: `9c5d2afb8a47e92e63427c7923511e8f4290ed888798cb8a8ac8eecbd37e769f`
+- `campusApi.js`: `58ecce2155ea6b8215c22a8664f001f0137fc7e1c532b868c9fe95251eef5fa4`
 
-`q1-network-01` / `network-connect-01` өзгерген жоқ. `/api/me`, `/api/attempts`, `/api/attempts/<id>/submit`; `credentials: same-origin`, POST JSON және `X-Campus-Request: 1` сақталған. Токен/пароль/жергілікті ұпай сақтау жоқ.
+Қалған 11 Q1 сабағы және 8 Q3 сабағы `GenericMission` қолданады:
 
-Evidence — `{roles:{switch,router,node},links:[[from,to],...],fault}`. Клиент score/pass жібермейді. Желі рөлдері, pc1-switch / pc2-switch / switch-router және ажыратылған uplink ақауы сол қалпы. Сервер критерийлерін көрсетеді; қате болса қайта жіберуге болады. Мәтіндік тапсырма сол миссияның қолжетімді баламасы, қосымша үй жұмысы емес.
+1. `/api/me`: аккаунт/пароль ауыстыру талабы.
+2. `GET /api/lesson/:id`: title/objective/missionId және сервер берген questions/options. 401/403 экранда дұрыс көрсетіледі; жабық сабақтың attempts сұрауы жасалмайды.
+3. Оқушы басқанда `POST /api/attempts {lessonId, missionId}`.
+4. `POST /api/attempts/:attemptId/submit {answers:{questionId:optionId}}`.
+5. **Тек сервердің `passed === true` жауабы** табыс болып саналады. Клиентте жауап кілті, ұпай есептеу, XP арқылы ашу немесе localStorage прогресі жоқ. Қате жауаптан кейін өзгертіп сол әрекетпен қайта жіберуге болады. Желі қатесінде жауаптар жоғалмайды.
+6. Материал/рефлексия/мұғалім қадамы үшін `/?lesson=<id>#result` сілтемесі бар. Толық сабақ аяқталды не келесі сабақ ашылды деп клиент өзі шешпейді.
 
-Сервер растағаннан кейін түсіндірме/рефлексия үшін сайтқа қайтарады. Келесі сабақ мұғалім мақұлдауынсыз ашылды деп көрсетілмейді. NetworkMission/campusApi осы дизайн итерациясында өзгертілмеді. Ортақ чат бұған дейін нақты сервердің evidence қабылдауын растаған; бұл итерацияда толық серверлік ағын қайта жүргізілген жоқ.
+Барлық сұраулар бұрынғы same-origin credentials + POST JSON/`X-Campus-Request: 1` келісімін сақтайды. `courseMissions.js` белгілі ID-лерді/сұрақ пішімін тексереді, бірақ дұрыс жауапты білмейді. Сұрақтар React мәтіні ретінде шығады; HTML орындалмайды.
 
-## Build және тексеру
+## Q3: басқа қала және бөлек checkpoint
 
-game-source ішінде Node PATH-пен:
+`/game/?lesson=q3-01` … `q3-08` Q1 World компонентін жүктемейді. Ата-чат берген ескі кампус iframe арқылы ашылады:
 
-```sh
-node node_modules/vite/bin/vite.js build --emptyOutDir false
-node scripts/prepare-sites-build.mjs
-node --test tests/*.test.mjs
-```
+`/legacy-q3/game/?lesson=html|table|links|css|media|js|quiz|db`
 
-Соңғы нәтиже: **27/27 тест өтті**. Қамтылғаны:
+Сервердің `legacyGameUrl` мәні осы known mapping-пен сәйкес local path болса қабылданады; сыртқы/басқа URL-ға iframe бағытталмайды. Ағымдағы бекітілген mapping fallback ретінде бар. Legacy файлдарды бұл чат өзгертпейді және бұл build-ке көшірмейді — ортақ серверде оларды ата-чат береді.
 
-- Нақты asset файлдарын браузерсіз GLTF/VRM parser арқылы ашу; үш civilian skeleton-ының қажетті normalized bones/аяқ өлшемдері; қашықтыққа тәуелді gait-ті сол bones-қа қолданып, finite transforms тексеру.
-- Нақты роботтың Idle/Walking клиптері AnimationMixer арқылы уақыт өткенде skeleton transforms өзгертеді.
-- Әр ғимараттың кірісі және маршруттардың көптеген нүктесі нақты footprint-тен тыс; магистраль бұрынғы fountain collider-іне соғылмайды; rack/қабырға/аудан шекарасы қозғалысты тоқтатады.
-- Headless scene құрастыру: 8 бөлек архитектура түрі, бір функционал есік, 7 КЕЙІН белгісі, finite geometry және mesh саны шегі.
-- Q1 camera reset, еркін камера/trackpad, физикалық пернелер, gait және бұрынғы retained тесттер.
-- API evidence/ID/header/credentials және сервер/желі қателері; Sites packaging файлдарының болуы.
+Айқын «Сабаққа оралу» және «Серверлік миссияға кіру» сыртқы панельде тұрады. Iframe XP/localStorage/postMessage **бағаға не unlock-қа кірмейді**. Q3 checkpoint та дәл generic API арқылы серверде тексеріледі. Q3 суреті `qa/q3-mobile.jpg` ішінде оның басқа қала екенін көрсетеді.
 
-Дайын `dist/client` game-build ішіне толық көшірілді; `/game/` HTML JS/CSS жолдары мен Q1 avatar активтері бар екені тексерілді. Build шамамен 52.3 МБ (бар public активтерімен); JS шамамен 1.04 МБ, gzip 281 КБ. Үлкен chunk ескертуі сақталды.
+## Файлдар
 
-## Шектеулер және үйлестіру QA
+Жаңа: `GenericMission.jsx`, `courseMissions.js`, `courseTheme.js`, `CameraPanel.jsx`, `observatoryAtmosphere.js`, `tests/course-missions.test.mjs`, `tests/observatory.test.mjs`.
 
-Браузер қолданылған жоқ. Headless tests — визуал QA немесе FPS өлшемі емес. Орталық чат мына тексерулерді жалғастырады:
+Өзгерген: `App.jsx`, `World.jsx`, `NetworkDistrict.js`, `districts/q1.js`, `content.js`, `styles.css`, `cameraControls.js`, `cameraOcclusion.js` және оларға қатысты tests. AGENTS/DISTRICTS осы жұмысқа сай жаңартылды. Қосымша npm тәуелділігі орнатылған жоқ.
 
-- Кең/тар экранда жаңа ауданның жалпы көрінісі, көше масштабы, ғимарат силуэттері, таңбалар мен intro card қабаттасуы.
-- Үш аватарды таңдау, нақты текстуралар/бағыт/аяқтың жерге тірелуі, жаяу жүру/sprint/idle және model-load failure.
-- NPC бұрылыстары, камераның ғимарат ішінде қалмауы, шекара/кіреберіс, reduced-motion және төмен графика.
-- Мектеп ноутбугында FPS, VRM жүктеу уақыты, әлсіз интернет. ≤15 МБ алғашқы жүктеу мақсаты орындалды деген мәлімдеме жоқ; texture/model оңтайландыру бөлек қажет болуы мүмкін.
-- Сол origin-де login → mission → сервер feedback → pass → сайттағы рефлексия → мұғалім review. Аккаунт бөлінуі/сессия/идемпотенттік сервер тексеруі ортақ интеграцияға тиесілі.
+## Қабылдау тексеруі
 
-Автоматикалық pathfinding жоқ: click-to-walk бұрынғыдай тікелей мақсатқа жүреді және қабырға бойымен сырғиды; күрделі бұрышта WASD/бағыттау пернелерімен айналып өтуге болады. Оқу панелін ашу үшін дәл 3D қозғалыс міндетті емес. Avatar таңдауы осы бет сессиясына ғана сақталады; ортақ профиль схемасы өзгермеді.
+Соңғы build + packaging + барлық тесттер: **44/44 өтті**. Қамтылғаны:
 
-## Соңғы итерация: жарық, материал, анимация және нақты кейіпкер аудиті
+- 12 Q1 / 8 Q3 ID, assessments exclusion, әр generic сабаққа дұрыс lessonId/missionId, тек answers жіберу, сервердің false/pass және 401/403/error жағдайлары.
+- Registry атауы/құлып күйі, кеңістіктегі топты client дерегінің ауыстырмауы, Q3 local iframe URL шектеуі.
+- Actual GLB/VRM құрылымы мен authored clips, gait, камера/keyboard, mobile overview, 350ms W кедергі regression-ы.
+- Күмбез/телескоп/жарық терезелердің геометриясы, night/day theme ауысуы, low режиміндегі light/instance шектері, mission entry/коллайдерлердің сақталуы.
 
-**Render polish дайын; Naruto/Tom/Jerry/Transformers активтерін ауыстыру орындалған жоқ.** Себебі жеке кейіпкер атауы емес: нақты ресми модель архивтері осы сессияда қолжетімсіз. Толық дәлел мен кандидаттар: `asset-audit/CHARACTER_AUDIT.md`; ресми API receipt: `asset-audit/sketchfab-metadata.json`.
+Нақты backend `Store` оқшау QA SQLite арқылы қолданылып, **19 public generic lesson payload** алынды: 11 Q1 + 8 Q3. Бәрі frontend validator/evidence serializer арқылы өтті, private correct/feedback кілттері payload-та болмады. Ортақ оқу нәтижесіне тест бағасы жазылған жоқ. Бұл тест дүкені `work/` ішінде, public емес.
 
-### Ойынға енгізілгені
+Жеке localhost 8897 preview браузерде тексерілді:
 
-- Жарық балансы: hemisphere fill азайтылды, бағытталған жылы күн мен салқын backlight қайта реттелді; экспозиция .92. Көлеңке bias нақтыланды, жақын аудан тұманнан анық қалуы үшін fog аралығы 110–190 м болды.
-- Three.js-тің орнатылған RoomEnvironment + PMREM арқылы бейтарап reflection environment жасалды; сырттан HDR/скрипт жүктелмейді. Бұл studio reflection көзі, өлшенген outdoor жарық симуляциясы емес.
-- `src/districtMaterials.js`: ұсақ bevel тек ірі конструкция қырларына, бетон/бояу/металл roughness айырмасы; glass dielectric/clearcoat. Материалдар бір кеш арқылы қайта қолданылады.
-- Бар Poly Haven normal/roughness суреттері жолдарға қосылды. UV өлшемі жолдың ұзындығына тәуелсіз 1.5 м масштабта сақталады; ғимараттарға панель жіктері мен sill детальдары қосылды. Қазіргі актив лицензиялары/сілтемелері өзгермеді.
-- Аяқ астына арзан radial contact shadow қосылды; бөлек экрандық AO/bloom pass жоқ. Кабель ізі .085 м болып анықталды.
-- High режимінде рендер нысанасы 60 FPS, DPR cap 1.85; low — 30 FPS/DPR 1. Бұл мақсат, құрылғыда өлшенген нәтиже емес.
-- NPC маршруттары quadratic corner fillet арқылы жұмырланды; орын/бағыт секірісі азайды. Camera follow, есік және marker интерполяциясы dt-ге тәуелді болды. Player қозғалыс пернелері/соқтығыс логикасы және authored skeleton/clip жүйесі сақталды.
+- Түнгі/күндізгі нақты сахна және theme батырмасы.
+- 390×844: сегіз marker кадрда, header/intro батырмалары сыйды; viewport соңында қалпына келтірілді.
+- Reduced motion + low графика checkbox-тары, Naruto-мен бастапқы кіру/W350ms қозғалысы; фондық қозғалыс тоқтайды, player controls жұмыс істейді.
+- Жанды `/api/course` атаулары, Q1-14 mission title/objective/start экраны.
+- Q3-01 iframe: шын legacy кампус және жеке серверлік checkpoint батырмасы.
+- Console errors тізімі бос болды. Нақты оқу бағаларын өзгерту үшін браузерде submit орындалған жоқ; бұл ағынның сервер бағалауын ата-чаттың backend tests-і және frontend contract tests жабады.
 
-Өзгерген: `src/World.jsx`, `src/NetworkDistrict.js`, `src/districts/q1.js`, `tests/district.test.mjs`. Жаңа: `src/districtMaterials.js`, `tests/district-materials.test.mjs`, `scripts/audit-character-candidates.py`, `asset-audit/`.
+Скриншоттар: `qa/q1-observatory-night.jpg`, `qa/q1-mobile-night.jpg`, `qa/q1-day.jpg`, `qa/q3-mobile.jpg`.
 
-Осы итерацияда `App.jsx`, сайт интерфейсі, lesson/API evidence, ортақ база және GitHub өзгертілмеді. `NetworkMission.jsx` және `campusApi.js` SHA256 алдыңғы итерациямен бірдей:
+## Интеграцияның соңғы тексеруі
 
-- NetworkMission: `9c5d2afb8a47e92e63427c7923511e8f4290ed888798cb8a8ac8eecbd37e769f`
-- campusApi: `58ecce2155ea6b8215c22a8664f001f0137fc7e1c532b868c9fe95251eef5fa4`
+Parent `dist/client`-ті `/game/` ішіне көшіргеннен кейін own origin-де staff/student рөлдерімен:
 
-### Тексеру
+1. Q1 first exact network → қате/дұрыс нәтиже → сайт рефлексиясы.
+2. Құлыптаулы Q1-02 student-ке 403; алдыңғысы мақұлданған соң generic begin/submit.
+3. Q1-09/14 логика миссиялары; Q1-07/13/15 gameUrl жоқ.
+4. Q3-01/08 бөлек iframe және generic checkpoint; iframe XP unlock жасамайды.
+5. Күн/түн site↔game синхроны, портрет mobile labels, low/reduced және нақты мектеп құрылғысындағы FPS.
 
-`vite build --emptyOutDir false` + packaging + барлық тесттер: **30/30 өтті**. Жаңа тесттер pavement UV масштабы, texture байланысы/материал профилі, bevel-дің finite geometry-і және NPC бұрылыстарының үздіксіздігін тексереді. Жұмырланған маршруттардың да actual footprint-ке кірмейтіні тексерілді. Actual VRM/robot bones/clips тесттері және API келісім тесттері өтеді.
-
-Build `outputs/game-build` ішіне файлдарды жоймай көшірілді; `/game/` index JS/CSS references және texture/model файлдары тексерілді. Ағымдағы JS: `index-hmx6lEQO.js`, шамамен 1.048 МБ / gzip 283 КБ. Үлкен chunk ескертуі бар. Бұрынғы hash файлдары жойылмады; HTML жаңа bundle-ды ғана жүктейді. Іске қосу/жариялау, жергілікті дерек жою және untrusted script жүктеу болмады.
-
-Браузер қолданылған жоқ; берілген `q1-district-redesigned.png` статикалық скриншоты қаралды. Жаңа lighting/material result, текстура repeat, PMREM startup, avatar ground contact және нақты FPS орталық чаттың браузер QA-сында тексерілуі тиіс. Бұл headless тексеру photorealism немесе өнімділік кепілдігі емес.
-
-### Нақты актив бөгеті
-
-8 listing-тің ресми Data API-і HTTP 200 берді; сегізінің де ресми download endpoint-і авторизациясыз **401** берді. Naruto running/walking кандидаттарында 1 animation-нан бар. Тексерілген ықшам Tom модельдері және Tom Multiversus rig — 0 animation; Jerry rigged — 1; Transformers transform — 1; «Transformers Animated» сериясының Optimus моделінде 0. Бір animation — дайын Walk/Idle/Run жинағының дәлелі емес.
-
-Сатып алу, модель viewer-ін айналып өту немесе ойыннан rip жасау қолданылмады. Қазіргі студенттер/RobotExpressive жаңа franchise кейіпкерлері деп аталмады. Runtime roster уақытша бұрынғы нақты атауларымен қалды. Ресми аккаунттан алынған архив/лицензия жеткенде бір Naruto моделінің rig/clip сәйкестігін тексеруден бастауға болады; Tom/Jerry үшін provenance және baked locomotion, Transformers үшін transform/locomotion бөлуі қажет.
-
-
-## Соңғы түзету: кіреберістегі үшінші жақ камерасының кедергісі
-
-Күйі: **build жаңартылды**, browser QA-ға дайын. Дәлел ретінде орталық чаттың `screenshots/game-polish.png` суреті қаралды; осы чат браузерге тимеді.
-
-Себеп: бұрын camera collision тек stationGroups (оқу ғимараттары) арқылы тексерілген. Көріністі жауып тұрған utility bridge бағаны бұл топқа кірмеген. Жақындату шегі .6 м болып, OrbitControls minDistance 2.2 м арқылы қайта шектелуі де ықтимал еді.
-
-Түзету:
-
-- `NetworkDistrict.js` нақты статикалық district mesh-терінен cameraOccluders береді: ғимараттармен бірге utility bridge бағандары, rack canopies, инфрақұрылым, маңдайша және ландшафт бөлшектері. Жер/жол жазықтары, packet және mission marker декоры кірмейді.
-- Жаңа `src/cameraOcclusion.js`: кейіпкердің бас/дене/аяқ және жанама көрініс нүктелерінен камераға жеті reverse ray; камераның near-plane жанындағы/ішіндегі mesh үшін bounding guard. Алдымен view corridor бойынша broadphase сүзгі бар.
-- Кедергі келтірген mesh материалдары уақытша 6% opacity/depthWrite=false clone-дарына ауысады. Sightline ашылғанда немесе overview-ға ауысқанда бастапқы material identity қалпына келеді. Material arrays қолдаулы; clone-дар cleanup кезінде босатылады.
-- Collision dolly арқылы камераны жақындату алынды. OrbitControls damping/clamp біткеннен кейін opacity тексеріледі; OrbitControls-пен қашықтық тартысы жоқ. Player/camera координаттары fade helper-де өзгермейді. Қозғалыс, footprints, lesson/API өзгермеді.
-
-`tests/camera-occlusion.test.mjs`: actual Q1 scene geometry-мен бірінші entry + 21 кадр/350 мс W симуляциясы; дәл x=-3.3,z=-7 utility бағанының fade-ке кіретінін және camera/player position өзгермейтінін тексереді. Қосымша camera-inside mesh/material arrays қалпына келуі және кейіпкер артындағы геометрияның мөлдірленбеуі тексерілді.
-
-Vite build + packaging + бүкіл suite: **33/33 өтті**. Нақты бағанға күшейтілген regression тексеруі де 3/3 өтті. Ағымдағы bundle: `index-IJYqoH3a.js` (шамамен 1.049 МБ / gzip 284 КБ); `/game/` refs тексерілді. `game-build` файлдарды жоймай жаңартылды. Үлкен chunk туралы бұрынғы ескерту бар.
-
-Орталық QA: fresh reload → default engineer → Кампусқа кіру → W 350ms; кейіпкер мен ортадағы бағанды, orbit/overview/follow ауысуын, есік жанын тексеру. Толық final viewport көрінісі headless тесттен расталмайды. Жарық/материал сапасы туралы жаңа визуал мәлімдеме жасалмайды. Naruto/Tom/Jerry/Transformers активтері әлі жүктелген жоқ; roster атаулары өзгертілмеді. Жариялау/жергілікті жою жасалмады.
+Жеке preview сервері аяқталғанда тоқтатылды. Жариялау, GitHub write, түпнұсқа жобаға өзгеріс немесе жергілікті файл жою жасалған жоқ.

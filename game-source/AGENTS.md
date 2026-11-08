@@ -34,3 +34,12 @@ User requests robot, animal and military NPCs alongside the three anime students
 
 ## Q1 guest characters (2026-11-08)
 Use actual downloaded Naruto and Jerry for player/NPC selections. Tom is a stationary animated guest; Optimus has a transform showcase, not a walk cycle. Keep attribution. Preserve Naruto idle/run blend and horizontal root-motion removal. Do not relabel old civilian models as franchise characters.
+
+## Observatory course expansion (2026-11-08)
+Q1 uses the provided observatory-night reference: open telescope dome, warm windows,
+cyan fibre boulevard, star field and richer planted perimeter. Day/night follows
+same-origin localStorage `campus-theme` (`light`/`dark`). Preserve all real guest
+characters, authored gait and credits. Q1 has 12 instructional missions, with
+07/13/15 assessments excluded; server controls access and grades every attempt.
+Q3 must render its distinct `/legacy-q3/game/` campus and use a separate generic
+server checkpoint; iframe XP/messages/localStorage never unlock lessons.

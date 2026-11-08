@@ -22,12 +22,12 @@ test('route wraps continuously and travels straight between corners',()=>{
  assert.ok(Math.hypot(routePose(route,13.999).x,routePose(route,13.999).z)<.002);
  assert.throws(()=>districtFor('q2'));assert.equal(districtFor('q1'),Q1);
 });
-test('headless scene has distinct building types, a single functioning lab, and finite geometry',()=>{
+test('headless scene has distinct building types, eight mission destinations, and finite geometry',()=>{
  const scene=new THREE.Scene();const labels=[];
  const sign=(parent,text,w,h,x,y,z)=>{labels.push(text);const m=new THREE.Mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial());m.position.set(x,y,z);parent.add(m);return m;};
  const district=buildNetworkDistrict(scene,Q1.stations.map((s,i)=>({...s,short:'Аймақ '+i,color:'#339ac5'})),sign);
  assert.equal(district.stationGroups.length,8);assert.equal(new Set(district.stationGroups.map(g=>g.userData.kind)).size,8);assert.equal(district.doors.length,1);assert.equal(district.doors[0].i,0);
- assert.equal(labels.filter(s=>s==='КЕЙІН').length,7);assert.ok(district.signals.length>=7);
+ assert.equal(labels.filter(s=>s==='КЕЙІН').length,0);assert.ok(district.warmWindows.length>30);assert.ok(scene.getObjectByName('observatory-telescope'));assert.ok(district.signals.length>=7);
  scene.updateMatrixWorld(true);let meshes=0;
  scene.traverse(o=>{assert.ok(o.matrixWorld.elements.every(Number.isFinite));if(o.isMesh){meshes++;assert.ok([...o.geometry.attributes.position.array].every(Number.isFinite));}});
  assert.ok(meshes>150);assert.ok(meshes<800,'district geometry budget');

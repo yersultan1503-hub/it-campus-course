@@ -1,0 +1,8 @@
+import {useState} from 'react';
+import {ArrowLeft,ArrowRight,CaretUp,CaretDown,Plus,Minus,Camera,ArrowCounterClockwise} from '@phosphor-icons/react';
+export function CameraPanel({cameraRef,follow,onFollow}) {
+ const [open,setOpen]=useState(false);
+ return <div className="camera-tools">{open&&<div className="camera-popover" role="group" aria-label="Еркін камераны басқару"><strong>{follow?'Кейіпкер камерасы':'Еркін 3D камера'}</strong><button className="camera-reset" onClick={onFollow}>{follow?'Кампусты жоғарыдан шолу':'Кейіпкерді қадағалау'}</button><p>Басып сүйре — айналдыру<br/>Екі саусақпен сырғыт — жылжыту<br/>Қысу / Ctrl + сырғыту — масштаб</p><div className="camera-pad"><button aria-label="Камераны солға айналдыру" onClick={()=>cameraRef.current?.rotate(-Math.PI/6)}><ArrowLeft/></button><button aria-label="Камераны жоғарыдан қарату" onClick={()=>cameraRef.current?.rotate(0,-.2)}><CaretUp/></button><button aria-label="Камераны оңға айналдыру" onClick={()=>cameraRef.current?.rotate(Math.PI/6)}><ArrowRight/></button><button aria-label="Камераны алыстату" onClick={()=>cameraRef.current?.zoom(1.2)}><Minus/></button><button aria-label="Камераны төменнен қарату" onClick={()=>cameraRef.current?.rotate(0,.2)}><CaretDown/></button><button aria-label="Камераны жақындату" onClick={()=>cameraRef.current?.zoom(1/1.2)}><Plus/></button></div><button className="camera-reset" onClick={()=>cameraRef.current?.reset()}><ArrowCounterClockwise/>Бастапқы көрініс</button></div>}<button className="camera-toggle" aria-expanded={open} onClick={()=>setOpen(!open)}><Camera/>{follow?'Кейіпкер':'Камера'} {open?<CaretDown/>:<CaretUp/>}</button></div>;
+}
+
+

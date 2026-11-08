@@ -2,8 +2,10 @@
 from pathlib import Path
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 from http.cookies import SimpleCookie
+import posixpath
 import argparse, base64, hashlib, hmac, json, os, re, secrets, sqlite3, time
 import urllib.request, urllib.parse, urllib.error
+from course_content import mission_for,grade,SUMMARIES
 
 ROOT=Path(__file__).resolve().parent
 LESSON='q1-network-01'; MISSION='network-connect-01'
@@ -61,7 +63,7 @@ class GoogleIdentity:
 
 class Store:
  def __init__(self,path,identity=None,allow_test_login=False):
-  self.allow_test_login=allow_test_login;self.path=Path(path);self.path.parent.mkdir(parents=True,exist_ok=True);self.identity=identity or GoogleIdentity()
+  self.allow_test_login=allow_test_login;self.path=Path(path);self.path.parent.mkdir(parents=True,exist_ok=True);self.identity=identity or GoogleIdentity();self.catalog=json.loads((ROOT/'course_catalog.json').read_text()) if (ROOT/'course_catalog.json').exists() else []
   with self.db() as c:c.executescript('''
   PRAGMA journal_mode=WAL;
   CREATE TABLE IF NOT EXISTS users(id TEXT PRIMARY KEY, email TEXT UNIQUE NOT NULL, name TEXT NOT NULL, role TEXT NOT NULL CHECK(role IN ('student','teacher','admin')), password TEXT NOT NULL,class_id TEXT NOT NULL DEFAULT '10A',must_change INTEGER NOT NULL DEFAULT 0,verified INTEGER NOT NULL DEFAULT 1,google_sub TEXT UNIQUE,auth_source TEXT NOT NULL DEFAULT 'local-test');
@@ -71,6 +73,7 @@ class Store:
   CREATE TABLE IF NOT EXISTS limits(key TEXT PRIMARY KEY,count INTEGER NOT NULL,until REAL NOT NULL);
   CREATE TABLE IF NOT EXISTS attempts(id TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id),lesson_id TEXT NOT NULL,mission_id TEXT NOT NULL,passed INTEGER NOT NULL DEFAULT 0,evidence TEXT,created REAL NOT NULL);
   CREATE TABLE IF NOT EXISTS submissions(user_id TEXT PRIMARY KEY REFERENCES users(id),explanation TEXT NOT NULL,reflection TEXT NOT NULL,status TEXT NOT NULL DEFAULT 'pending',feedback TEXT NOT NULL DEFAULT '',revision INTEGER NOT NULL DEFAULT 1);
+  CREATE TABLE IF NOT EXISTS lesson_submissions(user_id TEXT NOT NULL REFERENCES users(id),lesson_id TEXT NOT NULL,confidence TEXT NOT NULL,difficulty TEXT NOT NULL,comment TEXT NOT NULL DEFAULT '',status TEXT NOT NULL DEFAULT 'pending',feedback TEXT NOT NULL DEFAULT '',revision INTEGER NOT NULL DEFAULT 1,PRIMARY KEY(user_id,lesson_id));
   CREATE TABLE IF NOT EXISTS teacher_requests(user_id TEXT PRIMARY KEY REFERENCES users(id),reason TEXT NOT NULL,status TEXT NOT NULL DEFAULT 'pending',created REAL NOT NULL,reviewed REAL,reviewer TEXT,decision_note TEXT NOT NULL DEFAULT '');
   CREATE TABLE IF NOT EXISTS audit(id INTEGER PRIMARY KEY,actor TEXT,action TEXT NOT NULL,target TEXT,at REAL NOT NULL,detail TEXT NOT NULL DEFAULT '');
   ''')
@@ -119,9 +122,39 @@ class Store:
   token=secrets.token_urlsafe(32)
   c.execute('INSERT OR REPLACE INTO sessions VALUES(?,?,?,?,?)',(u['id'],token_hash(token),now,now,now+8*3600));self.audit(c,u['id'],'login_replace' if old else 'login')
   return token
- def progress(self,c,uid):
-  passed=bool(c.execute('SELECT 1 FROM attempts WHERE user_id=? AND passed=1 AND lesson_id=? LIMIT 1',(uid,LESSON)).fetchone());s=c.execute('SELECT * FROM submissions WHERE user_id=?',(uid,)).fetchone();status=s['status'] if s else 'none';done=passed and status=='approved'
+ def lesson(self,lid):
+  lid='q1-02' if lid=='q1-network-02' else lid
+  item=next((x for x in self.catalog if x['id']==lid),None)
+  if not item:fail(404,'lesson_missing','Сабақ табылмады.')
+  return item
+ def progress(self,c,uid,lid=LESSON):
+  passed=bool(c.execute('SELECT 1 FROM attempts WHERE user_id=? AND passed=1 AND lesson_id=? LIMIT 1',(uid,lid)).fetchone())
+  s=c.execute('SELECT * FROM lesson_submissions WHERE user_id=? AND lesson_id=?',(uid,lid)).fetchone()
+  if not s and lid==LESSON:s=c.execute('SELECT * FROM submissions WHERE user_id=?',(uid,)).fetchone()
+  status=s['status'] if s else 'none';assessment=any(x['id']==lid and x['kind']=='assessment' for x in self.catalog);done=(passed or assessment) and status=='approved'
   return {'missionPassed':passed,'reflectionSubmitted':bool(s),'reviewStatus':status,'completed':done,'nextUnlocked':done}
+ def previous(self,item):
+  prior=[x for x in self.catalog if x['quarter']==item['quarter'] and x['order']<item['order'] and x['kind']=='lesson']
+  return prior[-1]['id'] if prior else None
+ def unlocked(self,c,u,item):
+  if not u:return False
+  if u['role'] in ('teacher','admin'):return True
+  prior=self.previous(item)
+  return not prior or self.progress(c,u['id'],prior)['completed']
+ def course(self,c,u):
+  quarters=[]
+  for n,title in [(1,'Желілер, қауіпсіздік және логика'),(2,'Алгоритмдер және программалау'),(3,'Веб-жобалау'),(4,'Жобалау және қорытынды')]:
+   items=[x for x in self.catalog if x['quarter']==n];lessons=[]
+   for x in items:
+    lessons.append({k:x[k] for k in ['id','order','title','objective','kind']}|{'unlocked':self.unlocked(c,u,x),'progress':self.progress(c,u['id'],x['id']) if u else None,'gameUrl':'/game/?lesson='+x['id'] if x['kind']=='lesson' else None})
+   quarters.append({'number':n,'title':title,'available':bool(items),'status':'ready' if items else 'not-imported','lessons':lessons})
+  return {'quarters':quarters}
+ def lesson_payload(self,c,u,item):
+  if not self.unlocked(c,u,item):fail(403,'locked','Алдыңғы сабақты аяқтап, мұғалімнің қабылдауын күтіңіз.')
+  lid=item['id'];sub=c.execute('SELECT * FROM lesson_submissions WHERE user_id=? AND lesson_id=?',(u['id'],lid)).fetchone()
+  if not sub and lid==LESSON:sub=c.execute('SELECT * FROM submissions WHERE user_id=?',(u['id'],)).fetchone()
+  following=[x for x in self.catalog if x['quarter']==item['quarter'] and x['order']>item['order'] and x['kind']=='lesson']
+  return {**item,'status':'ready','resources':[r for r in item['resources'] if not r.get('staffOnly') or u['role'] in ('teacher','admin')],'summary':SUMMARIES.get(lid,item.get('summary','Бағалау материалын ашып, мұғалім нұсқаулығымен орындаңыз. Бағаны мұғалім бекітеді.')),'progress':self.progress(c,u['id'],lid),'submission':dict(sub) if sub else None,'missionId':MISSION if lid==LESSON else lid+'-mission','mission':mission_for(item),'gameUrl':'/game/?lesson='+lid if item['kind']=='lesson' else None,'previousId':self.previous(item),'nextId':following[0]['id'] if following else None}
  def scoped_student(self,c,u,uid):
   s=c.execute("SELECT * FROM users WHERE id=? AND role='student'",(uid,)).fetchone()
   if not s or u['role'] not in ('admin','teacher') or (u['role']=='teacher' and u['class_id']!=s['class_id']):fail(403,'forbidden','Бұл оқушыға рұқсат жоқ.')
@@ -176,6 +209,10 @@ class Store:
   token=None
   with self.db() as c:
    c.execute('BEGIN IMMEDIATE')
+   if method=='GET' and path=='/api/course':
+    try:viewer=self.user(c,cookie)
+    except ApiError:viewer=None
+    return self.course(c,viewer),None
    if method=='GET' and path=='/api/config':return {'googleConfigured':self.identity.configured,'mode':'local-pilot','registration':'google','localTestLogin':self.allow_test_login},None
    if method=='POST' and path in ('/api/auth/google/confirm','/api/auth/google/cancel'):
     try:t=SimpleCookie(cookie).get('campus_pending');t=t.value if t else ''
@@ -194,6 +231,11 @@ class Store:
     token=self.session(c,u,data.get('replaceSession') is True,cookie);return {'user':self.public_user(u)},token
    u=self.user(c,cookie,allow_change=path in ('/api/me','/api/auth/password','/api/auth/logout'))
    uid=u['id']
+   if method=='POST' and path=='/api/profile':
+    name=txt(data,'name',2,80)
+    if any(ord(ch)<32 for ch in name):fail(400,'name','Аты-жөнді бір жолмен жазыңыз.')
+    c.execute('UPDATE users SET name=? WHERE id=?',(name,uid));self.audit(c,uid,'profile_name_changed',uid)
+    return {'user':self.public_user(c.execute('SELECT * FROM users WHERE id=?',(uid,)).fetchone())},None
    if method=='GET' and path=='/api/profile':
     return {'user':self.public_user(u),'session':{'singleActive':True,'expiresAt':u['expires']},'progress':self.progress(c,uid),'teacherRequest':dict(r) if (r:=c.execute('SELECT status,reason,decision_note FROM teacher_requests WHERE user_id=?',(uid,)).fetchone()) else None},None
    if method=='POST' and path=='/api/teacher-request':
@@ -206,35 +248,35 @@ class Store:
     self.audit(c,uid,'teacher_request',uid);return {'ok':True},None
    if method=='GET' and path=='/api/staff/catalog':
     if u['role'] not in ('teacher','admin'):fail(403,'forbidden','Бұл каталог мұғалім мен әкімшіге арналған.')
-    registry=ROOT/'materials/quarter1.json';items=json.loads(registry.read_text()) if registry.exists() else []
-    lessons=[]
-    for i,item in enumerate(items):
-     lesson={'id':item.get('id',f'q1-resource-{i+1:02}'),'title':item.get('title','Оқу материалы'),'resources':[{k:r.get(k,'') for k in ('title','type','url')} for r in item.get('resources',[])]}
-     if i==0:lesson.update(lessonUrl='/?lesson='+LESSON,gameUrl='/game/?lesson='+LESSON)
-     lessons.append(lesson)
-    return {'quarters':[{'number':1,'title':'Бірінші тоқсан','status':'ready','lessons':lessons},{'number':2,'title':'Екінші тоқсан','status':'not-imported','lessons':[]},{'number':3,'title':'Үшінші тоқсан','status':'external','lessons':[],'courseUrl':'https://it-club-10-course.vercel.app/index.html','gameUrl':'https://it-club-10-course.vercel.app/game/'},{'number':4,'title':'Төртінші тоқсан','status':'not-imported','lessons':[]}]},None
+    result=self.course(c,u)
+    for quarter in result['quarters']:
+     for item in quarter['lessons']:
+      item['resources']=self.lesson(item['id'])['resources'];item['lessonUrl']='/?lesson='+item['id']
+    return result,None
    if method=='POST' and path=='/api/auth/logout':c.execute('DELETE FROM sessions WHERE user_id=?',(uid,));return {'ok':True},''
    if method=='GET' and path in ('/api/me','/api/progress'):
     prog=self.progress(c,uid)
     if path.endswith('progress'):return prog,None
     s=c.execute('SELECT explanation,reflection,feedback,status FROM submissions WHERE user_id=?',(uid,)).fetchone();return {'user':self.public_user(u),'progress':prog,'submission':dict(s) if s else None},None
-   if method=='GET' and path=='/api/lesson/'+LESSON:
-    registry=ROOT/'materials/quarter1.json';items=json.loads(registry.read_text()) if registry.exists() else []
-    resources=items[0]['resources'] if items else []
-    return {'id':LESSON,'title':'Компьютерлік желілердің жұмыс жасау принциптері','objective':'10.6.1.1 — желілік компоненттердің мақсатын сипаттау: тораптар, маршрутизаторлар, коммутаторлар.','resources':resources,'missionId':MISSION},None
-   if method=='GET' and path=='/api/lesson/q1-network-02':
-    if u['role'] not in ('teacher','admin') and not self.progress(c,uid)['completed']:fail(403,'locked','Алдымен бірінші сабақты аяқтап, мұғалім бағасын алыңыз.')
-    return {'id':'q1-network-02','title':'Желі. Желілік компоненттер','status':'coming-soon'},None
+   if method=='GET' and path.startswith('/api/lesson/'):
+    return self.lesson_payload(c,u,self.lesson(path.removeprefix('/api/lesson/'))),None
    if method=='POST' and path=='/api/attempts':
-    if data.get('lessonId')!=LESSON or data.get('missionId')!=MISSION:fail(400,'mission','Бұл миссия пилотқа кірмейді.')
-    existing=c.execute('SELECT id FROM attempts WHERE user_id=? AND lesson_id=? AND passed=0 ORDER BY created DESC LIMIT 1',(uid,LESSON)).fetchone()
+    item=self.lesson(data.get('lessonId'));lid=item['id'];expected=MISSION if lid==LESSON else lid+'-mission'
+    if item['kind']!='lesson' or data.get('missionId')!=expected:fail(400,'mission','Сабақтың миссиясын таңдаңыз.')
+    if not self.unlocked(c,u,item):fail(403,'locked','Алдыңғы сабақ әлі аяқталмаған.')
+    existing=c.execute('SELECT id FROM attempts WHERE user_id=? AND lesson_id=? AND passed=0 ORDER BY created DESC LIMIT 1',(uid,lid)).fetchone()
     aid=existing['id'] if existing else secrets.token_hex(16)
-    if not existing:c.execute('INSERT INTO attempts(id,user_id,lesson_id,mission_id,created) VALUES(?,?,?,?,?)',(aid,uid,LESSON,MISSION,time.time()))
+    if not existing:c.execute('INSERT INTO attempts(id,user_id,lesson_id,mission_id,created) VALUES(?,?,?,?,?)',(aid,uid,lid,expected,time.time()))
     return {'attemptId':aid},None
    m=re.fullmatch('/api/attempts/([0-9a-f]{32})/submit',path)
    if method=='POST' and m:
     a=c.execute('SELECT * FROM attempts WHERE id=? AND user_id=?',(m[1],uid)).fetchone()
     if not a:fail(404,'attempt_missing','Орындау табылмады.')
+    if not self.unlocked(c,u,self.lesson(a['lesson_id'])):fail(403,'locked','Алдыңғы сабақ әлі аяқталмаған.')
+    if a['lesson_id']!=LESSON:
+     passed,criteria=grade(a['lesson_id'],data.get('answers'))
+     if passed or not a['passed']:c.execute('UPDATE attempts SET passed=?,evidence=? WHERE id=?',(int(passed),json.dumps(data,ensure_ascii=False),a['id']))
+     return {'passed':passed or bool(a['passed']),'criteria':criteria,'progress':self.progress(c,uid,a['lesson_id'])},None
     if a['passed']:return {'passed':True,'criteria':[{'id':k,'passed':True,'feedback':'Расталған нәтиже сақталған.'} for k in ['roles','links','fault']],'progress':self.progress(c,uid)},None
     roles=data.get('roles')=={'switch':'local','router':'networks','node':'endpoint'}
     links=data.get('links');norm=set()
@@ -245,6 +287,18 @@ class Store:
     fault=data.get('fault')=='cable';passed=roles and wiring and fault
     criteria=[{'id':k,'passed':v,'feedback':good if v else bad} for k,v,good,bad in [('roles',roles,'Құрылғылардың қызметі дұрыс.','Торап — соңғы құрылғы; коммутатор — жергілікті желі; маршрутизатор — желілер арасы.'),('links',wiring,'Екі компьютер коммутаторға, коммутатор маршрутизаторға қосылды.','Екі компьютерді коммутаторға, коммутаторды маршрутизаторға жалғаңыз.'),('fault',fault,'Үзілген кабель анықталды.','Жоғары желіге шығатын байланыс кабелін тексеріңіз.')]]
     c.execute('UPDATE attempts SET passed=?,evidence=? WHERE id=?',(int(passed),json.dumps(data,ensure_ascii=False),a['id']));return {'passed':passed,'criteria':criteria,'progress':self.progress(c,uid)},None
+   if method=='POST' and path=='/api/submissions':
+    if u['role']!='student':fail(403,'student_required','Рефлексияны оқушы аккаунтынан жіберіңіз.')
+    item=self.lesson(data.get('lessonId'));lid=item['id']
+    if not self.unlocked(c,u,item):fail(403,'locked','Алдыңғы сабақ әлі аяқталмаған.')
+    if item['kind']=='lesson' and not self.progress(c,uid,lid)['missionPassed']:fail(409,'mission_required','Алдымен ойын миссиясын аяқтаңыз.')
+    confidence=data.get('confidence');difficulty=data.get('difficulty');comment=data.get('comment','')
+    if confidence not in ('clear','partial','help') or difficulty not in ('none','theory','practice','terms'):fail(400,'reflection_choice','Түсіну деңгейі мен қиындықты таңдаңыз.')
+    if not isinstance(comment,str) or len(comment)>500:fail(400,'comment','Пікір 500 таңбадан аспасын.')
+    old=c.execute('SELECT * FROM lesson_submissions WHERE user_id=? AND lesson_id=?',(uid,lid)).fetchone()
+    if not old or (old['confidence'],old['difficulty'],old['comment'])!=(confidence,difficulty,comment.strip()):
+     c.execute("INSERT INTO lesson_submissions(user_id,lesson_id,confidence,difficulty,comment) VALUES(?,?,?,?,?) ON CONFLICT(user_id,lesson_id) DO UPDATE SET confidence=excluded.confidence,difficulty=excluded.difficulty,comment=excluded.comment,status='pending',feedback='',revision=lesson_submissions.revision+1",(uid,lid,confidence,difficulty,comment.strip()));self.audit(c,uid,'quick_reflection',lid)
+    return {'ok':True,'progress':self.progress(c,uid,lid)},None
    if method=='POST' and path=='/api/submission':
     if u['role']!='student':fail(403,'student_required','Жұмысты оқушы аккаунтынан жіберіңіз.')
     if data.get('lessonId')!=LESSON:fail(400,'lesson','Қате сабақ.')
@@ -257,15 +311,22 @@ class Store:
    if method=='GET' and path=='/api/teacher/students':
     if u['role'] not in ('admin','teacher'):fail(403,'forbidden','Мұғалім рұқсаты қажет.')
     rows=c.execute("SELECT * FROM users WHERE active=1 AND role='student'"+(' AND class_id=?' if u['role']=='teacher' else ''),(u['class_id'],) if u['role']=='teacher' else ()).fetchall();students=[]
-    for s in rows:
-     sub=c.execute('SELECT explanation,reflection,feedback,status,revision FROM submissions WHERE user_id=?',(s['id'],)).fetchone();students.append({**self.public_user(s),'progress':self.progress(c,s['id']),'submission':dict(sub) if sub else None})
+    for student in rows:
+     subs=[]
+     for item in self.catalog:
+      sub=c.execute('SELECT * FROM lesson_submissions WHERE user_id=? AND lesson_id=?',(student['id'],item['id'])).fetchone()
+      if not sub and item['id']==LESSON:sub=c.execute('SELECT * FROM submissions WHERE user_id=?',(student['id'],)).fetchone()
+      if sub:subs.append({**dict(sub),'lessonId':item['id'],'title':item['title'],'reflection':dict(sub).get('comment',dict(sub).get('reflection',''))})
+     students.append({**self.public_user(student),'progress':self.progress(c,student['id']),'submission':next((x for x in subs if x['lessonId']==LESSON),None),'submissions':subs,'lessonProgress':{x['id']:self.progress(c,student['id'],x['id']) for x in self.catalog}})
     return {'students':students},None
    if method=='POST' and path=='/api/teacher/review':
-    target=txt(data,'studentId',1,60);self.scoped_student(c,u,target);prog=self.progress(c,target)
-    if not prog['missionPassed'] or not prog['reflectionSubmitted']:fail(409,'not_submitted','Жұмыс әлі тапсырылмаған.')
+    target=txt(data,'studentId',1,60);self.scoped_student(c,u,target);lid=data.get('lessonId',LESSON);item=self.lesson(lid);prog=self.progress(c,target,lid)
+    if (item['kind']=='lesson' and not prog['missionPassed']) or not prog['reflectionSubmitted']:fail(409,'not_submitted','Жұмыс әлі тапсырылмаған.')
     if not isinstance(data.get('approved'),bool):fail(400,'review','Бағалау шешімі қажет.')
     feedback=txt(data,'feedback',3);status='approved' if data['approved'] else 'revise'
-    c.execute('UPDATE submissions SET status=?,feedback=? WHERE user_id=?',(status,feedback,target));self.audit(c,uid,'review',target,status+': '+feedback);return {'ok':True},None
+    c.execute('UPDATE lesson_submissions SET status=?,feedback=? WHERE user_id=? AND lesson_id=?',(status,feedback,target,lid))
+    if lid==LESSON:c.execute('UPDATE submissions SET status=?,feedback=? WHERE user_id=?',(status,feedback,target))
+    self.audit(c,uid,'review',target,lid+': '+status+': '+feedback);return {'ok':True},None
    if path.startswith('/api/admin/'):
     if u['role']!='admin':fail(403,'forbidden','Әкімші рұқсаты қажет.')
     if method=='GET' and path=='/api/admin/users':return {'users':[self.public_user(x) for x in c.execute('SELECT * FROM users ORDER BY name')],'requests':[dict(x) for x in c.execute("SELECT r.*,u.name,u.email FROM teacher_requests r JOIN users u ON u.id=r.user_id WHERE r.status='pending' AND u.active=1 ORDER BY r.created")]},None
@@ -344,7 +405,21 @@ class Handler(SimpleHTTPRequestHandler):
   self.send_response(303);self.send_header('Location',location);self.send_header('Cache-Control','no-store')
   for cookie in cookies:self.send_header('Set-Cookie',cookie)
   self.send_header('Content-Length','0');self.end_headers()
+ def resource_access(self):
+  path=posixpath.normpath('/'+urllib.parse.unquote(urllib.parse.urlsplit(self.path).path).lstrip('/'))
+  if not path.startswith('/resources/course/'):return True
+  try:
+   with self.server.store.db() as c:
+    u=self.server.store.user(c,self.headers.get('Cookie',''))
+    matches=[(item,r) for item in self.server.store.catalog for r in item['resources'] if path in [urllib.parse.unquote(r.get(k,'')) for k in ('url','previewUrl','downloadUrl')]]
+    if not matches:fail(404,'resource_missing','Материал табылмады.')
+    if not any((not r.get('staffOnly') or u['role'] in ('teacher','admin')) and self.server.store.unlocked(c,u,item) for item,r in matches):fail(403,'forbidden','Бұл материалға рұқсат жоқ.')
+   return True
+  except ApiError as e:self.json_response(e.status,{'error':e.code,'message':e.message});return False
+ def do_HEAD(self):
+  if self.resource_access():super().do_HEAD()
  def do_GET(self):
+  if not self.resource_access():return
   path=urllib.parse.urlsplit(self.path).path
   if path in ('/api/auth/google/start','/api/auth/google/callback'):return self.oauth(path)
   if self.path.startswith('/api/'):return self.api('GET')

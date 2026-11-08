@@ -48,7 +48,14 @@ export function createCameraActions(camera, controls, viewportHeight, view = {ta
       });
     },
     reset() {
-      change(() => { controls.target.set(...view.target); camera.position.set(...view.position); });
+      change(() => { const current=typeof view==='function'?view():view;controls.target.set(...current.target); camera.position.set(...current.position); });
     },
   };
+}
+
+// Keep the complete district readable on portrait screens; follow view stays unchanged.
+export function districtOverview(view,aspect){
+ const target=new Vector3(...view.target),offset=new Vector3(...view.position).sub(target);
+ const factor=Math.max(1,.95/Math.max(.25,aspect));
+ return {target:[view.target[0],view.target[1]-Math.max(0,factor-1)*7,view.target[2]],position:offset.multiplyScalar(factor).add(target).toArray()};
 }

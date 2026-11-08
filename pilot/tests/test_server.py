@@ -34,7 +34,7 @@ class PilotTests(unittest.TestCase):
   self.req('/api/submission',data,c);self.assertFalse(self.req('/api/progress',{},c,'GET')[0]['nextUnlocked'])
   self.req('/api/teacher/review',{'studentId':self.a,'approved':True,'feedback':'Үш критерий орындалды.'},t)
   self.assertTrue(self.req('/api/progress',{},c,'GET')[0]['completed'])
-  self.assertEqual(self.req('/api/lesson/q1-network-02',{},c,'GET')[0]['status'],'coming-soon')
+  self.assertEqual(self.req('/api/lesson/q1-network-02',{},c,'GET')[0]['status'],'ready')
   reopened=Store(self.s.path,FakeGoogle());self.assertTrue(reopened.request('GET','/api/progress',{},c)[0]['completed'])
   self.req('/api/submission',data,c);self.assertTrue(self.req('/api/progress',{},c,'GET')[0]['completed'])
   self.assertEqual(len(self.req('/api/teacher/students',{},t,'GET')[0]['students']),1)
@@ -88,7 +88,7 @@ class PilotTests(unittest.TestCase):
   for session in (teacher,admin):
    catalog=self.req('/api/staff/catalog',{},session,'GET')[0]
    self.assertEqual([q['number'] for q in catalog['quarters']],[1,2,3,4])
-   self.assertEqual(self.req('/api/lesson/q1-network-02',{},session,'GET')[0]['status'],'coming-soon')
+   self.assertEqual(self.req('/api/lesson/q1-network-02',{},session,'GET')[0]['status'],'ready')
    self.assertEqual(self.req('/api/profile',{},session,'GET')[0]['user']['accessMode'],'staff')
   _,state=self.s.google_start();_,token,_=self.s.google_callback({'state':[state],'code':['profile-google']},'campus_oauth='+state)
   self.assertTrue(self.req('/api/profile',{},'campus_session='+token,'GET')[0]['user']['emailVerified'])

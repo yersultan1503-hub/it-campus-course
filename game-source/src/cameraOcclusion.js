@@ -35,7 +35,9 @@ export function createOcclusionFade(opacity=.06){
     const clone=material=>{const faded=material.clone();faded.transparent=true;faded.opacity=Math.min(material.opacity,opacity);faded.depthWrite=false;return faded;};
     cache.set(object,{original,faded:Array.isArray(original)?original.map(clone):clone(original)});
    }
-   object.material=cache.get(object).faded;active.add(object);
+   const entry=cache.get(object),sources=Array.isArray(entry.original)?entry.original:[entry.original],targets=Array.isArray(entry.faded)?entry.faded:[entry.faded];
+   sources.forEach((source,i)=>{const target=targets[i];if(source.color&&target.color)target.color.copy(source.color);if(source.emissive&&target.emissive)target.emissive.copy(source.emissive);if('emissiveIntensity' in source)target.emissiveIntensity=source.emissiveIntensity;target.opacity=Math.min(source.opacity,opacity);});
+   object.material=entry.faded;active.add(object);
   }
   return new Set(active);
  }

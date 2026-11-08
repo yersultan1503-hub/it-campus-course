@@ -1,0 +1,23 @@
+import {useEffect,useRef,useState} from 'react';
+import {api} from './campusApi';
+import {loadLessonMission,startLessonAttempt,submitLessonAnswers,lessonReturn} from './courseMissions';
+export function GenericMission({lessonId,onPassed}){
+ const [session,setSession]=useState(null),[lesson,setLesson]=useState(null),[attempt,setAttempt]=useState(null),[answers,setAnswers]=useState({}),[busy,setBusy]=useState(false),[error,setError]=useState(null),[result,setResult]=useState(null),[loadVersion,setLoadVersion]=useState(0);
+ const mounted=useRef(false);
+ useEffect(()=>{let active=true;mounted.current=true;setError(null);setLesson(null);setAttempt(null);setResult(null);setAnswers({});setSession(null);
+ (async()=>{try{const me=await api('/api/me');if(!active)return;setSession(me);if(me.user.mustChangePassword)return;const data=await loadLessonMission(lessonId);if(active)setLesson(data);}catch(e){if(active)setError(e);}})();
+ return()=>{active=false;mounted.current=false;};},[lessonId,loadVersion]);
+ async function begin(){if(busy||!lesson)return;setBusy(true);setError(null);try{const data=await startLessonAttempt(lesson);if(mounted.current)setAttempt(data.attemptId);}catch(e){if(mounted.current)setError(e);}finally{if(mounted.current)setBusy(false);}}
+ async function submit(event){event.preventDefault();if(busy||!lesson||!attempt)return;setBusy(true);setError(null);setResult(null);try{const data=await submitLessonAnswers(attempt,lesson,answers);if(mounted.current){setResult(data);if(data.passed===true)onPassed(lessonId);}}catch(e){if(mounted.current)setError(e);}finally{if(mounted.current)setBusy(false);}}
+ const returnUrl=lessonReturn(lessonId),passwordRequired=session?.user?.mustChangePassword||error?.code==='password_change_required',locked=error?.status===403&&!passwordRequired;
+ return <div className="zone-content generic-mission"><div className="eyebrow">{lessonId.startsWith('q3-')?'ҮШІНШІ ТОҚСАН · БАҚЫЛАУ МИССИЯСЫ':'БІРІНШІ ТОҚСАН · МИССИЯ'}</div><h1>{lesson?.mission?.title||lesson?.title||'Оқу зертханасы'}</h1>
+ {error&&<div role="alert" className="mission-error"><strong>{locked?'Миссияға қолжетімділік жабық':error.status===401?'Аккаунтқа кіру қажет':'Сұрау орындалмады'}</strong><p>{error.message}</p>{passwordRequired?<a href="/">Сайтта құпиясөзді өзгерту</a>:error.status===401?<a href={returnUrl}>Сайтта аккаунтқа кіру</a>:locked?<a href={returnUrl}>Сабақтағы ашылу шартын көру</a>:<button className="secondary" disabled={busy} onClick={()=>{if(!lesson)setLoadVersion(v=>v+1);else if(!attempt)begin();else setError(null);}}>Қайта көру</button>}</div>}
+ {session?.user?.mustChangePassword?<a href="/">Алдымен сайтта құпиясөзді өзгертіңіз</a>:!lesson&&!error?<p role="status">Аккаунт пен сабаққа қолжетімділік тексерілуде…</p>:null}
+ {lesson&&<><p className="mission-objective">{lesson.objective}</p><p>{lesson.mission.prompt||lesson.summary}</p><p className="game-note">Жауаптарды сервер тексереді. Уақыт шектеуі жоқ; тапсырма пернетақтамен де орындалады.</p>
+ {!attempt?<button className="primary" disabled={busy} onClick={begin}>{busy?'Әрекет ашылуда…':'Миссияны бастау'}</button>:<form onSubmit={submit}>
+ <fieldset disabled={busy||result?.passed===true} className="mission-questions"><legend className="sr-only">Миссия сұрақтары</legend>{lesson.mission.questions.map((q,index)=><fieldset key={q.id} className="mission-question"><legend>{index+1}. {q.prompt}</legend><div className="mission-options">{q.options.map(option=><label key={option.id} className={'mission-option '+(answers[q.id]===option.id?'is-selected':'')}><input type="radio" name={lessonId+'-'+q.id} value={option.id} required checked={answers[q.id]===option.id} onChange={()=>setAnswers(a=>({...a,[q.id]:option.id}))}/><span>{option.label}</span></label>)}</div></fieldset>)}</fieldset>
+ <button className="primary" disabled={busy||result?.passed===true}>{busy?'Сервер тексеруде…':'Жауаптарды тексеруге жіберу'}</button></form>}
+ {result&&<section className="network-result" role="status"><h2>{result.passed===true?'Сервер миссияны растады':'Жауаптарды қарап, қайта орында'}</h2><ul>{result.criteria?.map((criterion,index)=><li key={criterion.id||index}>{criterion.passed?'✓':'↻'} {criterion.feedback}</li>)}</ul>{result.passed===true&&<p>Нәтиже аккаунтыңызға сақталды. Сабақтың қалған талаптары мен келесі қадам сайтта көрсетіледі.</p>}</section>}
+ </>}
+ <p><a href={returnUrl}>← Сабаққа оралу: материал, нәтиже және рефлексия</a></p></div>;
+}

@@ -29,6 +29,7 @@ test('camera inside foreground geometry fades, then restores material identity o
  const wall=new THREE.Mesh(new THREE.BoxGeometry(2,5,2),Array.from({length:6},()=>new THREE.MeshStandardMaterial()));wall.position.set(0,2,4);wall.updateMatrixWorld(true);
  const camera=new THREE.PerspectiveCamera(55,1,.1,100);camera.position.set(0,2,4);camera.lookAt(0,1,0);camera.updateMatrixWorld(true);
  const original=wall.material,fade=createOcclusionFade();assert.ok(cameraBlockers(camera,new THREE.Vector3(),[wall]).has(wall));fade.update(camera,new THREE.Vector3(),[wall]);assert.notEqual(wall.material,original);for(const m of wall.material)assert.equal(m.opacity,.06);
+ original[0].color.set('#ffb866');fade.update(camera,new THREE.Vector3(),[wall]);assert.equal(wall.material[0].color.getHexString(),'ffb866');
  fade.clear();assert.equal(wall.material,original);for(const m of original){assert.equal(m.opacity,1);assert.equal(m.transparent,false);}
  fade.dispose();wall.geometry.dispose();original.forEach(m=>m.dispose());
 });

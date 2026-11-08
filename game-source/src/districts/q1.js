@@ -1,7 +1,7 @@
 // Only Q1 is implemented. Future quarters must provide their own plan and roster.
 export const Q1={
  id:'q1',title:'Байланыс зерттеу ауданы',
- view:{position:[34,31,40],target:[0,.6,0]},bounds:{x:21,z:18},
+ view:{position:[34,21,42],target:[0,.6,0]},bounds:{x:21,z:18},
  stations:[
   {position:[-13,-10],entry:[-7,-10],rotation:Math.PI/2,width:8,depth:6,kind:'network-lab'},
   {position:[0,-12],entry:[0,-7],rotation:0,width:7,depth:5,kind:'relay-workshop'},
@@ -10,7 +10,7 @@ export const Q1={
   {position:[13,1],entry:[7,1],rotation:-Math.PI/2,width:7,depth:6,kind:'security-gate'},
   {position:[-13,12],entry:[-7,12],rotation:Math.PI/2,width:6,depth:5,kind:'crypto-vault'},
   {position:[1,12],entry:[1,7],rotation:Math.PI,width:6,depth:5,kind:'identity-portal'},
-  {position:[13,12],entry:[7,12],rotation:-Math.PI/2,width:6,depth:5,kind:'expansion-pad'}
+  {position:[13,12],entry:[7,12],rotation:-Math.PI/2,width:6,depth:5,kind:'logic-observatory'}
  ],
  routes:{research:[[-6,-6],[6,-6],[6,6],[-6,6]],service:[[-7,-10],[-7,1],[-7,12],[-5,12],[-5,1],[-5,-10]]},
  avatars:[{id:'naruto',label:'Naruto',asset:'naruto.glb',kind:'naruto',height:1.8},{id:'jerry',label:'Jerry',asset:'jerry.glb',kind:'jerry',height:1.15},{id:'engineer',label:'Желі инженері',asset:'student-B.vrm'}, {id:'researcher',label:'Зерттеуші',asset:'student-A.vrm'}, {id:'robot',label:'Сервис роботы',asset:'campus-robot.glb'}],

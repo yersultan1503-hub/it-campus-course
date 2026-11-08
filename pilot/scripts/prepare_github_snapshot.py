@@ -21,13 +21,13 @@ def add(path,target):
   entry['content']=text
  except UnicodeError:entry['binary']=True
  entries.append(entry)
-for name in ['server.py','requirements.txt','README.md','CONTRACT.md','GOOGLE_SETUP.md','DESIGN_AUDIT.md','CLOUD_DATABASE.md','BACKUP_POLICY.md','seed_local.py','.gitignore']:
+for name in ['server.py','course_catalog.json','course_content.py','requirements.txt','README.md','CONTRACT.md','GOOGLE_SETUP.md','DESIGN_AUDIT.md','CLOUD_DATABASE.md','BACKUP_POLICY.md','seed_local.py','.gitignore']:
  add(ROOT/name,'pilot/'+name)
 for dirname in ['tests','scripts','database']:
  for p in (ROOT/dirname).rglob('*'):
   if '__pycache__' not in p.parts:add(p,'pilot/'+str(p.relative_to(ROOT)))
 for p in (ROOT/'public').rglob('*'):
- if 'game' not in p.relative_to(ROOT/'public').parts:add(p,'pilot/'+str(p.relative_to(ROOT)))
+ if p.relative_to(ROOT/'public').parts[0] != 'game':add(p,'pilot/'+str(p.relative_to(ROOT)))
 # Preserve the material registry without absolute MacBook paths.
 registry=json.loads((ROOT/'materials/quarter1.json').read_text())
 for lesson in registry:

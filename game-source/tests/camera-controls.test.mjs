@@ -55,3 +55,10 @@ test('district camera reset uses its own view without changing legacy defaults',
  assert.ok(controls.target.distanceTo(new Vector3(...view.target))<1e-8);
  assert.equal(controls.enableDamping,true);
 });
+
+test('portrait overview fits the district without changing the follow preset',async()=>{
+ const {districtOverview}=await import('../src/cameraControls.js');
+ const view={target:[0,.6,0],position:[34,21,42]},portrait=districtOverview(view,390/844),desktop=districtOverview(view,1280/720);
+ assert.ok(new Vector3(...portrait.position).distanceTo(new Vector3(...view.target))>new Vector3(...desktop.position).distanceTo(new Vector3(...view.target))*1.8);
+ assert.ok(portrait.target[1]<view.target[1]);assert.deepEqual(view.position,[34,21,42]);assert.deepEqual(desktop.position,view.position);
+});

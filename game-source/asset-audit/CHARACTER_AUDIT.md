@@ -1,3 +1,5 @@
+> Кейінгі интеграция жаңартуы: ата-чат нақты Naruto/Jerry/Tom/Optimus GLB файлдарын public/assets ішіне қосты. Төмендегі құжат — архивтер алынғанға дейінгі зерттеу receipt-і; қазіргі runtime бөгеті емес. Active asset/credits және соңғы тексеру үшін HANDOFF.md мен public/assets/CREDITS.txt қараңыз.
+
 # 2026-11-08 — модельдер интеграцияланды
 
 Naruto, Jerry, Tom және Optimus ресми Sketchfab download интерфейсі арқылы жүктелді. Авторлар/CC BY 4.0 сілтемелері public/assets/CREDITS.txt ішінде. Төмендегі бастапқы аудит тарихи күй ретінде сақталды; 401 бөгеті шешілді.

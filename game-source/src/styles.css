@@ -61,3 +61,46 @@
 .pilot-intro-actions .start-button:hover{background:#2c7895}
 .player-label{background:#234b5c!important;border-color:#f0c674!important;color:#fff5d4!important;box-shadow:0 2px 10px #173e5630}
 @media(max-width:650px){.intro-copy h1{font-size:25px}.avatar-picker{margin-top:10px;font-size:11px}.avatar-picker select{padding:8px}.intro-copy{max-height:calc(100dvh - 230px)}}
+/* Observatory course shell. The underlying Three.js scene has matching light/dark modes. */
+.campus-header-actions{display:flex;gap:8px;margin-left:auto;align-items:center;pointer-events:auto}
+.campus-header-actions button{min-height:44px}
+.compact-station{padding:5px;border-radius:50%}.compact-station strong{display:none}
+.intro-selected{font-size:11px!important;line-height:1.5!important;margin-bottom:0}
+.intro-copy h1{font-size:28px}.intro-copy{max-width:430px}
+.mission-error{padding:16px;border:1px solid #ba995c;border-radius:12px;margin:12px 0;background:#fff4d9}
+.mission-error p{margin:8px 0;line-height:1.6}.mission-error a{text-decoration:underline}
+.mission-objective{font-size:13px;line-height:1.8;border-left:3px solid #56bdc8;padding-left:14px}
+.mission-questions{border:0;padding:0;margin:24px 0}
+.mission-question{border:1px solid #afc1c9;border-radius:14px;padding:18px;margin:0 0 20px;min-width:0}
+.mission-question legend{font-weight:750;line-height:1.6;padding:0 8px;max-width:100%}
+.mission-options{display:grid;gap:10px}.mission-option{display:flex;align-items:flex-start;gap:12px;padding:14px;border:1px solid #c8d5d8;background:#f6faf7;border-radius:10px;line-height:1.6;cursor:pointer;font-size:14px}
+.mission-option input{flex-shrink:0;width:19px;height:19px;accent-color:#19718f;margin-top:2px}.mission-option.is-selected{border-color:#358da8;background:#e5f1ef}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.catalog-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.lesson-catalog h2{font-size:18px;margin-top:28px}
+.catalog-lesson{display:flex;align-items:center;gap:12px;padding:16px;text-align:left;border-radius:12px;background:#edf3ee;color:#254d60;border:1px solid #c6d3cf;min-height:90px}
+.catalog-lesson.is-current{border-color:#b99759}.catalog-lesson strong{font-size:13px;line-height:1.6;display:block}.catalog-lesson small{display:block;margin-top:6px;font-size:10px;color:#657b78}.catalog-lesson>svg{margin-left:auto;flex-shrink:0}.catalog-number{font-size:18px;font-weight:800;color:#8b743f}
+[data-theme=dark] .game-brand,[data-theme=dark] .intro-copy,[data-theme=dark] .quest-card,[data-theme=dark] .camera-toggle,[data-theme=dark] .camera-popover,[data-theme=dark] .walk-controls{background:#0b2236ee;border-color:#345166;color:#edf4f4;box-shadow:0 12px 40px #0005}
+[data-theme=dark] .intro-copy{border-top-color:#edbc6b}[data-theme=dark] .intro-copy h1 em{color:#f2bf6b}
+[data-theme=dark] .intro-copy p,[data-theme=dark] .quest-card p,[data-theme=dark] .camera-popover p,[data-theme=dark] .game-note,[data-theme=dark] .eyebrow{color:#b1c7ce}
+[data-theme=dark] .secondary,[data-theme=dark] .camera-reset,[data-theme=dark] .camera-pad button{background:#18364c;border-color:#36556a;color:#e3edf1}
+[data-theme=dark] .course-return{background:#14354adf;color:#f0d4a2;border:1px solid #426171}
+[data-theme=dark] .station-label{background:#122f43ec;color:#e9f7f9;border-color:#48677c}[data-theme=dark] .station-label.selected{border-color:#efbd6a;box-shadow:0 0 0 4px #e8ad4f25}
+[data-theme=dark] .avatar-picker{color:#bfd2d8}[data-theme=dark] select{background:#102b40;color:#e7f3f5;border-color:#49697e}
+[data-theme=dark] .pilot-intro-actions .pilot-fallback-button{background:#19374b;color:#e6f1f2;border-color:#3c5d6d}
+[data-theme=dark] .pilot-intro-actions .start-button{background:#dba557;color:#092638;border-color:#efc376;box-shadow:0 4px 0 #90662f}
+[data-theme=dark] .modal{background:#102b3d;color:#e5eff3;border-color:#426076}[data-theme=dark] .modal-top{background:#10293ef5;border-bottom-color:#365368}
+[data-theme=dark] .network-diagram,[data-theme=dark] .hint-panel{background:#183c4c;color:#d3e6e9}
+[data-theme=dark] .mission-question,[data-theme=dark] .network-mission fieldset{border-color:#446374}
+[data-theme=dark] .mission-option{background:#18364a;color:#e1edf0;border-color:#3d5a6b}[data-theme=dark] .mission-option.is-selected{background:#214959;border-color:#6dd1db}
+[data-theme=dark] .mission-error{background:#453928;color:#f4dfb6;border-color:#8c7549}
+[data-theme=dark] .catalog-lesson{background:#18364b;color:#e3eef0;border-color:#35576c}[data-theme=dark] .catalog-lesson small{color:#aac7d1}[data-theme=dark] .catalog-number{color:#ecc07c}
+[data-theme=dark] .loading-state{background:#081c2c;color:#dfeaf0}
+[data-theme=dark] .quest-button,[data-theme=dark] .primary{background:#286e88;color:#fff;border-color:#4f94a6}
+[data-theme=dark] .quest-card .pilot-quest-fallback{color:#c5dbe2;border-color:#3a6273}
+[data-theme=dark] .network-result{border-color:#70afb4;background:#153b49}
+.legacy-campus-frame{position:absolute;top:158px;left:0;width:100%;height:calc(100% - 158px);border:0;background:#18354b}
+.legacy-shell .course-return{top:26px;left:280px}.legacy-shell .quest-card{top:88px;left:20px;right:20px;width:auto;display:flex;align-items:center;gap:18px;padding:10px 14px}
+.legacy-shell .quest-card .eyebrow,.legacy-shell .quest-card p,.legacy-shell .pilot-quest-fallback{display:none}.legacy-shell .quest-card h2{margin:0;font-size:14px;flex:1}.legacy-shell .quest-button{width:auto;margin:0}
+@media(max-width:700px){.campus-header-actions{gap:4px}.campus-header-actions button{padding:9px;font-size:10px}.intro-copy h1{font-size:24px}.catalog-grid{grid-template-columns:1fr}.mission-question{padding:12px}.mission-option{padding:12px;font-size:13px}.legacy-shell .course-return{top:84px;left:16px}.legacy-shell .quest-card{top:126px;left:10px;right:10px}.legacy-campus-frame{top:202px;height:calc(100% - 202px)}.legacy-shell .quest-button{font-size:10px;padding:10px}.legacy-shell .quest-card h2{font-size:11px}}
+@media(max-width:650px){.station-label{min-width:34px;min-height:34px}.station-label:after{content:'';position:absolute;inset:-5px}.station-label.selected{max-width:140px}.station-label.selected strong{max-width:94px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}}
+@media(max-width:650px){.intro-copy>p:not(.intro-selected){display:none}.intro-selected{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.intro-copy h1{font-size:22px}}

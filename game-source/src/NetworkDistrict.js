@@ -3,7 +3,7 @@ import {Q1,stationCollider} from './districts/q1.js';
 import {districtBoxGeometry,pavingGeometry,districtMaterial} from './districtMaterials.js';
 // Q1-specific architecture. Other quarters need separate scene factories.
 export function buildNetworkDistrict(scene,lessons,sign,{surfaceTextures={}}={}){
- const stationGroups=[],markers=[],doors=[],trees=[],lamps=[],signals=[],traces=[],districtMeshes=[];
+ const stationGroups=[],markers=[],doors=[],trees=[],lamps=[],signals=[],traces=[],districtMeshes=[],warmWindows=[],neonMaterials=[];
  const colliders=[...Q1.stations.map(stationCollider),...Q1.infrastructureColliders];
  scene.userData.district='q1';
  const materials=new Map();
@@ -15,6 +15,8 @@ export function buildNetworkDistrict(scene,lessons,sign,{surfaceTextures={}}={})
  function group(p,x=0,y=0,z=0){const g=new THREE.Group();g.position.set(x,y,z);p.add(g);return g;}
  function beam(p,a,b,r,color){const start=new THREE.Vector3(...a),end=new THREE.Vector3(...b),delta=end.clone().sub(start);const m=mesh(new THREE.CylinderGeometry(r,r,delta.length(),8),material(color,.35),p);m.position.copy(start.add(end).multiplyScalar(.5));m.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),delta.normalize());return m;}
  const glass=material('#3b647a',0,'glass');
+ const windowMaterial=new THREE.MeshStandardMaterial({color:'#e2b96e',emissive:'#ff9f38',emissiveIntensity:1.8,roughness:.3,metalness:0});
+ const neon=new THREE.MeshBasicMaterial({color:'#56edff',toneMapped:false});neonMaterials.push(neon);
  const pave=(w,d,c,x=0,z=0)=>mesh(pavingGeometry(w,.08,d),material(c,0,'paving'),scene,x,.045,z);
  const led=new THREE.MeshBasicMaterial({color:'#51d8da'});
  // Linear fibre boulevard and staggered service blocks replace the radial fountain plan.
@@ -23,7 +25,7 @@ export function buildNetworkDistrict(scene,lessons,sign,{surfaceTextures={}}={})
  for(const x of [-6,6])pave(2.8,32,'#d6dddc',x,0);
  for(const z of [-6,6])pave(16,2.8,'#d6dddc',0,z);
  for(const s of Q1.stations){const [x,z]=s.entry;pave(6,2,'#d6dddc',x<0?-9:x>5?9:x,z);}
- const fibreMaterial=new THREE.MeshBasicMaterial({color:'#278b9f'});
+ const fibreMaterial=new THREE.MeshBasicMaterial({color:'#50e7fc',toneMapped:false});neonMaterials.push(fibreMaterial);
  function conduit(points){const curve=new THREE.CurvePath();for(let i=1;i<points.length;i++)curve.add(new THREE.LineCurve3(new THREE.Vector3(...points[i-1]),new THREE.Vector3(...points[i])));mesh(new THREE.TubeGeometry(curve,Math.max(4,points.length*8),.085,6,false),fibreMaterial,scene);traces.push(curve);}
  conduit([[0,.14,17],[0,.14,6],[3,.14,6],[3,.14,-6],[0,.14,-6],[0,.14,-9]]);
  for(const z of [-10,1,12])for(const side of [-1,1])conduit([[3,.14,z],[side*7,.14,z],[side*10,.14,z]]);
@@ -39,6 +41,18 @@ export function buildNetworkDistrict(scene,lessons,sign,{surfaceTextures={}}={})
  for(let h=1;h<9;h+=2)for(const side of [-1,1])beam(mast,[-.6,h,side*.55],[.5,h+2,side*.4],.04,'#7b929d');
  for(const h of [6,8]){box(mast,2.3,.12,.13,'#dce6e8',0,h,0);for(const x of [-1.1,1.1])box(mast,.35,1.1,.17,'#eff4ef',x,h,0);}
  const dish=mesh(new THREE.SphereGeometry(.85,20,12,0,Math.PI*2,0,Math.PI/2),material('#e5edef',.4),mast,0,9,0);dish.rotation.x=.8;
+ function observatory(parent){
+  const dome=group(parent,1.1,3.9,-.25);dome.name='observatory-dome';
+  cylinder(dome,2.85,.5,'#728c9e',0,.25,0);
+  const shell=mesh(new THREE.SphereGeometry(2.8,32,14,.5,Math.PI*2-1,0,Math.PI/2),material('#57758a',.65),dome,0,.5,0);shell.name='open-dome-shell';
+  for(let j=0;j<9;j++){const rib=mesh(new THREE.TorusGeometry(2.82,.025,4,20,Math.PI/2),material('#bca779',.55),dome,0,.5,0);rib.rotation.y=.5+j*(Math.PI*2-1)/8;}
+  const rim=mesh(new THREE.TorusGeometry(2.84,.07,6,48),material('#bca779',.5),dome,0,.5,0);rim.rotation.x=Math.PI/2;
+  cylinder(dome,.17,1.25,'#bba47b',0,1,0);const scope=group(dome,0,1.6,0);scope.rotation.z=-.75;
+  const barrel=cylinder(scope,.22,1.75,'#c0ced6',0,.1,0);barrel.name='observatory-telescope';cylinder(scope,.29,.18,'#b59759',0,.95,0);cylinder(scope,.23,.03,'#49dfff',0,1.05,0);
+  const interior=new THREE.PointLight('#ffbf62',14,5,2);interior.position.set(0,1,0);dome.add(interior);
+  return interior;
+ }
+ const observatoryLights=[];
  Q1.stations.forEach((s,i)=>{
   const lesson=lessons[i],g=group(scene,s.position[0],0,s.position[1]);g.rotation.y=s.rotation;g.userData.station=i;g.userData.kind=s.kind;stationGroups.push(g);
   const {width:w,depth:d}=s;box(g,w+.5,.18,d+.5,'#728b95',0,.1,0);
@@ -53,7 +67,7 @@ export function buildNetworkDistrict(scene,lessons,sign,{surfaceTextures={}}={})
    box(g,w,2.5,d,'#b9c9ce',0,1.4,0);const roof=box(g,w+.4,.18,d+.6,'#326979',0,2.95,0);roof.rotation.z=.08;
    for(const x of [-2.2,0,2.2])box(g,1.5,1.6,.1,'#334e5c',x,1.25,d/2+.08);for(const x of [-2,0,2])box(g,1.3,.14,1.5,'#263f63',x,3.24,-.3);
   }else if(i===2){
-   box(g,4.3,6.1,4.3,'#d4e0e3',0,3.2,-.5);for(let floor=0;floor<4;floor++)mesh(new THREE.BoxGeometry(4.5,.7,4.5),glass,g,0,1.4+floor*1.2,-.5);
+   box(g,4.3,6.1,4.3,'#d4e0e3',0,3.2,-.5);for(let floor=0;floor<4;floor++)mesh(new THREE.BoxGeometry(4.5,.7,4.5),windowMaterial,g,0,1.4+floor*1.2,-.5);
    box(g,6,.18,5.8,'#315e74',0,6.4,-.4);cylinder(g,.055,2,'#719bab',0,7.4,-.5);
   }else if(i===3){
    cylinder(g,2.8,2.9,'#d4e2e2',0,1.6,0);const dome=mesh(new THREE.SphereGeometry(2.9,24,12,0,Math.PI*2,0,Math.PI/2),material('#497783',.5),g,0,3,0);dome.scale.y=.65;
@@ -66,23 +80,27 @@ export function buildNetworkDistrict(scene,lessons,sign,{surfaceTextures={}}={})
   }else if(i===6){
    for(const x of [-2.3,2.3])box(g,.65,4,.65,'#6b8b97',x,2,0);box(g,w,1,2,'#2d687d',0,4.2,0);mesh(new THREE.BoxGeometry(3.7,2,.1),glass,g,0,1.3,-.7);box(g,1,1.4,.8,'#d2e3e4',-1.8,.8,1.2);
   }else{
-   for(const x of [-w/2,w/2])box(g,.12,1.1,d,'#81969c',x,.65,0);for(const z of [-d/2,d/2])box(g,w,1.1,.12,'#81969c',0,.65,z);
-   for(const x of [-2,0,2]){box(g,.35,.7,.35,'#e1ad59',x,.4,0);box(g,.6,.12,.6,'#f1d28c',x,.75,0);}
+   box(g,w,2.7,d,'#334f67',0,1.5,0);box(g,w+.4,.2,d+.4,'#243b52',0,3.05,0);
+   for(const x of [-1.4,1.4]){const ring=mesh(new THREE.TorusGeometry(.65,.06,6,28),material('#bfa475',.5),g,x,4.05,0);ring.rotation.y=.45;sign(g,x<0?'0':'1',.6,.8,x,4.05,.1,'#173a55');}
+
   }
   if(i<7){for(let x=-w/2+.9;x<w/2;x+=1.4)box(g,.025,1.9,.025,'#78939e',x,1.55,d/2+.075);box(g,w-.3,.09,.19,'#e4edef',0,.36,d/2+.1);}
+  if(i<8){for(let x=-w/2+.9;x<w/2-.4;x+=1.15){const pane=mesh(new THREE.PlaneGeometry(.88,1.05),windowMaterial,g,x,1.8,d/2+.2);warmWindows.push(pane);}mesh(new THREE.BoxGeometry(w-.25,.045,.06),neon,g,0,3.02,d/2+.23);}
+  for(const side of [-1,1])for(let z=-d/2+.8;z<d/2-.4;z+=1.15){const pane=mesh(new THREE.PlaneGeometry(.85,1.05),windowMaterial,g,side*(w/2+.1),1.8,z);pane.rotation.y=side*Math.PI/2;warmWindows.push(pane);}
   const signY=i===2?5.9:i===4?4.3:i===6?4.2:2.8;
   sign(g,i===0?'ЖЕЛІ ЗЕРТХАНАСЫ':lesson.short,Math.min(w-1,4),.72,0,signY,d/2+.2,'#19465a');
-  if(i>0)sign(g,'КЕЙІН',1.8,.43,0,.72,d/2+.27,'#526777');
+  sign(g,i===7?'09 · 10 · 11 · 12 · 14':'Q1',i===7?3.2:1,.4,0,.75,d/2+.27,'#233f54');
   if(i===0){const hinge=group(g,-.55,1.15,d/2+.18);box(hinge,1.1,2,.08,'#244a5f',.55,0,0);doors.push({hinge,i});}
-  const height=i===2?8.7:i===6?5.6:5.4;
+  if(i===0)observatoryLights.push(observatory(g));
+  const height=i===0?8.1:i===2?8.7:i===6?5.6:5.4;
   const marker=group(scene,s.position[0],height,s.position[1]);const gem=mesh(new THREE.OctahedronGeometry(i===0?.3:.19),new THREE.MeshStandardMaterial({color:lesson.color,emissive:lesson.color,emissiveIntensity:.3}),marker);markers.push({g:marker,gem,i,height});
  });
  const beds=[[-19,-6],[-19,4],[-19,13],[19,-4],[19,6],[19,14],[-3,4],[3,-3]];
  beds.forEach(([x,z],index)=>{box(scene,2.1,.15,3.3,'#587e6e',x,.1,z);for(let j=0;j<5;j++){const shrub=mesh(new THREE.IcosahedronGeometry(.38,1),material(index%2?'#72988a':'#4e877a'),scene,x+(j%2-.5)*.7,.6,z+(j-2)*.5);shrub.scale.y=.85;}
-  const tree=group(scene,x,0,z);trees.push(tree);cylinder(tree,.09,2.7,'#7f8b7a',0,1.4,0);const crown=mesh(new THREE.IcosahedronGeometry(.9,1),material('#5d8b79'),tree,0,3.1,0);crown.scale.set(.7,1.6,.7);
+  const tree=group(scene,x,0,z);trees.push(tree);cylinder(tree,.09,2.7,'#7f8b7a',0,1.4,0);const crown=mesh(new THREE.IcosahedronGeometry(.9,2),material('#5d8b79'),tree,0,3.1,0);crown.scale.set(.7,1.6,.7);for(const side of [-1,1]){const leaf=mesh(new THREE.IcosahedronGeometry(.55,1),material('#396b5e'),tree,side*.4,2.7,side*.2);leaf.scale.y=1.4;}for(let f=0;f<5;f++)mesh(new THREE.SphereGeometry(.07,6,4),material('#edc87c'),scene,x+(f%2-.5)*.8,.35,z+(f-2)*.45);
  });
  for(const x of [-22,22])for(const z of [-17,-9,0,9,17]){const hill=mesh(new THREE.IcosahedronGeometry(3.5,1),material('#86a697'),scene,x*1.5,-.3,z*1.8);hill.scale.set(2,.7,1.3);}
- for(const x of [-4,4])for(const z of [-13,-5,5,15]){const g=group(scene,x,0,z);lamps.push(g);box(g,.07,3.2,.07,'#607d8b',0,1.6,0);box(g,.7,.08,.25,'#d8f6ed',.28,3.2,0);}
+ for(const x of [-4,4])for(const z of [-13,-5,5,15]){const g=group(scene,x,0,z);lamps.push(g);box(g,.07,3.2,.07,'#607d8b',0,1.6,0);mesh(new THREE.BoxGeometry(.7,.08,.25),windowMaterial,g,.28,3.2,0);}
  for(const [x,z] of [[-3,7],[3,7],[-3,-7],[3,-7]]){const g=group(scene,x,0,z);box(g,1.6,.12,.55,'#b8c9c8',0,.6,0);for(const dx of [-.6,.6])box(g,.12,.5,.45,'#496b7d',dx,.3,0);}
  for(const x of [-3,3])box(scene,.3,4.5,.3,'#456b7b',x,2.25,17);
  box(scene,6.7,1,.4,'#1c536b',0,4.4,17);sign(scene,'БАЙЛАНЫС АУДАНЫ',5.8,.65,0,4.4,17.24,'#1c536b');
@@ -90,5 +108,8 @@ export function buildNetworkDistrict(scene,lessons,sign,{surfaceTextures={}}={})
  const decoration=new Set([...signals.map(s=>s.packet),...markers.map(m=>m.gem)]);
  const bounds=new THREE.Box3();
  const cameraOccluders=districtMeshes.filter(mesh=>!decoration.has(mesh)&&bounds.setFromObject(mesh).max.y>.3);
- return {stationGroups,markers,doors,trees,lamps,signals,colliders,cameraOccluders};
+ const baseMaterials=[...new Set(districtMeshes.map(m=>m.material))].filter(m=>m.isMeshStandardMaterial&&m!==windowMaterial).map(m=>({m,color:m.color.clone()}));
+ let themeKey='';
+ function setTheme(theme,low){const key=theme+low;if(key===themeKey)return;themeKey=key;const night=theme!=='light';baseMaterials.forEach(({m,color})=>{m.color.copy(color);if(night)m.color.lerp(new THREE.Color('#102c43'),m.metalness>.3?.32:.62);});windowMaterial.emissiveIntensity=night?1.7:.12;windowMaterial.color.set(night?'#9f6b35':'#9db2ba');neonMaterials.forEach(m=>m.color.set(night?'#57eeff':'#278b9f'));observatoryLights.forEach(light=>{light.visible=night&&!low;light.intensity=night&&!low?14:0;});}
+ return {stationGroups,markers,doors,trees,lamps,signals,colliders,cameraOccluders,setTheme,warmWindows,observatoryLights};
 }
