@@ -2,7 +2,7 @@
 
 Күні: 2026-11-08. Күйі: **жарық/материал/қозғалыс build ДАЙЫН; нақты сұралған кейіпкерлерді ауыстыру үшін архивтер жетіспейді**. Оқшау build, жарияланған жоқ.
 
-Ең соңғы тексеру: **30/30 тест өтті**. Алдыңғы аудан қайта құруының сипаттамасы төменде сақталған; жаңа render polish және актив аудитінің нақты мәртебесі файл соңындағы бөлімде.
+Ең соңғы тексеру: **33/33 тест өтті**, камера кедергісінің түзетуі де қосылған. Алдыңғы аудан қайта құруының сипаттамасы төменде сақталған; жаңа render polish және актив аудитінің нақты мәртебесі файл соңындағы бөлімде.
 
 ## Қайдан алу және қалай біріктіру
 
@@ -130,3 +130,23 @@ Build `outputs/game-build` ішіне файлдарды жоймай көшір
 8 listing-тің ресми Data API-і HTTP 200 берді; сегізінің де ресми download endpoint-і авторизациясыз **401** берді. Naruto running/walking кандидаттарында 1 animation-нан бар. Тексерілген ықшам Tom модельдері және Tom Multiversus rig — 0 animation; Jerry rigged — 1; Transformers transform — 1; «Transformers Animated» сериясының Optimus моделінде 0. Бір animation — дайын Walk/Idle/Run жинағының дәлелі емес.
 
 Сатып алу, модель viewer-ін айналып өту немесе ойыннан rip жасау қолданылмады. Қазіргі студенттер/RobotExpressive жаңа franchise кейіпкерлері деп аталмады. Runtime roster уақытша бұрынғы нақты атауларымен қалды. Ресми аккаунттан алынған архив/лицензия жеткенде бір Naruto моделінің rig/clip сәйкестігін тексеруден бастауға болады; Tom/Jerry үшін provenance және baked locomotion, Transformers үшін transform/locomotion бөлуі қажет.
+
+
+## Соңғы түзету: кіреберістегі үшінші жақ камерасының кедергісі
+
+Күйі: **build жаңартылды**, browser QA-ға дайын. Дәлел ретінде орталық чаттың `screenshots/game-polish.png` суреті қаралды; осы чат браузерге тимеді.
+
+Себеп: бұрын camera collision тек stationGroups (оқу ғимараттары) арқылы тексерілген. Көріністі жауып тұрған utility bridge бағаны бұл топқа кірмеген. Жақындату шегі .6 м болып, OrbitControls minDistance 2.2 м арқылы қайта шектелуі де ықтимал еді.
+
+Түзету:
+
+- `NetworkDistrict.js` нақты статикалық district mesh-терінен cameraOccluders береді: ғимараттармен бірге utility bridge бағандары, rack canopies, инфрақұрылым, маңдайша және ландшафт бөлшектері. Жер/жол жазықтары, packet және mission marker декоры кірмейді.
+- Жаңа `src/cameraOcclusion.js`: кейіпкердің бас/дене/аяқ және жанама көрініс нүктелерінен камераға жеті reverse ray; камераның near-plane жанындағы/ішіндегі mesh үшін bounding guard. Алдымен view corridor бойынша broadphase сүзгі бар.
+- Кедергі келтірген mesh материалдары уақытша 6% opacity/depthWrite=false clone-дарына ауысады. Sightline ашылғанда немесе overview-ға ауысқанда бастапқы material identity қалпына келеді. Material arrays қолдаулы; clone-дар cleanup кезінде босатылады.
+- Collision dolly арқылы камераны жақындату алынды. OrbitControls damping/clamp біткеннен кейін opacity тексеріледі; OrbitControls-пен қашықтық тартысы жоқ. Player/camera координаттары fade helper-де өзгермейді. Қозғалыс, footprints, lesson/API өзгермеді.
+
+`tests/camera-occlusion.test.mjs`: actual Q1 scene geometry-мен бірінші entry + 21 кадр/350 мс W симуляциясы; дәл x=-3.3,z=-7 utility бағанының fade-ке кіретінін және camera/player position өзгермейтінін тексереді. Қосымша camera-inside mesh/material arrays қалпына келуі және кейіпкер артындағы геометрияның мөлдірленбеуі тексерілді.
+
+Vite build + packaging + бүкіл suite: **33/33 өтті**. Нақты бағанға күшейтілген regression тексеруі де 3/3 өтті. Ағымдағы bundle: `index-IJYqoH3a.js` (шамамен 1.049 МБ / gzip 284 КБ); `/game/` refs тексерілді. `game-build` файлдарды жоймай жаңартылды. Үлкен chunk туралы бұрынғы ескерту бар.
+
+Орталық QA: fresh reload → default engineer → Кампусқа кіру → W 350ms; кейіпкер мен ортадағы бағанды, orbit/overview/follow ауысуын, есік жанын тексеру. Толық final viewport көрінісі headless тесттен расталмайды. Жарық/материал сапасы туралы жаңа визуал мәлімдеме жасалмайды. Naruto/Tom/Jerry/Transformers активтері әлі жүктелген жоқ; roster атаулары өзгертілмеді. Жариялау/жергілікті жою жасалмады.

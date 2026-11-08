@@ -3,13 +3,13 @@ import {Q1,stationCollider} from './districts/q1.js';
 import {districtBoxGeometry,pavingGeometry,districtMaterial} from './districtMaterials.js';
 // Q1-specific architecture. Other quarters need separate scene factories.
 export function buildNetworkDistrict(scene,lessons,sign,{surfaceTextures={}}={}){
- const stationGroups=[],markers=[],doors=[],trees=[],lamps=[],signals=[],traces=[];
+ const stationGroups=[],markers=[],doors=[],trees=[],lamps=[],signals=[],traces=[],districtMeshes=[];
  const colliders=[...Q1.stations.map(stationCollider),...Q1.infrastructureColliders];
  scene.userData.district='q1';
  const materials=new Map();
  const metalColors=new Set(['#365564','#314d60','#315e74','#354f5d','#2d687d','#718b98','#536d7e','#43606c','#243d4a']);
  const material=(color,metalness=metalColors.has(color)?.4:0,profile='paint')=>{const key=color+metalness+profile;if(!materials.has(key))materials.set(key,districtMaterial(color,metalness,profile,surfaceTextures));return materials.get(key);};
- function mesh(geo,mat,parent,x=0,y=0,z=0){const m=new THREE.Mesh(geo,mat);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;parent.add(m);return m;}
+ function mesh(geo,mat,parent,x=0,y=0,z=0){const m=new THREE.Mesh(geo,mat);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;parent.add(m);districtMeshes.push(m);return m;}
  const box=(p,w,h,d,c,x=0,y=0,z=0)=>mesh(districtBoxGeometry(w,h,d),material(c),p,x,y,z);
  const cylinder=(p,r,h,c,x=0,y=0,z=0)=>mesh(new THREE.CylinderGeometry(r,r,h,16),material(c,.3),p,x,y,z);
  function group(p,x=0,y=0,z=0){const g=new THREE.Group();g.position.set(x,y,z);p.add(g);return g;}
@@ -86,5 +86,9 @@ export function buildNetworkDistrict(scene,lessons,sign,{surfaceTextures={}}={})
  for(const [x,z] of [[-3,7],[3,7],[-3,-7],[3,-7]]){const g=group(scene,x,0,z);box(g,1.6,.12,.55,'#b8c9c8',0,.6,0);for(const dx of [-.6,.6])box(g,.12,.5,.45,'#496b7d',dx,.3,0);}
  for(const x of [-3,3])box(scene,.3,4.5,.3,'#456b7b',x,2.25,17);
  box(scene,6.7,1,.4,'#1c536b',0,4.4,17);sign(scene,'БАЙЛАНЫС АУДАНЫ',5.8,.65,0,4.4,17.24,'#1c536b');
- return {stationGroups,markers,doors,trees,lamps,signals,colliders};
+ scene.updateMatrixWorld(true);
+ const decoration=new Set([...signals.map(s=>s.packet),...markers.map(m=>m.gem)]);
+ const bounds=new THREE.Box3();
+ const cameraOccluders=districtMeshes.filter(mesh=>!decoration.has(mesh)&&bounds.setFromObject(mesh).max.y>.3);
+ return {stationGroups,markers,doors,trees,lamps,signals,colliders,cameraOccluders};
 }

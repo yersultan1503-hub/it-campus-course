@@ -6,6 +6,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
+import {createOcclusionFade} from './cameraOcclusion';
 import { LESSONS } from './content';
 import { createCameraActions, wheelIntent } from './cameraControls';
 import { movementKey, slideMove } from './movement';
@@ -47,7 +48,7 @@ export function World({ avatar='engineer', follow, artifacts, started, selected,
   function sign(p,text,w=2.7,h=1.8,x=0,y=2,z=1.8,bg='#163047'){
    const can=document.createElement('canvas');can.width=512;can.height=256;const c=can.getContext('2d');c.fillStyle=bg;c.fillRect(0,0,512,256);c.fillStyle='#f5f5e9';c.textAlign='center';c.textBaseline='middle';c.font=`700 ${text.length>5?65:125}px Arial`;c.fillText(text,256,135,480);const t=new THREE.CanvasTexture(can);t.colorSpace=THREE.SRGBColorSpace;const o=mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({map:t}),p,x,y,z);o.castShadow=false;return o;
   }
-  const {stationGroups,markers,doors,trees,lamps,signals,colliders}=buildNetworkDistrict(scene,LESSONS,sign,{surfaceTextures});
+  const {stationGroups,markers,doors,trees,lamps,signals,colliders,cameraOccluders}=buildNetworkDistrict(scene,LESSONS,sign,{surfaceTextures});
   // Articulated hips, knees, ankles, shoulders and elbows share a distance-driven gait.
   function person(x,z,color='#244c70',scale=1,variant=0){
    const g=group(scene,x,.1,z);g.scale.setScalar(scale);const rig=group(g),body=group(rig,0,.78,0);
@@ -127,7 +128,7 @@ export function World({ avatar='engineer', follow, artifacts, started, selected,
   function cancel(){pointerStart=null;}
   function up(e){const start=pointerStart;pointerStart=null;if(!start||start.id!==e.pointerId||start.dragged||e.ctrlKey||e.shiftKey||e.metaKey||Math.hypot(start.x-e.clientX,start.y-e.clientY)>7||e.button!==0||props.current.paused)return;const r=el.getBoundingClientRect();pointer.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);raycaster.setFromCamera(pointer,camera);const hits=raycaster.intersectObjects(stationGroups,true);if(hits.length){let o=hits[0].object;while(o&&o.userData.station===undefined)o=o.parent;if(o){props.current.onSelect(o.userData.station);const l=LESSONS[o.userData.station];target.set(l.entry[0],0,l.entry[1]);}return;}const p=new THREE.Vector3();if(raycaster.ray.intersectPlane(plane,p)){target.set(THREE.MathUtils.clamp(p.x,-Q1.bounds.x+.5,Q1.bounds.x-.5),0,THREE.MathUtils.clamp(p.z,-Q1.bounds.z+.5,Q1.bounds.z-.5));}}
   addEventListener('keydown',keydown);addEventListener('keyup',keyup);renderer.domElement.addEventListener('pointerdown',down);renderer.domElement.addEventListener('pointermove',move);renderer.domElement.addEventListener('pointercancel',cancel);renderer.domElement.addEventListener('pointerup',up);const blur=()=>{sprint=false;keys.clear();tapUntil.clear();cancel();};addEventListener('blur',blur);
-  let focusTarget=null,focusPosition=null,lastSelected=-1,lastFollow=null;const previousPlayer=new THREE.Vector3(),cameraRay=new THREE.Raycaster();const fadedMaterials=new Map();let faded=[];
+  let focusTarget=null,focusPosition=null,lastSelected=-1,lastFollow=null;const previousPlayer=new THREE.Vector3(),occlusion=createOcclusionFade();
   const cancelFocus=()=>{focusTarget=null;focusPosition=null;};controls.addEventListener('start',cancelFocus);
   let raf,previous=performance.now(),lastNear=-1,elapsed=0;const projected=new THREE.Vector3();
   function resize(){const w=el.clientWidth,h=el.clientHeight;camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h);}
@@ -193,26 +194,27 @@ export function World({ avatar='engineer', follow, artifacts, started, selected,
     for(const [name,action] of Object.entries(actions)){action.setEffectiveWeight(THREE.MathUtils.damp(action.getEffectiveWeight(),weights[name],10,dt));action.setEffectiveTimeScale(name==='Walk'?Math.max(.55,v/walkSpeed):name==='Run'?Math.max(.7,v/4.5):1);}
     mixer.update(dt);
    });
-   faded.forEach(o=>{o.material=fadedMaterials.get(o).original;});faded=[];
    if(p.started&&!p.paused){
     if(lastFollow!==p.follow){lastFollow=p.follow;cancelFocus();if(p.follow){const heading=player.g.rotation.y;controls.target.copy(player.g.position).add(new THREE.Vector3(0,1.35,0));camera.position.copy(controls.target).add(new THREE.Vector3(-Math.sin(heading)*5.8,2.5,-Math.cos(heading)*5.8));}else{cameraActions.reset();}}
     if(p.follow){
      const movement=player.g.position.clone().sub(previousPlayer);if(movement.length()<2){camera.position.add(movement);controls.target.add(movement);}
      const desired=player.g.position.clone().add(new THREE.Vector3(0,1.35,0));const delta=desired.sub(controls.target);const followBlend=1-Math.exp(-dt*4.5);controls.target.addScaledVector(delta,followBlend);camera.position.addScaledVector(delta,followBlend);
-     const direction=camera.position.clone().sub(controls.target),length=direction.length();cameraRay.set(controls.target,direction.normalize());cameraRay.far=length;const obstruction=cameraRay.intersectObjects(stationGroups,true)[0];if(obstruction&&obstruction.distance>.5)camera.position.copy(controls.target).addScaledVector(direction,Math.max(.6,obstruction.distance-.25));
-     cameraRay.far=camera.position.distanceTo(controls.target);const blockers=cameraRay.intersectObjects([...lamps,...trees],true);
-     for(const hit of blockers){const o=hit.object;if(!o.isMesh||faded.includes(o))continue;if(!fadedMaterials.has(o)){const material=o.material.clone();material.transparent=true;material.opacity=.12;material.depthWrite=false;fadedMaterials.set(o,{original:o.material,material});}o.material=fadedMaterials.get(o).material;faded.push(o);}
+
     }
    }
+   // Let OrbitControls finish its damping/clamps before inspecting the final view.
+   // Include infrastructure, gantries, rack canopies and facade details, not just labs.
+   controls.update();scene.updateMatrixWorld(true);
+   if(p.started&&p.follow)occlusion.update(camera,player.g.position,cameraOccluders);else occlusion.clear();
    let near=-1,nd=Infinity;
    markers.forEach(({g,gem,i,height})=>{g.position.y=height+(p.reduced?0:Math.sin(elapsed*2+i)*.18);gem.rotation.y+=p.reduced?0:dt*.45;const done=p.completed.includes(i);gem.material.color.set(done?'#4baf91':LESSONS[i].color);gem.material.emissive.set(done?'#318b6e':LESSONS[i].color);const scale=i===p.selected?1.4:1;gem.scale.lerp(new THREE.Vector3(scale,scale,scale),1-Math.exp(-dt*5));const d=Math.hypot(player.g.position.x-LESSONS[i].position[0],player.g.position.z-LESSONS[i].position[1]);if(d<nd){nd=d;near=i;}
     const node=document.getElementById('station-label-'+i);if(node){projected.set(LESSONS[i].position[0],height+.2,LESSONS[i].position[1]).project(camera);node.style.transform='translate(-50%, -100%) translate('+((projected.x*.5+.5)*el.clientWidth)+'px,'+((-projected.y*.5+.5)*el.clientHeight)+'px)';node.style.opacity=projected.z>1?'0':'1';}
    });
    if(nd>6.5)near=-1;if(near!==lastNear){lastNear=near;p.onNear(near);}
-   controls.update();const badge=document.getElementById('player-label');if(badge){badge.textContent=playerModels.has(p.avatar)?'СЕН · '+(Q1.avatars.find(a=>a.id===p.avatar)?.label||'Зерттеуші').toLocaleUpperCase('kk'):failedAvatars.has(p.avatar)?'СЕН · ЖЕҢІЛ АВАТАР':'КЕЙІПКЕР ЖҮКТЕЛУДЕ…';projected.copy(player.g.position).add(new THREE.Vector3(0,2.65,0)).project(camera);badge.style.transform='translate(-50%, -100%) translate('+((projected.x*.5+.5)*el.clientWidth)+'px,'+((-projected.y*.5+.5)*el.clientHeight)+'px)';badge.style.visibility=p.started&&projected.z<1&&projected.z>-1?'visible':'hidden';}renderer.render(scene,camera);
+   const badge=document.getElementById('player-label');if(badge){badge.textContent=playerModels.has(p.avatar)?'СЕН · '+(Q1.avatars.find(a=>a.id===p.avatar)?.label||'Зерттеуші').toLocaleUpperCase('kk'):failedAvatars.has(p.avatar)?'СЕН · ЖЕҢІЛ АВАТАР':'КЕЙІПКЕР ЖҮКТЕЛУДЕ…';projected.copy(player.g.position).add(new THREE.Vector3(0,2.65,0)).project(camera);badge.style.transform='translate(-50%, -100%) translate('+((projected.x*.5+.5)*el.clientWidth)+'px,'+((-projected.y*.5+.5)*el.clientHeight)+'px)';badge.style.visibility=p.started&&projected.z<1&&projected.z>-1?'visible':'hidden';}renderer.render(scene,camera);
   }
   raf=requestAnimationFrame(animate);
-  return()=>{disposed=true;environment.dispose();surfaceTextures.normal.dispose();surfaceTextures.roughness.dispose();students.forEach(({vrm})=>VRMUtils.deepDispose(vrm.scene));campusAudio.ambience(20,false);fadedMaterials.forEach(x=>x.material.dispose());actors.forEach(a=>a.mixer.stopAllAction());cancelAnimationFrame(raf);ro.disconnect();removeEventListener('keydown',keydown);removeEventListener('keyup',keyup);removeEventListener('blur',blur);renderer.domElement.removeEventListener('pointerdown',down);renderer.domElement.removeEventListener('pointermove',move);renderer.domElement.removeEventListener('pointercancel',cancel);renderer.domElement.removeEventListener('pointerup',up);renderer.domElement.removeEventListener('wheel',wheel,true);cameraRef.current=null;controls.dispose();const allMaterials=new Set();scene.traverse(o=>{o.geometry?.dispose();if(o.material)(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>allMaterials.add(m));});allMaterials.forEach(m=>{for(const value of Object.values(m))if(value?.isTexture)value.dispose();m.dispose();});Object.values(mats).forEach(m=>m.dispose());renderer.dispose();renderer.domElement.remove();};
+  return()=>{disposed=true;environment.dispose();surfaceTextures.normal.dispose();surfaceTextures.roughness.dispose();students.forEach(({vrm})=>VRMUtils.deepDispose(vrm.scene));campusAudio.ambience(20,false);occlusion.dispose();actors.forEach(a=>a.mixer.stopAllAction());cancelAnimationFrame(raf);ro.disconnect();removeEventListener('keydown',keydown);removeEventListener('keyup',keyup);removeEventListener('blur',blur);renderer.domElement.removeEventListener('pointerdown',down);renderer.domElement.removeEventListener('pointermove',move);renderer.domElement.removeEventListener('pointercancel',cancel);renderer.domElement.removeEventListener('pointerup',up);renderer.domElement.removeEventListener('wheel',wheel,true);cameraRef.current=null;controls.dispose();const allMaterials=new Set();scene.traverse(o=>{o.geometry?.dispose();if(o.material)(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>allMaterials.add(m));});allMaterials.forEach(m=>{for(const value of Object.values(m))if(value?.isTexture)value.dispose();m.dispose();});Object.values(mats).forEach(m=>m.dispose());renderer.dispose();renderer.domElement.remove();};
  },[]);
  return <div ref={host} className="world" role="img" aria-label="Бірінші тоқсанның байланыс зерттеу ауданы">{failure&&<div className="world-failure"><h2>Жеңіл режим іске қосылды</h2><p>Бұл браузерде WebGL ашылмады. Мәтіндік балама батырмасын таңдаңыз — бірінші желі тапсырмасын орындауға болады.</p></div>}</div>;
 }

@@ -23,7 +23,7 @@ def add(path,target):
  entries.append(entry)
 for name in ['server.py','requirements.txt','README.md','CONTRACT.md','GOOGLE_SETUP.md','DESIGN_AUDIT.md','CLOUD_DATABASE.md','BACKUP_POLICY.md','seed_local.py','.gitignore']:
  add(ROOT/name,'pilot/'+name)
-for dirname in ['tests','scripts']:
+for dirname in ['tests','scripts','database']:
  for p in (ROOT/dirname).rglob('*'):
   if '__pycache__' not in p.parts:add(p,'pilot/'+str(p.relative_to(ROOT)))
 for p in (ROOT/'public').rglob('*'):
