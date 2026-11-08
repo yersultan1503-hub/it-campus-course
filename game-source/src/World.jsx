@@ -8,28 +8,31 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
 import {createOcclusionFade} from './cameraOcclusion';
-import { LESSONS } from './content';
+import { LESSONS as NETWORK_STATIONS } from './content';
+import {Q2,Q2_STATIONS} from './districts/q2';
+import {buildCodingDistrict} from './CodingDistrict';
 import { createCameraActions, wheelIntent, districtOverview } from './cameraControls';
 import { movementKey, slideMove } from './movement';
 import { animateWalk } from './walkAnimation';
 import {Q1,routePose,roundedPatrol} from './districts/q1';
-const PATROLS=Object.fromEntries(Object.entries(Q1.routes).map(([id,route])=>[id,roundedPatrol(route)]));
 import {buildNetworkDistrict} from './NetworkDistrict';
 import {createObservatoryAtmosphere} from './observatoryAtmosphere';
 
-export function World({ theme='dark', avatar='engineer', follow, artifacts, started, selected, completed, low, reduced, paused, onSelect, onNear, onReady, onStart, cameraRef }) {
+export function World({ districtId='q1', theme='dark', avatar='engineer', follow, artifacts, started, selected, completed, low, reduced, paused, onSelect, onNear, onReady, onStart, cameraRef }) {
+ const Q=districtId==='q2'?Q2:Q1,LESSONS=districtId==='q2'?Q2_STATIONS:NETWORK_STATIONS;
  const host=useRef(null), engine=useRef(null), props=useRef({theme,avatar,follow,artifacts,started,selected,completed,low,reduced,paused,onSelect,onNear,onReady,onStart});
  props.current={theme,avatar,follow,artifacts,started,selected,completed,low,reduced,paused,onSelect,onNear,onReady,onStart};
  const [failure,setFailure]=useState(false);
  useEffect(()=>{
+  const PATROLS=Object.fromEntries(Object.entries(Q.routes).map(([id,route])=>[id,roundedPatrol(route)]));
   const el=host.current;let renderer;
   try{renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance'});}catch{setFailure(true);props.current.onReady();return;}
   renderer.setPixelRatio(Math.min(devicePixelRatio,1.85));renderer.setSize(el.clientWidth,el.clientHeight);renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=.92;
-  el.appendChild(renderer.domElement);renderer.domElement.setAttribute('aria-label','Байланыс зерттеу ауданы: талшықты желі, зертхана және жоспарланған аймақтар');
+  el.appendChild(renderer.domElement);renderer.domElement.setAttribute('aria-label',Q.title+' · 3D оқу ауданы');
   const scene=new THREE.Scene();scene.background=new THREE.Color('#dce9f2');scene.fog=new THREE.Fog('#dce9f2',110,190);
-  const camera=new THREE.PerspectiveCamera(55,el.clientWidth/el.clientHeight,.1,210);camera.position.set(...districtOverview(Q1.view,camera.aspect).position);
-  const controls=new OrbitControls(camera,renderer.domElement);controls.target.set(...districtOverview(Q1.view,camera.aspect).target);controls.enableDamping=true;controls.dampingFactor=.09;controls.rotateSpeed=.65;controls.panSpeed=.8;controls.zoomSpeed=.85;controls.maxPolarAngle=Math.PI*.485;controls.minPolarAngle=.06;controls.minDistance=2.2;controls.maxDistance=160;controls.enablePan=true;controls.screenSpacePanning=false;controls.mouseButtons={LEFT:THREE.MOUSE.ROTATE,MIDDLE:THREE.MOUSE.DOLLY,RIGHT:THREE.MOUSE.PAN};controls.touches={ONE:THREE.TOUCH.ROTATE,TWO:THREE.TOUCH.DOLLY_PAN};controls.update();
-  const cameraActions=createCameraActions(camera,controls,()=>el.clientHeight,()=>districtOverview(Q1.view,camera.aspect));cameraRef.current=cameraActions;
+  const camera=new THREE.PerspectiveCamera(55,el.clientWidth/el.clientHeight,.1,210);camera.position.set(...districtOverview(Q.view,camera.aspect).position);
+  const controls=new OrbitControls(camera,renderer.domElement);controls.target.set(...districtOverview(Q.view,camera.aspect).target);controls.enableDamping=true;controls.dampingFactor=.09;controls.rotateSpeed=.65;controls.panSpeed=.8;controls.zoomSpeed=.85;controls.maxPolarAngle=Math.PI*.485;controls.minPolarAngle=.06;controls.minDistance=2.2;controls.maxDistance=160;controls.enablePan=true;controls.screenSpacePanning=false;controls.mouseButtons={LEFT:THREE.MOUSE.ROTATE,MIDDLE:THREE.MOUSE.DOLLY,RIGHT:THREE.MOUSE.PAN};controls.touches={ONE:THREE.TOUCH.ROTATE,TWO:THREE.TOUCH.DOLLY_PAN};controls.update();
+  const cameraActions=createCameraActions(camera,controls,()=>el.clientHeight,()=>districtOverview(Q.view,camera.aspect));cameraRef.current=cameraActions;
   function wheel(e){if(props.current.paused)return;const intent=wheelIntent(e,el.clientHeight);if(intent.zoom)return;e.preventDefault();e.stopImmediatePropagation();cameraActions.pan(intent.x,intent.y);}
   renderer.domElement.addEventListener('wheel',wheel,{capture:true,passive:false});
   const hemisphere=new THREE.HemisphereLight('#e4f0ff','#7b887c',1.1);scene.add(hemisphere);
@@ -50,8 +53,8 @@ export function World({ theme='dark', avatar='engineer', follow, artifacts, star
   function sign(p,text,w=2.7,h=1.8,x=0,y=2,z=1.8,bg='#163047'){
    const can=document.createElement('canvas');can.width=512;can.height=256;const c=can.getContext('2d');c.fillStyle=bg;c.fillRect(0,0,512,256);c.fillStyle='#f5f5e9';c.textAlign='center';c.textBaseline='middle';c.font=`700 ${text.length>5?65:125}px Arial`;c.fillText(text,256,135,480);const t=new THREE.CanvasTexture(can);t.colorSpace=THREE.SRGBColorSpace;const o=mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({map:t}),p,x,y,z);o.castShadow=false;return o;
   }
-  const {stationGroups,markers,doors,trees,lamps,signals,colliders,cameraOccluders,setTheme:districtTheme}=buildNetworkDistrict(scene,LESSONS,sign,{surfaceTextures});
-  const atmosphere=createObservatoryAtmosphere(scene);let lightingTheme='';
+  const {stationGroups,markers,doors,trees,lamps,signals,colliders,cameraOccluders,setTheme:districtTheme}=(districtId==='q2'?buildCodingDistrict:buildNetworkDistrict)(scene,LESSONS,sign,{surfaceTextures});
+  const atmosphere=districtId==='q2'?{update(){}}:createObservatoryAtmosphere(scene);let lightingTheme='';
   // Articulated hips, knees, ankles, shoulders and elbows share a distance-driven gait.
   function person(x,z,color='#244c70',scale=1,variant=0){
    const g=group(scene,x,.1,z);g.scale.setScalar(scale);const rig=group(g),body=group(rig,0,.78,0);
@@ -86,7 +89,7 @@ export function World({ theme='dark', avatar='engineer', follow, artifacts, star
   groundShadow(player);
   const guests=[];
   const actors=[],students=[],playerModels=new Map(),failedAvatars=new Set();
-  const bots=Q1.civilians.map((config,index)=>{const pose=routePose(PATROLS[config.route],config.offset);const b=person(pose.x,pose.z,['#497785','#72987c'][index],config.scale,index+1);return {...b,...config,distance:config.offset};});
+  const bots=Q.civilians.map((config,index)=>{const pose=routePose(PATROLS[config.route],config.offset);const b=person(pose.x,pose.z,['#497785','#72987c'][index],config.scale,index+1);return {...b,...config,distance:config.offset};});
   bots.forEach(groundShadow);
   const visitors=[];
   const studentLoader=new GLTFLoader();studentLoader.register(parser=>new VRMLoaderPlugin(parser));
@@ -114,12 +117,14 @@ export function World({ theme='dark', avatar='engineer', follow, artifacts, star
     onLoad:actor=>{if(variant){playerModels.set(variant,actor.root);actor.root.visible=props.current.avatar===variant;}guests.push({...actor,person,variant});},
     onError:()=>{if(variant)failedAvatars.add(variant);else if(person.rig)person.rig.visible=true;console.warn('Character could not load:',config.asset);}});
   }
-  bots.forEach(b=>guest(b,b));
-  Q1.avatars.filter(a=>a.kind).forEach(a=>guest(player,a,a.id));
+  bots.forEach((b,i)=>b.asset.endsWith('.vrm')?loadStudent(b,b.asset,i*2):guest(b,b));
+  Q.avatars.filter(a=>a.kind).forEach(a=>guest(player,a,a.id));
+  if(districtId==='q1'){
   const tom={g:group(scene,-5,.1,-11),actualSpeed:0};tom.g.rotation.y=Math.PI/2;guest(tom,{asset:'tom.glb',kind:'tom',height:1.8});groundShadow(tom);sign(tom.g,'TOM',1,.35,0,2.2,0);
   const optimus={g:group(scene,8,.1,5),actualSpeed:0};guest(optimus,{asset:'optimus.glb',kind:'optimus',height:3.8});groundShadow(optimus);sign(optimus.g,'OPTIMUS',2,.4,0,4.2,0);
 
-  Q1.avatars.filter(a=>a.asset.endsWith('.vrm')).forEach((a,i)=>loadStudent(player,a.asset,i*2,a.id));
+  }
+  Q.avatars.filter(a=>a.asset.endsWith('.vrm')).forEach((a,i)=>loadStudent(player,a.asset,i*2,a.id));
   function loadRobot(person,config,variant=null){
    new GLTFLoader().load('./assets/'+config.asset,gltf=>{
     if(disposed){VRMUtils.deepDispose(gltf.scene);return;}
@@ -131,7 +136,7 @@ export function World({ theme='dark', avatar='engineer', follow, artifacts, star
     actors.push({person,mixer,actions,walkSpeed:config.speed||1.7,variant});
    },undefined,()=>{if(variant)failedAvatars.add(variant);console.warn('Q1 robot model could not load');});
   }
-  const service=Q1.service,servicePose=routePose(PATROLS[service.route],service.offset);
+  const service=Q.service,servicePose=routePose(PATROLS[service.route],service.offset);
   const technician={g:group(scene,servicePose.x,.1,servicePose.z),route:service.route,distance:service.offset,speed:service.speed,actualSpeed:0};visitors.push(technician);groundShadow(technician);loadRobot(technician,service);
   loadRobot(player,{asset:'campus-robot.glb',scale:.43,idle:'Idle',walk:'Walking',speed:1.7},'robot');
   const keys=new Set(),tapUntil=new Map();let sprint=false,speed=0,stepDistance=0;let pointerStart=null,keyboardMove=false;const raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2();const plane=new THREE.Plane(new THREE.Vector3(0,1,0),-.12);
@@ -140,22 +145,22 @@ export function World({ theme='dark', avatar='engineer', follow, artifacts, star
   function down(e){if(!e.isPrimary){if(pointerStart)pointerStart.dragged=true;return;}pointerStart={x:e.clientX,y:e.clientY,id:e.pointerId,dragged:false};}
   function move(e){if(pointerStart&&Math.hypot(pointerStart.x-e.clientX,pointerStart.y-e.clientY)>7)pointerStart.dragged=true;}
   function cancel(){pointerStart=null;}
-  function up(e){const start=pointerStart;pointerStart=null;if(!start||start.id!==e.pointerId||start.dragged||e.ctrlKey||e.shiftKey||e.metaKey||Math.hypot(start.x-e.clientX,start.y-e.clientY)>7||e.button!==0||props.current.paused)return;const r=el.getBoundingClientRect();pointer.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);raycaster.setFromCamera(pointer,camera);const hits=raycaster.intersectObjects(stationGroups,true);if(hits.length){let o=hits[0].object;while(o&&o.userData.station===undefined)o=o.parent;if(o){props.current.onSelect(o.userData.station);const l=LESSONS[o.userData.station];target.set(l.entry[0],0,l.entry[1]);}return;}const p=new THREE.Vector3();if(raycaster.ray.intersectPlane(plane,p)){target.set(THREE.MathUtils.clamp(p.x,-Q1.bounds.x+.5,Q1.bounds.x-.5),0,THREE.MathUtils.clamp(p.z,-Q1.bounds.z+.5,Q1.bounds.z-.5));}}
+  function up(e){const start=pointerStart;pointerStart=null;if(!start||start.id!==e.pointerId||start.dragged||e.ctrlKey||e.shiftKey||e.metaKey||Math.hypot(start.x-e.clientX,start.y-e.clientY)>7||e.button!==0||props.current.paused)return;const r=el.getBoundingClientRect();pointer.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);raycaster.setFromCamera(pointer,camera);const hits=raycaster.intersectObjects(stationGroups,true);if(hits.length){let o=hits[0].object;while(o&&o.userData.station===undefined)o=o.parent;if(o){props.current.onSelect(o.userData.station);const l=LESSONS[o.userData.station];target.set(l.entry[0],0,l.entry[1]);}return;}const p=new THREE.Vector3();if(raycaster.ray.intersectPlane(plane,p)){target.set(THREE.MathUtils.clamp(p.x,-Q.bounds.x+.5,Q.bounds.x-.5),0,THREE.MathUtils.clamp(p.z,-Q.bounds.z+.5,Q.bounds.z-.5));}}
   addEventListener('keydown',keydown);addEventListener('keyup',keyup);renderer.domElement.addEventListener('pointerdown',down);renderer.domElement.addEventListener('pointermove',move);renderer.domElement.addEventListener('pointercancel',cancel);renderer.domElement.addEventListener('pointerup',up);const blur=()=>{sprint=false;keys.clear();tapUntil.clear();cancel();};addEventListener('blur',blur);
   let focusTarget=null,focusPosition=null,lastSelected=-1,lastFollow=null;const previousPlayer=new THREE.Vector3(),occlusion=createOcclusionFade();
   const cancelFocus=()=>{focusTarget=null;focusPosition=null;};controls.addEventListener('start',cancelFocus);
   let raf,previous=performance.now(),lastNear=-1,elapsed=0;const projected=new THREE.Vector3();
-  function resize(){const w=el.clientWidth,h=el.clientHeight;camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h);if(!props.current.started){const view=districtOverview(Q1.view,camera.aspect);camera.position.set(...view.position);controls.target.set(...view.target);controls.update();}}
+  function resize(){const w=el.clientWidth,h=el.clientHeight;camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h);if(!props.current.started){const view=districtOverview(Q.view,camera.aspect);camera.position.set(...view.position);controls.target.set(...view.target);controls.update();}}
   const ro=new ResizeObserver(resize);ro.observe(el);
   engine.current={scene,renderer,camera,player,target};props.current.onReady();
   function animate(now){raf=requestAnimationFrame(animate);if(now-previous<(props.current.paused?200:1000/(props.current.low?30:60)))return;const dt=Math.min((now-previous)/1000,.05);previous=now;elapsed+=dt;const p=props.current;controls.enabled=!p.paused;renderer.shadowMap.enabled=!p.low;const ratio=Math.min(devicePixelRatio,p.low?1:1.85);if(renderer.getPixelRatio()!==ratio)renderer.setPixelRatio(ratio);
-   if(lightingTheme!==p.theme){lightingTheme=p.theme;const night=p.theme!=='light';scene.background.set(night?'#051321':'#dce9f2');scene.fog.color.copy(scene.background);scene.fog.near=night?80:110;scene.fog.far=night?175:190;hemisphere.color.set(night?'#8cb2e4':'#e4f0ff');hemisphere.groundColor.set(night?'#18372e':'#7b887c');hemisphere.intensity=night?.65:1.1;sun.color.set(night?'#aacbff':'#fff1dc');sun.intensity=night?.85:3.1;back.intensity=night?.3:.4;scene.environmentIntensity=night?.16:.45;renderer.toneMappingExposure=night?1:.92;}
+   if(lightingTheme!==p.theme){lightingTheme=p.theme;const night=p.theme!=='light';scene.background.set(night?(districtId==='q2'?'#171326':'#051321'):(districtId==='q2'?'#dbd5cd':'#dce9f2'));scene.fog.color.copy(scene.background);scene.fog.near=night?80:110;scene.fog.far=night?175:190;hemisphere.color.set(night?'#8cb2e4':'#e4f0ff');hemisphere.groundColor.set(night?'#18372e':'#7b887c');hemisphere.intensity=night?.65:1.1;sun.color.set(night?'#aacbff':'#fff1dc');sun.intensity=night?.85:3.1;back.intensity=night?.3:.4;scene.environmentIntensity=night?.16:.45;renderer.toneMappingExposure=night?1:.92;}
    districtTheme(p.theme,p.low);atmosphere.update(p.theme,p.low);
    if(p.paused){sprint=false;keys.clear();tapUntil.clear();if(keyboardMove){target.copy(player.g.position);keyboardMove=false;}}
    previousPlayer.copy(player.g.position);let movedDistance=0;
    if(p.started&&!p.paused){const pressed=key=>keys.has(key)||(tapUntil.get(key)||0)>now;let dx=Number(pressed('right'))-Number(pressed('left')),dz=Number(pressed('back'))-Number(pressed('forward'));
     if(dx||dz){const forward=camera.getWorldDirection(new THREE.Vector3()).setY(0).normalize(),right=new THREE.Vector3().crossVectors(forward,new THREE.Vector3(0,1,0));const d=right.multiplyScalar(dx).addScaledVector(forward,-dz).normalize();target.copy(player.g.position).addScaledVector(d,1.2);target.y=0;keyboardMove=true;}else if(keyboardMove){target.copy(player.g.position);keyboardMove=false;}
-    const diff=target.clone().sub(player.g.position);diff.y=0;const dist=diff.length();if(dist>.08){const d=diff.normalize(),step=d.clone().multiplyScalar(Math.min(dist,dt*(speed=THREE.MathUtils.damp(speed,sprint?5.1:2.1,9,dt)))),next=slideMove(player.g.position,step,colliders,{bounds:Q1.bounds,plaza:false});movedDistance=Math.hypot(next.x-player.g.position.x,next.z-player.g.position.z);player.g.position.x=next.x;player.g.position.z=next.z;const turn=Math.atan2(d.x,d.z)-player.g.rotation.y;player.g.rotation.y+=Math.atan2(Math.sin(turn),Math.cos(turn))*(1-Math.exp(-dt*12));}
+    const diff=target.clone().sub(player.g.position);diff.y=0;const dist=diff.length();if(dist>.08){const d=diff.normalize(),step=d.clone().multiplyScalar(Math.min(dist,dt*(speed=THREE.MathUtils.damp(speed,sprint?5.1:2.1,9,dt)))),next=slideMove(player.g.position,step,colliders,{bounds:Q.bounds,plaza:false});movedDistance=Math.hypot(next.x-player.g.position.x,next.z-player.g.position.z);player.g.position.x=next.x;player.g.position.z=next.z;const turn=Math.atan2(d.x,d.z)-player.g.rotation.y;player.g.rotation.y+=Math.atan2(Math.sin(turn),Math.cos(turn))*(1-Math.exp(-dt*12));}
    }
    if(movedDistance<.0001)speed=0;
    player.actualSpeed=movedDistance/dt;
@@ -228,10 +233,10 @@ export function World({ theme='dark', avatar='engineer', follow, artifacts, star
     const node=document.getElementById('station-label-'+i);if(node){projected.set(LESSONS[i].position[0],height+.2,LESSONS[i].position[1]).project(camera);node.style.transform='translate(-50%, -100%) translate('+((projected.x*.5+.5)*el.clientWidth)+'px,'+((-projected.y*.5+.5)*el.clientHeight)+'px)';node.style.opacity=projected.z>1?'0':'1';}
    });
    if(nd>6.5)near=-1;if(near!==lastNear){lastNear=near;p.onNear(near);}
-   const badge=document.getElementById('player-label');if(badge){badge.textContent=playerModels.has(p.avatar)?'СЕН · '+(Q1.avatars.find(a=>a.id===p.avatar)?.label||'Зерттеуші').toLocaleUpperCase('kk'):failedAvatars.has(p.avatar)?'СЕН · ЖЕҢІЛ АВАТАР':'КЕЙІПКЕР ЖҮКТЕЛУДЕ…';projected.copy(player.g.position).add(new THREE.Vector3(0,2.65,0)).project(camera);badge.style.transform='translate(-50%, -100%) translate('+((projected.x*.5+.5)*el.clientWidth)+'px,'+((-projected.y*.5+.5)*el.clientHeight)+'px)';badge.style.visibility=p.started&&projected.z<1&&projected.z>-1?'visible':'hidden';}renderer.render(scene,camera);
+   const badge=document.getElementById('player-label');if(badge){badge.textContent=playerModels.has(p.avatar)?'СЕН · '+(Q.avatars.find(a=>a.id===p.avatar)?.label||'Зерттеуші').toLocaleUpperCase('kk'):failedAvatars.has(p.avatar)?'СЕН · ЖЕҢІЛ АВАТАР':'КЕЙІПКЕР ЖҮКТЕЛУДЕ…';projected.copy(player.g.position).add(new THREE.Vector3(0,2.65,0)).project(camera);badge.style.transform='translate(-50%, -100%) translate('+((projected.x*.5+.5)*el.clientWidth)+'px,'+((-projected.y*.5+.5)*el.clientHeight)+'px)';badge.style.visibility=p.started&&projected.z<1&&projected.z>-1?'visible':'hidden';}renderer.render(scene,camera);
   }
   raf=requestAnimationFrame(animate);
   return()=>{disposed=true;guests.forEach(g=>g.dispose());environment.dispose();surfaceTextures.normal.dispose();surfaceTextures.roughness.dispose();students.forEach(({vrm})=>VRMUtils.deepDispose(vrm.scene));campusAudio.ambience(20,false);occlusion.dispose();actors.forEach(a=>a.mixer.stopAllAction());cancelAnimationFrame(raf);ro.disconnect();removeEventListener('keydown',keydown);removeEventListener('keyup',keyup);removeEventListener('blur',blur);renderer.domElement.removeEventListener('pointerdown',down);renderer.domElement.removeEventListener('pointermove',move);renderer.domElement.removeEventListener('pointercancel',cancel);renderer.domElement.removeEventListener('pointerup',up);renderer.domElement.removeEventListener('wheel',wheel,true);cameraRef.current=null;controls.dispose();const allMaterials=new Set();scene.traverse(o=>{o.geometry?.dispose();if(o.material)(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>allMaterials.add(m));});allMaterials.forEach(m=>{for(const value of Object.values(m))if(value?.isTexture)value.dispose();m.dispose();});Object.values(mats).forEach(m=>m.dispose());renderer.dispose();renderer.domElement.remove();};
- },[]);
- return <div ref={host} className="world" role="img" aria-label="Бірінші тоқсанның байланыс зерттеу ауданы">{failure&&<div className="world-failure"><h2>Жеңіл режим іске қосылды</h2><p>Бұл браузерде WebGL ашылмады. Мәтіндік балама батырмасын таңдаңыз — бірінші желі тапсырмасын орындауға болады.</p></div>}</div>;
+ },[districtId]);
+ return <div ref={host} className="world" role="img" aria-label={Q.title}>{failure&&<div className="world-failure"><h2>Жеңіл режим іске қосылды</h2><p>Бұл браузерде WebGL ашылмады. Мәтіндік балама батырмасын таңдаңыз — бірінші желі тапсырмасын орындауға болады.</p></div>}</div>;
 }

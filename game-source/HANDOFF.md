@@ -1,6 +1,19 @@
+# Соңғы handoff: Q2 және Q3 серверлік құлыптар
+
+2026-11-08: **dist/client соңғы build дайын, 56/56 тест өтті.** Көшіруге болады; нақты blocker жоқ.
+
+- Canonical artifact: осы source ішіндегі `dist/client/` толық мазмұны → `/game/`. `legacy-access.js` жалғыз емес: оның `assets/legacyAccess-BRn1LVcH.js` dependency-сін де көшіріңіз. Негізгі entry `assets/campus-CdfAr516.js`.
+- Q2: q2-01…q2-05 үшін бөлек CodingDistrict, бес ғимарат, басқа жол/ландшафт/NPC құрамы. Тек сервердің generic question banks/attempts API қолданылады; импортталған Q2 HTML орындалмайды. Q1 guests және бірінші NetworkMission evidence өзгермеді.
+- Q3: сыртқы каталог, iframe loading, ішкі station/map/mode және actual zone entry сервердің unlocked flags-іне байланған. localStorage XP рұқсат бермейді. /api/me + /api/course сәтсіз не ескіргенде fail closed; 20s/focus refresh.
+- Parent интеграциясының міндетті екінші бөлігі: `integration/legacy-q3-App.guarded.jsx` файлын isolated legacy source-қа қолданып rebuild; legacy index.html-ге `<script type="module" src="/game/legacy-access.js"></script>` қосу. Нақты patch және түсіндірме: `integration/README.md`. Parent өзінің direct legacy HTTP guard-ын да қосқанын хабарлады. Бұл чат year-pilot файлын өзгертпеді.
+- Тесттер: нақты React catalogue — student 22 locked/3 open, staff server flags бойынша 25 open; direct locked Q3 iframe жоқ; seeded XP/role рұқсат бермейді; inner canvas lock/mode/E hook/revocation; Q2 geometry және бес server mission contract. Браузерде Q2 ашылды, console errors жоқ. Дәлел: `qa/q2-coding-district.jpg`. Нақты баға submit жасалмады.
+- Бұрынғы `outputs/game-build` жаңартылмаған; оны көшірмеңіз. Түпнұсқа Desktop, production, GitHub өзгермеді.
+
+Төменде Q1 және бұрынғы функциялардың сақталған техникалық жазбалары.
+
 # Q1 обсерваториясы және жылдық ойын интеграциясы
 
-Күні: 2026-11-08. Күйі: **іске асырылған; соңғы build және 44/44 тест дайын**. Жариялау/commit жасалған жоқ. Түпнұсқа Desktop IT_CAMPUS, production және интеграцияның year-pilot файлдары өзгертілмеді.
+Күні: 2026-11-08. Күйі: **іске асырылған; соңғы build және 56/56 тест дайын**. Жариялау/commit жасалған жоқ. Түпнұсқа Desktop IT_CAMPUS, production және интеграцияның year-pilot файлдары өзгертілмеді.
 
 ## Ата-чатқа берілетін артефакт
 
@@ -75,11 +88,11 @@ Portrait overview ауданға орын қалдыру үшін кеңейті
 
 Жаңа: `GenericMission.jsx`, `courseMissions.js`, `courseTheme.js`, `CameraPanel.jsx`, `observatoryAtmosphere.js`, `tests/course-missions.test.mjs`, `tests/observatory.test.mjs`.
 
-Өзгерген: `App.jsx`, `World.jsx`, `NetworkDistrict.js`, `districts/q1.js`, `content.js`, `styles.css`, `cameraControls.js`, `cameraOcclusion.js` және оларға қатысты tests. AGENTS/DISTRICTS осы жұмысқа сай жаңартылды. Қосымша npm тәуелділігі орнатылған жоқ.
+Өзгерген: `App.jsx`, `World.jsx`, `NetworkDistrict.js`, `districts/q1.js`, `content.js`, `styles.css`, `cameraControls.js`, `cameraOcclusion.js` және оларға қатысты tests. AGENTS/DISTRICTS осы жұмысқа сай жаңартылды. DOM регрессия тесттері үшін jsdom 26.1.0 devDependency қосылды; pnpm-lock.yaml жаңартылды.
 
 ## Қабылдау тексеруі
 
-Соңғы build + packaging + барлық тесттер: **44/44 өтті**. Қамтылғаны:
+Соңғы build + packaging + барлық тесттер: **56/56 өтті**. Қамтылғаны:
 
 - 12 Q1 / 8 Q3 ID, assessments exclusion, әр generic сабаққа дұрыс lessonId/missionId, тек answers жіберу, сервердің false/pass және 401/403/error жағдайлары.
 - Registry атауы/құлып күйі, кеңістіктегі топты client дерегінің ауыстырмауы, Q3 local iframe URL шектеуі.

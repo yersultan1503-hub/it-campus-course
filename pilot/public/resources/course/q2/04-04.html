@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="kk">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Функцияларды біріктіру және декомпозиция</title>
+<style>
+:root{
+  --bg:#0f172a; --panel:#111c34; --panel2:#17223d; --text:#f8fafc;
+  --muted:#b9c4d6; --accent:#22d3ee; --accent2:#38bdf8; --ok:#22c55e;
+  --bad:#ef4444; --line:#263652; --warn:#f59e0b;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:
+linear-gradient(135deg,#0b1224,#101a31 55%,#0b1730);color:var(--text)}
+.container{max-width:1050px;margin:auto;padding:28px 18px 60px}
+.hero{background:linear-gradient(135deg,#16223f,#0f2b46);border:1px solid #24486b;
+border-radius:22px;padding:26px;box-shadow:0 18px 45px rgba(0,0,0,.28)}
+.badge{display:inline-block;background:#0b3950;color:#9eeeff;border:1px solid #16637c;
+padding:7px 12px;border-radius:999px;font-weight:700;font-size:13px}
+h1{margin:14px 0 8px;font-size:clamp(28px,5vw,46px)}
+.hero p{color:var(--muted);margin:6px 0 0;line-height:1.6}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:16px;margin-top:18px}
+.card{background:rgba(17,28,52,.96);border:1px solid var(--line);border-radius:18px;padding:18px}
+.card h2{margin:0 0 10px;font-size:20px}
+.card h3{margin:0 0 10px;font-size:17px;color:#d8f7ff}
+.q{margin:14px 0;padding:14px;border:1px solid #263a59;border-radius:14px;background:#0d1830}
+.q p{margin:0 0 10px;line-height:1.55}
+.option{display:block;padding:10px 12px;border:1px solid #2c4161;border-radius:11px;margin:8px 0;cursor:pointer;background:#111f3b}
+.option:hover{border-color:#49d8f5;background:#13284a}
+input[type=text], input[type=number], textarea, select{
+  width:100%;background:#0a1427;color:#fff;border:1px solid #355072;border-radius:10px;
+  padding:11px 12px;font-size:15px;outline:none
+}
+textarea{min-height:130px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+button{border:0;border-radius:11px;padding:11px 16px;font-weight:800;cursor:pointer;margin:6px 6px 0 0}
+.btn{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#062033}
+.btn2{background:#233654;color:#e8f7ff;border:1px solid #36547b}
+.result{margin-top:10px;font-weight:800}
+.ok{color:#61e58a}.bad{color:#ff7474}.warn{color:#ffd27a}
+code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+pre{white-space:pre-wrap;background:#071120;border:1px solid #223855;border-radius:13px;padding:14px;overflow:auto;color:#eaf8ff}
+.kpi{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.kpi span{background:#0b2039;border:1px solid #234769;border-radius:12px;padding:9px 12px;color:#cdeefe}
+.scorebox{position:sticky;top:10px;z-index:5;margin:16px 0;background:#0a1c33;border:1px solid #22517a;border-radius:14px;padding:12px 14px;display:flex;justify-content:space-between;gap:10px;align-items:center}
+.small{font-size:13px;color:var(--muted)}
+footer{margin-top:28px;color:#8fa0b9;text-align:center;font-size:13px}
+@media (max-width:600px){.container{padding:16px 12px 40px}.hero{padding:20px}.card{padding:14px}}
+</style>
+</head>
+<body>
+<div class="container">
+<section class="hero">
+<span class="badge">10-сынып • Python • Интерактив тапсырма</span>
+<h1>Функцияларды біріктіру және декомпозиция</h1>
+<p>Күрделі есепті бірнеше функцияға бөлу, функцияларды байланыстыру, тест-кейс ойластыру және шекаралық мәндерді тексеру.</p>
+<div class="kpi"><span>Автотексеру</span><span>Кодпен жұмыс</span><span>Қолданбалы есеп</span><span>Өзіндік жұмыс</span></div>
+</section>
+<div class="scorebox"><div><b>Жинаған ұпай:</b> <span id="score">0</span> / 6</div><button class="btn2" onclick="resetAll()">Қайта бастау</button></div>
+
+<div class="grid">
+<section class="card">
+<h2>1. Декомпозиция</h2>
+<div class="q"><p><b>1.</b> Декомпозиция дегеніміз...</p>
+<label class="option"><input type="radio" name="q1" value="split"> күрделі есепті шағын міндеттерге бөлу</label>
+<label class="option"><input type="radio" name="q1" value="merge"> барлық кодты бір жолға жазу</label>
+<label class="option"><input type="radio" name="q1" value="delete"> кодтың жартысын өшіру</label>
+<button class="btn" onclick="checkRadio('q1','split','r1','k1',1)">Тексеру</button><div id="r1" class="result"></div></div>
+
+<div class="q"><p><b>2.</b> Декомпозицияның пайдасы?</p>
+<label class="option"><input type="radio" name="q2" value="easy"> кодты оқу, тексеру, қайта қолдану жеңілдейді</label>
+<label class="option"><input type="radio" name="q2" value="hard"> қате табу қиындайды</label>
+<label class="option"><input type="radio" name="q2" value="none"> еш пайдасы жоқ</label>
+<button class="btn" onclick="checkRadio('q2','easy','r2','k2',1)">Тексеру</button><div id="r2" class="result"></div></div>
+</section>
+
+<section class="card">
+<h2>2. Функцияларды байланыстыр</h2>
+<pre>def average(a, b, c):
+    return (a + b + c) / 3
+
+def level(avg):
+    if avg >= 90:
+        return "Жоғары"
+    elif avg >= 70:
+        return "Орта"
+    else:
+        return "Төмен"</pre>
+<div class="q"><p><b>3.</b> <code>level(85)</code> нәтижесі?</p>
+<input id="t3" type="text"><button class="btn" onclick="checkText('t3',['орта'],'r3','k3',1)">Тексеру</button><div id="r3" class="result"></div></div>
+</section>
+</div>
+
+<section class="card">
+<h2>3. Тестілеу</h2>
+<p class="small">Функция: <code>def is_even(n): return n % 2 == 0</code></p>
+<div class="q"><p><b>4.</b> Шекаралық емес, бірақ әртүрлі жағдайды қамтитын жақсы тест жиыны қайсы?</p>
+<label class="option"><input type="radio" name="q4" value="good"> 2, 7, 0, -4</label>
+<label class="option"><input type="radio" name="q4" value="weak"> 2, 4, 6, 8</label>
+<label class="option"><input type="radio" name="q4" value="same"> 5, 5, 5, 5</label>
+<button class="btn" onclick="checkRadio('q4','good','r4','k4',1)">Тексеру</button><div id="r4" class="result"></div></div>
+</section>
+
+<div class="grid">
+<section class="card">
+<h2>4. Мини-жоба: баға жүйесі</h2>
+<p>Үш бағаның орташа мәнін есептеп, деңгейін анықтайтын екі функция жаз: <code>average()</code> және <code>grade()</code>.</p>
+<textarea placeholder="Код..."></textarea>
+<button class="btn2" onclick="show('ans1')">Үлгі жауап</button>
+<pre id="ans1" style="display:none">def average(a, b, c):
+    return (a + b + c) / 3
+
+def grade(avg):
+    if avg >= 90:
+        return "Жоғары"
+    elif avg >= 70:
+        return "Орта"
+    return "Төмен"
+
+avg = average(95, 82, 88)
+print(avg, grade(avg))</pre>
+</section>
+
+<section class="card">
+<h2>5. Декомпозицияға тапсырма</h2>
+<p>Интернет-дүкен есебін 3 функцияға бөл:</p>
+<p class="small">1) тауарлар сомасы; 2) жеңілдік; 3) соңғы төлем.</p>
+<textarea placeholder="3 функцияны жазыңыз..."></textarea>
+<button class="btn2" onclick="show('ans2')">Бір мүмкін шешім</button>
+<pre id="ans2" style="display:none">def subtotal(a, b, c):
+    return a + b + c
+
+def discount(total, percent):
+    return total * percent / 100
+
+def final_price(total, disc):
+    return total - disc
+
+s = subtotal(3000, 4500, 2500)
+d = discount(s, 10)
+print(final_price(s, d))</pre>
+</section>
+</div>
+
+<section class="card">
+<h2>6. Тест-кейс құру</h2>
+<pre>def grade(avg):
+    if avg >= 90:
+        return "A"
+    elif avg >= 75:
+        return "B"
+    elif avg >= 50:
+        return "C"
+    else:
+        return "F"</pre>
+
+<div class="q"><p><b>5.</b> A мен B шекарасын тексеруге ең тиімді жұп?</p>
+<label class="option"><input type="radio" name="q5" value="boundary"> 89 және 90</label>
+<label class="option"><input type="radio" name="q5" value="far"> 20 және 30</label>
+<label class="option"><input type="radio" name="q5" value="same"> 95 және 95</label>
+<button class="btn" onclick="checkRadio('q5','boundary','r5','k5',1)">Тексеру</button><div id="r5" class="result"></div></div>
+
+<div class="q"><p><b>6.</b> <code>grade(49)</code> нәтижесі?</p>
+<input id="t6" type="text"><button class="btn" onclick="checkText('t6',['f'],'r6','k6',1)">Тексеру</button><div id="r6" class="result"></div></div>
+<p class="small">Автоұпай: 6 балл. Мини-жобалар код сапасы бойынша мұғаліммен бағаланады.</p>
+</section>
+
+<footer>Информатика • 10-сынып • HTML интерактив тапсырмалар</footer>
+</div>
+<script>
+let score = 0;
+let checked = new Set();
+function mark(id, ok, msg){
+  const el=document.getElementById(id);
+  el.className='result '+(ok?'ok':'bad');
+  el.textContent=msg;
+}
+function addScore(key, pts){
+  if(!checked.has(key)){score += pts; checked.add(key); document.getElementById('score').textContent=score;}
+}
+function checkRadio(name, correct, out, key, pts=1){
+  const x=document.querySelector('input[name="'+name+'"]:checked');
+  if(!x){mark(out,false,'Жауапты таңдаңыз.');return;}
+  const ok=x.value===correct;
+  mark(out,ok,ok?'Дұрыс!':'Қате. Қайта ойланып көріңіз.');
+  if(ok)addScore(key,pts);
+}
+function checkText(id, answers, out, key, pts=1){
+  const v=document.getElementById(id).value.trim().toLowerCase().replace(/\s+/g,' ');
+  const ok=answers.some(a=>v===a.toLowerCase());
+  mark(out,ok,ok?'Дұрыс!':'Қате. Жауапты қайта тексеріңіз.');
+  if(ok)addScore(key,pts);
+}
+function show(id){const e=document.getElementById(id);e.style.display=e.style.display==='none'?'block':'none'}
+function resetAll(){location.reload()}
+</script>
+</body></html>

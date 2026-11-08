@@ -43,3 +43,6 @@ characters, authored gait and credits. Q1 has 12 instructional missions, with
 07/13/15 assessments excluded; server controls access and grades every attempt.
 Q3 must render its distinct `/legacy-q3/game/` campus and use a separate generic
 server checkpoint; iframe XP/messages/localStorage never unlock lessons.
+
+## Серверлік рұқсат және Q2
+Барлық каталог/станция/iframe/legacy zone entry үшін тек fresh /api/me + /api/course unlocked===true қолданылады. localStorage XP, role атауы не iframe message рұқсат бермейді. Legacy source hook және /game/legacy-access.js index module сақталсын. Q2 бес lesson ID q2-01…q2-05; бөлек CodingDistrict, generic сервер evidence; импорт HTML орындалмайды.

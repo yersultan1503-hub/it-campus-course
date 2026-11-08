@@ -34,7 +34,7 @@ class CourseTests(unittest.TestCase):
   self.req('/api/submissions',{**data,'confidence':'partial'},student);self.assertFalse(self.req('/api/progress',{},student,'GET')[0]['completed'])
  def test_catalog_all_materials_and_server_missions(self):
   admin=self.login('admin4@it-campus.invalid');student=self.login('student1@it-campus.invalid')
-  c=self.req('/api/course',{},admin,'GET')[0];self.assertEqual([len(q['lessons']) for q in c['quarters']],[15,0,8,0])
+  c=self.req('/api/course',{},admin,'GET')[0];self.assertEqual([len(q['lessons']) for q in c['quarters']],[15,5,8,0])
   for quarter in c['quarters']:
    for meta in quarter['lessons']:
     d=self.req('/api/lesson/'+meta['id'],{},admin,'GET')[0];self.assertTrue(d['resources']);self.assertNotIn('"correct"',json.dumps(d['mission']))

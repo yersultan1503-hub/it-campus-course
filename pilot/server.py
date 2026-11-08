@@ -74,6 +74,7 @@ class Store:
   CREATE TABLE IF NOT EXISTS attempts(id TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id),lesson_id TEXT NOT NULL,mission_id TEXT NOT NULL,passed INTEGER NOT NULL DEFAULT 0,evidence TEXT,created REAL NOT NULL);
   CREATE TABLE IF NOT EXISTS submissions(user_id TEXT PRIMARY KEY REFERENCES users(id),explanation TEXT NOT NULL,reflection TEXT NOT NULL,status TEXT NOT NULL DEFAULT 'pending',feedback TEXT NOT NULL DEFAULT '',revision INTEGER NOT NULL DEFAULT 1);
   CREATE TABLE IF NOT EXISTS lesson_submissions(user_id TEXT NOT NULL REFERENCES users(id),lesson_id TEXT NOT NULL,confidence TEXT NOT NULL,difficulty TEXT NOT NULL,comment TEXT NOT NULL DEFAULT '',status TEXT NOT NULL DEFAULT 'pending',feedback TEXT NOT NULL DEFAULT '',revision INTEGER NOT NULL DEFAULT 1,PRIMARY KEY(user_id,lesson_id));
+  CREATE TABLE IF NOT EXISTS practice_grades(user_id TEXT NOT NULL REFERENCES users(id),lesson_id TEXT NOT NULL,score INTEGER NOT NULL CHECK(score BETWEEN 0 AND 10),feedback TEXT NOT NULL DEFAULT '',grader TEXT NOT NULL REFERENCES users(id),graded_at REAL NOT NULL,PRIMARY KEY(user_id,lesson_id));
   CREATE TABLE IF NOT EXISTS teacher_requests(user_id TEXT PRIMARY KEY REFERENCES users(id),reason TEXT NOT NULL,status TEXT NOT NULL DEFAULT 'pending',created REAL NOT NULL,reviewed REAL,reviewer TEXT,decision_note TEXT NOT NULL DEFAULT '');
   CREATE TABLE IF NOT EXISTS audit(id INTEGER PRIMARY KEY,actor TEXT,action TEXT NOT NULL,target TEXT,at REAL NOT NULL,detail TEXT NOT NULL DEFAULT '');
   ''')
@@ -132,15 +133,28 @@ class Store:
   s=c.execute('SELECT * FROM lesson_submissions WHERE user_id=? AND lesson_id=?',(uid,lid)).fetchone()
   if not s and lid==LESSON:s=c.execute('SELECT * FROM submissions WHERE user_id=?',(uid,)).fetchone()
   status=s['status'] if s else 'none';assessment=any(x['id']==lid and x['kind']=='assessment' for x in self.catalog);done=(passed or assessment) and status=='approved'
-  return {'missionPassed':passed,'reflectionSubmitted':bool(s),'reviewStatus':status,'completed':done,'nextUnlocked':done}
+  mark=c.execute('SELECT score,feedback,graded_at AS gradedAt FROM practice_grades WHERE user_id=? AND lesson_id=?',(uid,lid)).fetchone()
+  return {'missionPassed':passed,'reflectionSubmitted':bool(s),'reviewStatus':status,'completed':done,'nextUnlocked':done,'grade':dict(mark) if mark else None}
+ def practice(self,c,uid,lid):
+  rows=c.execute('SELECT id,passed,evidence,created FROM attempts WHERE user_id=? AND lesson_id=? ORDER BY created DESC',(uid,lid)).fetchall()
+  sent=[r for r in rows if r['evidence'] is not None]
+  latest=sent[0] if sent else None
+  evidence=json.loads(latest['evidence']) if latest else None;answers=[]
+  if evidence is not None and lid!=LESSON:
+   _,criteria=grade(lid,evidence.get('answers'));by_id={x['id']:x for x in criteria}
+   selected_answers=evidence.get('answers') if isinstance(evidence.get('answers'),dict) else {}
+   for question in mission_for(self.lesson(lid))['questions']:
+    selected=next((x['label'] for x in question['options'] if x['id']==selected_answers.get(question['id'])),'Жауап жоқ')
+    answers.append({'question':question['prompt'],'selected':selected,**by_id.get(question['id'],{})})
+  return {'attemptCount':len(rows),'submittedCount':len(sent),'passed':any(r['passed'] for r in rows),'latestAttempt':{'id':latest['id'],'passed':bool(latest['passed']),'createdAt':latest['created'],'evidence':evidence,'answers':answers} if latest else None}
  def previous(self,item):
   prior=[x for x in self.catalog if x['quarter']==item['quarter'] and x['order']<item['order'] and x['kind']=='lesson']
   return prior[-1]['id'] if prior else None
  def unlocked(self,c,u,item):
   if not u:return False
   if u['role'] in ('teacher','admin'):return True
-  prior=self.previous(item)
-  return not prior or self.progress(c,u['id'],prior)['completed']
+  prior=[x for x in self.catalog if x['quarter']==item['quarter'] and x['order']<item['order'] and x['kind']=='lesson']
+  return all(self.progress(c,u['id'],x['id'])['completed'] for x in prior)
  def course(self,c,u):
   quarters=[]
   for n,title in [(1,'Желілер, қауіпсіздік және логика'),(2,'Алгоритмдер және программалау'),(3,'Веб-жобалау'),(4,'Жобалау және қорытынды')]:
@@ -312,13 +326,22 @@ class Store:
     if u['role'] not in ('admin','teacher'):fail(403,'forbidden','Мұғалім рұқсаты қажет.')
     rows=c.execute("SELECT * FROM users WHERE active=1 AND role='student'"+(' AND class_id=?' if u['role']=='teacher' else ''),(u['class_id'],) if u['role']=='teacher' else ()).fetchall();students=[]
     for student in rows:
-     subs=[]
+     subs=[];practices=[]
      for item in self.catalog:
       sub=c.execute('SELECT * FROM lesson_submissions WHERE user_id=? AND lesson_id=?',(student['id'],item['id'])).fetchone()
       if not sub and item['id']==LESSON:sub=c.execute('SELECT * FROM submissions WHERE user_id=?',(student['id'],)).fetchone()
       if sub:subs.append({**dict(sub),'lessonId':item['id'],'title':item['title'],'reflection':dict(sub).get('comment',dict(sub).get('reflection',''))})
-     students.append({**self.public_user(student),'progress':self.progress(c,student['id']),'submission':next((x for x in subs if x['lessonId']==LESSON),None),'submissions':subs,'lessonProgress':{x['id']:self.progress(c,student['id'],x['id']) for x in self.catalog}})
+      practice=self.practice(c,student['id'],item['id'])
+      if practice['attemptCount'] or sub:practices.append({'lessonId':item['id'],'title':item['title'],'kind':item['kind'],**practice,'grade':self.progress(c,student['id'],item['id'])['grade']})
+     students.append({**self.public_user(student),'progress':self.progress(c,student['id']),'submission':next((x for x in subs if x['lessonId']==LESSON),None),'submissions':subs,'practices':practices,'lessonProgress':{x['id']:self.progress(c,student['id'],x['id']) for x in self.catalog}})
     return {'students':students},None
+   if method=='POST' and path=='/api/teacher/grade':
+    target=txt(data,'studentId',1,60);self.scoped_student(c,u,target);item=self.lesson(data.get('lessonId'));lid=item['id'];score=data.get('score');feedback=data.get('feedback','')
+    if type(score) is not int or not 0<=score<=10:fail(400,'score','Баға 0–10 аралығындағы бүтін сан болуы керек.')
+    if not isinstance(feedback,str) or len(feedback)>2000:fail(400,'feedback','Пікір 2000 таңбадан аспасын.')
+    if not self.practice(c,target,lid)['submittedCount'] and not (item['kind']=='assessment' and self.progress(c,target,lid)['reflectionSubmitted']):fail(409,'not_submitted','Оқушы әлі практика тапсырмаған.')
+    at=time.time();c.execute('INSERT INTO practice_grades(user_id,lesson_id,score,feedback,grader,graded_at) VALUES(?,?,?,?,?,?) ON CONFLICT(user_id,lesson_id) DO UPDATE SET score=excluded.score,feedback=excluded.feedback,grader=excluded.grader,graded_at=excluded.graded_at',(target,lid,score,feedback.strip(),uid,at))
+    self.audit(c,uid,'practice_grade',target,json.dumps({'lessonId':lid,'score':score,'feedback':feedback.strip()},ensure_ascii=False));return {'ok':True,'grade':{'score':score,'feedback':feedback.strip(),'gradedAt':at}},None
    if method=='POST' and path=='/api/teacher/review':
     target=txt(data,'studentId',1,60);self.scoped_student(c,u,target);lid=data.get('lessonId',LESSON);item=self.lesson(lid);prog=self.progress(c,target,lid)
     if (item['kind']=='lesson' and not prog['missionPassed']) or not prog['reflectionSubmitted']:fail(409,'not_submitted','Жұмыс әлі тапсырылмаған.')
@@ -365,6 +388,9 @@ class Handler(SimpleHTTPRequestHandler):
  def __init__(self,*args,**kwargs):super().__init__(*args,directory=str(ROOT/'public'),**kwargs)
  def log_message(self,*args):pass
  def end_headers(self):
+  resource_path=posixpath.normpath('/'+urllib.parse.unquote(urllib.parse.urlsplit(self.path).path).lstrip('/'))
+  if resource_path.startswith('/resources/course/') and resource_path.endswith('.html'):
+   self.send_header('Content-Security-Policy',"sandbox allow-scripts; default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'")
   self.send_header('X-Content-Type-Options','nosniff');self.send_header('Referrer-Policy','strict-origin-when-cross-origin');self.send_header('X-Frame-Options','SAMEORIGIN');super().end_headers()
  def json_response(self,status,result,token=None):
   b=json.dumps(result,ensure_ascii=False).encode();self.send_response(status);self.send_header('Content-Type','application/json; charset=utf-8');self.send_header('Cache-Control','no-store');self.send_header('Content-Length',str(len(b)))
@@ -407,6 +433,16 @@ class Handler(SimpleHTTPRequestHandler):
   self.send_header('Content-Length','0');self.end_headers()
  def resource_access(self):
   path=posixpath.normpath('/'+urllib.parse.unquote(urllib.parse.urlsplit(self.path).path).lstrip('/'))
+  if path in ('/legacy-q3/game','/legacy-q3/game/index.html'):
+   try:
+    key=urllib.parse.parse_qs(urllib.parse.urlsplit(self.path).query).get('lesson',['html'])[0]
+    keys=['html','table','links','css','media','js','quiz','db']
+    if key not in keys:fail(404,'lesson_missing','Сабақ табылмады.')
+    with self.server.store.db() as c:
+     u=self.server.store.user(c,self.headers.get('Cookie',''));item=self.server.store.lesson('q3-%02d'%(keys.index(key)+1))
+     if not self.server.store.unlocked(c,u,item):fail(403,'locked','Алдыңғы сабақ әлі аяқталмаған.')
+    return True
+   except ApiError as e:self.json_response(e.status,{'error':e.code,'message':e.message});return False
   if not path.startswith('/resources/course/'):return True
   try:
    with self.server.store.db() as c:

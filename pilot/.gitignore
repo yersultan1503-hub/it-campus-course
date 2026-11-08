@@ -5,3 +5,5 @@ materials/
 screenshots/
 
 .venv/
+legacy-game-source/node_modules/
+legacy-game-source/dist/

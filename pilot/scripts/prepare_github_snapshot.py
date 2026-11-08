@@ -23,9 +23,9 @@ def add(path,target):
  entries.append(entry)
 for name in ['server.py','course_catalog.json','course_content.py','requirements.txt','README.md','CONTRACT.md','GOOGLE_SETUP.md','DESIGN_AUDIT.md','CLOUD_DATABASE.md','BACKUP_POLICY.md','seed_local.py','.gitignore']:
  add(ROOT/name,'pilot/'+name)
-for dirname in ['tests','scripts','database']:
+for dirname in ['tests','scripts','database','legacy-game-source']:
  for p in (ROOT/dirname).rglob('*'):
-  if '__pycache__' not in p.parts:add(p,'pilot/'+str(p.relative_to(ROOT)))
+  if not any(x in p.parts for x in ['__pycache__','node_modules','dist']):add(p,'pilot/'+str(p.relative_to(ROOT)))
 for p in (ROOT/'public').rglob('*'):
  if p.relative_to(ROOT/'public').parts[0] != 'game':add(p,'pilot/'+str(p.relative_to(ROOT)))
 # Preserve the material registry without absolute MacBook paths.
@@ -35,10 +35,12 @@ for lesson in registry:
  for r in lesson.get('resources',[]):r.pop('localPath',None)
 content=json.dumps(registry,ensure_ascii=False,indent=2)
 entries.append({'path':'pilot/materials/quarter1.json','content':content,'sha':hashlib.sha1(b'blob '+str(len(content.encode())).encode()+b'\0'+content.encode()).hexdigest(),'existing':False,'size':len(content.encode())})
-for dirname in ['src','public','tests','scripts','worker','asset-audit']:
+for name in ['quarter2.json','classroom-q2-raw.json']:
+ add(ROOT/'materials'/name,'pilot/materials/'+name)
+for dirname in ['src','public','tests','scripts','worker','asset-audit','integration']:
  for p in (GAME/dirname).rglob('*'):
   if not any(x.startswith('.') for x in p.relative_to(GAME).parts):add(p,'game-source/'+str(p.relative_to(GAME)))
-for name in ['package.json','package-lock.json','pnpm-workspace.yaml','vite.config.js','index.html','AGENTS.md','HANDOFF.md','DISTRICTS.md','.openai/hosting.json']:
+for name in ['package.json','package-lock.json','pnpm-workspace.yaml','vite.config.mjs','index.html','AGENTS.md','HANDOFF.md','DISTRICTS.md','.openai/hosting.json']:
  add(GAME/name,'game-source/'+name)
 # Snapshot manifest is private orchestration metadata, not uploaded itself.
 out=ROOT/'data/github-snapshot.json';out.write_text(json.dumps(entries,ensure_ascii=False));out.chmod(0o600)

@@ -4,7 +4,7 @@ import {Q1_LESSONS,Q3_LESSONS,Q3_KEYS,initialLesson,mergeCourse,loadLessonMissio
 const lesson=id=>({id,title:'Тақырып',kind:'instruction',missionId:'server-mission-'+id,mission:{title:'Зертхана',prompt:'Орында',questions:[{id:'a',prompt:'Қайсысы?',options:[{id:'x',label:'Бір'},{id:'y',label:'Екі'}]}]}});
 test('all 12 Q1 instructional lessons are routed; assessments never acquire a game attempt',async()=>{
  assert.equal(Q1_LESSONS.length,12);assert.equal(new Set(Q1_LESSONS.map(l=>l.id)).size,12);assert.equal(Q3_LESSONS.length,8);
- for(const id of ['q1-07','q1-13','q1-15','q2-01']){await assert.rejects(loadLessonMission(id,()=>{throw new Error('fetch must not run');}),/ойын тізіміне/);}
+ for(const id of ['q1-07','q1-13','q1-15','q4-01']){await assert.rejects(loadLessonMission(id,()=>{throw new Error('fetch must not run');}),/ойын тізіміне/);}
  assert.equal(initialLesson('?lesson=q1-14').station,7);assert.equal(initialLesson('?lesson=q3-08').id,'q3-08');assert.equal(initialLesson('?lesson=q1-07').id,'q1-network-01');
 });
 test('every generic lesson fetches its own mission id and submits answers only; server pass is authoritative',async()=>{
