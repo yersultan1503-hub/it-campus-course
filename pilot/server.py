@@ -60,8 +60,8 @@ class GoogleIdentity:
   return claims
 
 class Store:
- def __init__(self,path,identity=None):
-  self.path=Path(path);self.path.parent.mkdir(parents=True,exist_ok=True);self.identity=identity or GoogleIdentity()
+ def __init__(self,path,identity=None,allow_test_login=False):
+  self.allow_test_login=allow_test_login;self.path=Path(path);self.path.parent.mkdir(parents=True,exist_ok=True);self.identity=identity or GoogleIdentity()
   with self.db() as c:c.executescript('''
   PRAGMA journal_mode=WAL;
   CREATE TABLE IF NOT EXISTS users(id TEXT PRIMARY KEY, email TEXT UNIQUE NOT NULL, name TEXT NOT NULL, role TEXT NOT NULL CHECK(role IN ('student','teacher','admin')), password TEXT NOT NULL,class_id TEXT NOT NULL DEFAULT '10A',must_change INTEGER NOT NULL DEFAULT 0,verified INTEGER NOT NULL DEFAULT 1,google_sub TEXT UNIQUE,auth_source TEXT NOT NULL DEFAULT 'local-test');
@@ -71,6 +71,7 @@ class Store:
   CREATE TABLE IF NOT EXISTS limits(key TEXT PRIMARY KEY,count INTEGER NOT NULL,until REAL NOT NULL);
   CREATE TABLE IF NOT EXISTS attempts(id TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id),lesson_id TEXT NOT NULL,mission_id TEXT NOT NULL,passed INTEGER NOT NULL DEFAULT 0,evidence TEXT,created REAL NOT NULL);
   CREATE TABLE IF NOT EXISTS submissions(user_id TEXT PRIMARY KEY REFERENCES users(id),explanation TEXT NOT NULL,reflection TEXT NOT NULL,status TEXT NOT NULL DEFAULT 'pending',feedback TEXT NOT NULL DEFAULT '',revision INTEGER NOT NULL DEFAULT 1);
+  CREATE TABLE IF NOT EXISTS teacher_requests(user_id TEXT PRIMARY KEY REFERENCES users(id),reason TEXT NOT NULL,status TEXT NOT NULL DEFAULT 'pending',created REAL NOT NULL,reviewed REAL,reviewer TEXT,decision_note TEXT NOT NULL DEFAULT '');
   CREATE TABLE IF NOT EXISTS audit(id INTEGER PRIMARY KEY,actor TEXT,action TEXT NOT NULL,target TEXT,at REAL NOT NULL,detail TEXT NOT NULL DEFAULT '');
   ''')
   with self.db() as c:
@@ -83,6 +84,8 @@ class Store:
     c.execute('ALTER TABLE users ADD COLUMN google_sub TEXT')
     c.execute('CREATE UNIQUE INDEX IF NOT EXISTS google_subject_unique ON users(google_sub)')
     c.execute("ALTER TABLE users ADD COLUMN auth_source TEXT NOT NULL DEFAULT 'local-test'")
+   if 'active' not in columns:c.execute('ALTER TABLE users ADD COLUMN active INTEGER NOT NULL DEFAULT 1')
+   c.execute("CREATE UNIQUE INDEX IF NOT EXISTS single_admin ON users(role) WHERE role='admin'")
    c.execute('DROP TABLE IF EXISTS sms')
   os.chmod(self.path,0o600)
  def db(self):
@@ -102,12 +105,13 @@ class Store:
   try:raw=SimpleCookie(cookie or '').get('campus_session');raw=raw.value if raw else ''
   except Exception:raw=''
   now=time.time();u=c.execute('SELECT u.*,s.created,s.seen,s.expires FROM users u JOIN sessions s ON u.id=s.user_id WHERE s.token_hash=?',(token_hash(raw),)).fetchone()
-  if not u or u['expires']<now or now-u['seen']>1800:fail(401,'login_required','Сессия аяқталды. Қайта кіріңіз.')
+  if not u or not u['active'] or u['expires']<now or now-u['seen']>1800:fail(401,'login_required','Сессия аяқталды. Қайта кіріңіз.')
   c.execute('UPDATE sessions SET seen=? WHERE user_id=?',(now,u['id']))
   if u['must_change'] and not allow_change:fail(403,'password_change_required','Уақытша парольді жаңартыңыз.')
   return u
- def public_user(self,u):return {'id':u['id'],'name':u['name'],'email':u['email'],'role':u['role'],'classId':u['class_id'],'mustChangePassword':False,'authSource':u['auth_source'],'emailVerified':u['auth_source']=='google' and bool(u['verified']),'accessMode':'staff' if u['role'] in ('teacher','admin') else 'student'}
+ def public_user(self,u):return {'id':u['id'],'name':u['name'],'email':u['email'],'role':u['role'],'classId':u['class_id'],'mustChangePassword':False,'authSource':u['auth_source'],'emailVerified':u['auth_source']=='google' and bool(u['verified']),'active':bool(u['active']),'registered':bool(u['google_sub']),'accessMode':'staff' if u['role'] in ('teacher','admin') else 'student'}
  def session(self,c,u,replace=False,cookie=''):
+  if not u or not u['active']:fail(403,'account_removed','Бұл аккаунттың жобаға кіруі тоқтатылған. Әкімшіге хабарласыңыз.')
   now=time.time();old=c.execute('SELECT * FROM sessions WHERE user_id=?',(u['id'],)).fetchone()
   try:own=SimpleCookie(cookie or '').get('campus_session');own=token_hash(own.value) if own else ''
   except Exception:own=''
@@ -145,9 +149,16 @@ class Store:
   with self.db() as c:
    c.execute('BEGIN IMMEDIATE');u=c.execute('SELECT * FROM users WHERE google_sub=?',(subject,)).fetchone()
    if not u:
-    if c.execute('SELECT 1 FROM users WHERE email=?',(mail,)).fetchone():fail(409,'google_account_conflict','Бұл email басқа профильге бекітілген. Әкімшіге хабарласыңыз.')
-    uid=secrets.token_hex(12);c.execute("INSERT INTO users(id,email,name,role,password,google_sub,auth_source) VALUES(?,?,?,'student','google-managed',?,'google')",(uid,mail,str(claims.get('name') or mail)[:80],subject));u=c.execute('SELECT * FROM users WHERE id=?',(uid,)).fetchone();self.audit(c,uid,'google_register')
+    invited=c.execute('SELECT * FROM users WHERE email=?',(mail,)).fetchone()
+    if invited:
+     if invited['google_sub'] or invited['auth_source']!='google-invited':fail(409,'google_account_conflict','Бұл email басқа профильге бекітілген. Әкімшіге хабарласыңыз.')
+     if not invited['active']:fail(403,'account_removed','Бұл аккаунттың жобаға кіруі тоқтатылған.')
+     uid=invited['id'];c.execute("UPDATE users SET google_sub=?,auth_source='google',verified=1,name=? WHERE id=?",(subject,str(claims.get('name') or mail)[:80],uid))
+    else:
+     uid=secrets.token_hex(12);c.execute("INSERT INTO users(id,email,name,role,password,google_sub,auth_source) VALUES(?,?,?,'student','google-managed',?,'google')",(uid,mail,str(claims.get('name') or mail)[:80],subject))
+    u=c.execute('SELECT * FROM users WHERE id=?',(uid,)).fetchone();self.audit(c,uid,'google_register')
    elif u['email']!=mail:
+    if u['role']=='admin':fail(403,'owner_email_changed','Әкімші поштасы өзгерген. Кіру тоқтатылды.')
     if c.execute('SELECT 1 FROM users WHERE email=? AND id<>?',(mail,u['id'])).fetchone():fail(409,'google_account_conflict','Email сәйкестігін әкімші тексеруі керек.')
     c.execute('UPDATE users SET email=? WHERE id=?',(mail,u['id']))
    try:token=self.session(c,u,cookie=cookie);return '/',token,None
@@ -165,7 +176,7 @@ class Store:
   token=None
   with self.db() as c:
    c.execute('BEGIN IMMEDIATE')
-   if method=='GET' and path=='/api/config':return {'googleConfigured':self.identity.configured,'mode':'local-pilot','registration':'google','localTestLogin':True},None
+   if method=='GET' and path=='/api/config':return {'googleConfigured':self.identity.configured,'mode':'local-pilot','registration':'google','localTestLogin':self.allow_test_login},None
    if method=='POST' and path in ('/api/auth/google/confirm','/api/auth/google/cancel'):
     try:t=SimpleCookie(cookie).get('campus_pending');t=t.value if t else ''
     except Exception:t=''
@@ -177,13 +188,22 @@ class Store:
     u=c.execute('SELECT * FROM users WHERE id=?',(pending['user_id'],)).fetchone()
     return {'user':self.public_user(u)},self.session(c,u,True,cookie)
    if method=='POST' and path=='/api/auth/login':
+    if not self.allow_test_login:fail(403,'test_login_disabled','Тек Google арқылы кіріңіз.')
     p=email(data.get('email'));u=c.execute("SELECT * FROM users WHERE email=? AND auth_source='local-test'",(p,)).fetchone()
     if not u or not password_ok(data.get('password'),u['password']):fail(401,'invalid_credentials','Email немесе сынақ паролі дұрыс емес.')
     token=self.session(c,u,data.get('replaceSession') is True,cookie);return {'user':self.public_user(u)},token
    u=self.user(c,cookie,allow_change=path in ('/api/me','/api/auth/password','/api/auth/logout'))
    uid=u['id']
    if method=='GET' and path=='/api/profile':
-    return {'user':self.public_user(u),'session':{'singleActive':True,'expiresAt':u['expires']},'progress':self.progress(c,uid)},None
+    return {'user':self.public_user(u),'session':{'singleActive':True,'expiresAt':u['expires']},'progress':self.progress(c,uid),'teacherRequest':dict(r) if (r:=c.execute('SELECT status,reason,decision_note FROM teacher_requests WHERE user_id=?',(uid,)).fetchone()) else None},None
+   if method=='POST' and path=='/api/teacher-request':
+    if u['role']!='student':fail(409,'role_conflict','Сіздің рөліңіз мұғалім не әкімші.')
+    if u['auth_source']!='google' or not u['verified']:fail(403,'google_required','Алдымен Google арқылы кіріңіз.')
+    reason=txt(data,'reason',10,1000)
+    old=c.execute('SELECT status FROM teacher_requests WHERE user_id=?',(uid,)).fetchone()
+    if old and old['status']=='pending':fail(409,'request_pending','Өтінішіңіз қаралуда.')
+    c.execute("INSERT INTO teacher_requests(user_id,reason,status,created) VALUES(?,?,'pending',?) ON CONFLICT(user_id) DO UPDATE SET reason=excluded.reason,status='pending',created=excluded.created,reviewed=NULL,reviewer=NULL,decision_note=''",(uid,reason,time.time()))
+    self.audit(c,uid,'teacher_request',uid);return {'ok':True},None
    if method=='GET' and path=='/api/staff/catalog':
     if u['role'] not in ('teacher','admin'):fail(403,'forbidden','Бұл каталог мұғалім мен әкімшіге арналған.')
     registry=ROOT/'materials/quarter1.json';items=json.loads(registry.read_text()) if registry.exists() else []
@@ -236,7 +256,7 @@ class Store:
     return {'ok':True,'progress':self.progress(c,uid)},None
    if method=='GET' and path=='/api/teacher/students':
     if u['role'] not in ('admin','teacher'):fail(403,'forbidden','Мұғалім рұқсаты қажет.')
-    rows=c.execute("SELECT * FROM users WHERE role='student'"+(' AND class_id=?' if u['role']=='teacher' else ''),(u['class_id'],) if u['role']=='teacher' else ()).fetchall();students=[]
+    rows=c.execute("SELECT * FROM users WHERE active=1 AND role='student'"+(' AND class_id=?' if u['role']=='teacher' else ''),(u['class_id'],) if u['role']=='teacher' else ()).fetchall();students=[]
     for s in rows:
      sub=c.execute('SELECT explanation,reflection,feedback,status,revision FROM submissions WHERE user_id=?',(s['id'],)).fetchone();students.append({**self.public_user(s),'progress':self.progress(c,s['id']),'submission':dict(sub) if sub else None})
     return {'students':students},None
@@ -248,7 +268,29 @@ class Store:
     c.execute('UPDATE submissions SET status=?,feedback=? WHERE user_id=?',(status,feedback,target));self.audit(c,uid,'review',target,status+': '+feedback);return {'ok':True},None
    if path.startswith('/api/admin/'):
     if u['role']!='admin':fail(403,'forbidden','Әкімші рұқсаты қажет.')
-    if method=='GET' and path=='/api/admin/users':return {'users':[self.public_user(x) for x in c.execute('SELECT * FROM users ORDER BY name')]},None
+    if method=='GET' and path=='/api/admin/users':return {'users':[self.public_user(x) for x in c.execute('SELECT * FROM users ORDER BY name')],'requests':[dict(x) for x in c.execute("SELECT r.*,u.name,u.email FROM teacher_requests r JOIN users u ON u.id=r.user_id WHERE r.status='pending' AND u.active=1 ORDER BY r.created")]},None
+    if method=='POST' and path in ('/api/admin/change-role','/api/admin/remove-user','/api/admin/restore-user','/api/admin/review-request'):
+     target=txt(data,'userId',1,60);v=c.execute('SELECT * FROM users WHERE id=?',(target,)).fetchone()
+     if not v:fail(404,'not_found','Аккаунт табылмады.')
+     if v['role']=='admin' or target==uid:fail(403,'admin_protected','Жалғыз әкімшінің рөлін не қолжетімділігін өзгертуге болмайды.')
+     if path.endswith('review-request'):
+      r=c.execute("SELECT * FROM teacher_requests WHERE user_id=? AND status='pending'",(target,)).fetchone()
+      if not r or not v['active']:fail(409,'request_closed','Өтініш қаралған немесе аккаунт жабылған.')
+      if not isinstance(data.get('approved'),bool):fail(400,'decision','Шешім қажет.')
+      note=txt(data,'note',0,500);status='approved' if data['approved'] else 'rejected'
+      c.execute('UPDATE teacher_requests SET status=?,reviewed=?,reviewer=?,decision_note=? WHERE user_id=?',(status,time.time(),uid,note,target))
+      if data['approved']:c.execute("UPDATE users SET role='teacher' WHERE id=?",(target,))
+      self.audit(c,uid,'teacher_request_'+status,target,note)
+     elif path.endswith('change-role'):
+      role=data.get('role')
+      if role not in ('student','teacher'):fail(400,'role','Тек оқушы немесе мұғалім рөлін таңдаңыз.')
+      if not v['active']:fail(409,'account_removed','Алдымен аккаунтқа қолжетімділікті қайтарыңыз.')
+      c.execute('UPDATE users SET role=? WHERE id=?',(role,target));c.execute("UPDATE teacher_requests SET status='cancelled',reviewed=?,reviewer=? WHERE user_id=? AND status='pending'",(time.time(),uid,target));self.audit(c,uid,'role_changed',target,v['role']+' -> '+role)
+     else:
+      active=path.endswith('restore-user');c.execute('UPDATE users SET active=? WHERE id=?',(int(active),target))
+      if not active:c.execute("UPDATE teacher_requests SET status='cancelled',reviewed=?,reviewer=? WHERE user_id=? AND status='pending'",(time.time(),uid,target))
+      self.audit(c,uid,'access_restored' if active else 'access_removed',target)
+     c.execute('DELETE FROM sessions WHERE user_id=?',(target,));c.execute('DELETE FROM oauth_pending WHERE user_id=?',(target,));return {'ok':True},None
     if method=='POST' and path=='/api/admin/revoke-session':
      target=txt(data,'userId',1,60);v=c.execute('SELECT * FROM users WHERE id=?',(target,)).fetchone()
      if not v:fail(404,'not_found','Аккаунт табылмады.')

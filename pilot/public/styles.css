@@ -24,3 +24,5 @@ body[data-view=home] .staff-nav{position:absolute;top:112px;right:3.5%;padding:0
 
 /* Keep lesson text readable where the mobile crop crosses lit buildings. */
 @media(max-width:800px){.night-copy{background:rgba(4,16,28,.88);padding:22px;border-radius:12px;max-width:440px}.night-copy h1{font-size:clamp(32px,6vw,46px)}.night-copy>p{color:#e5eef4}}
+
+.admin-actions{display:flex;flex-wrap:wrap;gap:8px;min-width:230px}.admin-actions select{width:auto;min-width:105px}.request-card{padding:20px 0;border-top:1px solid #294355}.request-card label,.teacher-application label{display:grid;gap:8px}.request-card .actions{margin-top:14px}.danger{color:#ffb4b4!important;border-color:#925c63!important}.teacher-application textarea{min-height:110px;width:100%;margin-bottom:12px}

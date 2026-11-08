@@ -1,3 +1,9 @@
+# Access update — 2026-11-08
+
+Current endpoints: POST /api/teacher-request {reason}; GET /api/profile includes teacherRequest; GET /api/admin/users includes pending requests; POST /api/admin/review-request {userId,approved,note}; POST /api/admin/change-role {userId,role:student|teacher}; POST /api/admin/remove-user, restore-user, revoke-session {userId}. Server checks admin role, prevents changing/removing the sole admin; all role/access mutations revoke target sessions and pending login confirmations. Password login disabled by default; allow_test_login only explicit isolated tests. Existing permissions/progress logic preserved. Removal is reversible project-access revocation, not erasure of learning evidence. Database remains local SQLite; Supabase migration is pending.
+
+Historical contract below (old role/login restrictions superseded):
+
 # AUTH UPDATE — Google replaces SMS
 
 2026-11-08 user changed requirement to Google account registration. Phone/SMS/password recovery/admin password reset endpoints below are SUPERSEDED, retained only as planning history. Live contract: GoogleIdentity in server.py; GET /api/config {googleConfigured,localTestLogin,registration:google}; GET /api/auth/google/start, callback; POST /api/auth/google/confirm {replaceSession:true}; POST /api/auth/google/cancel. GET /api/me user.email not phone. POST /api/auth/login only local-test email/password, never Google password. Admin revoke only. All learning endpoints unchanged. See README.md.

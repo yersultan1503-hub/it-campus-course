@@ -11,7 +11,7 @@ class FakeGoogle:
   return {'sub':code,'email':code+'@example.com','email_verified':True,'name':'Google Test'}
 class PilotTests(unittest.TestCase):
  def setUp(self):
-  self.tmp=tempfile.TemporaryDirectory();self.s=Store(Path(self.tmp.name)/'db',FakeGoogle())
+  self.tmp=tempfile.TemporaryDirectory();self.s=Store(Path(self.tmp.name)/'db',FakeGoogle(),allow_test_login=True)
   self.a=self.s.create('student1@it-campus.invalid','Student','student',PASS)
   self.b=self.s.create('student2@it-campus.invalid','Other','student',PASS,'10B')
   self.t=self.s.create('teacher3@it-campus.invalid','Teacher','teacher',PASS)
