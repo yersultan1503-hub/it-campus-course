@@ -48,3 +48,6 @@ server checkpoint; iframe XP/messages/localStorage never unlock lessons.
 Барлық каталог/станция/iframe/legacy zone entry үшін тек fresh /api/me + /api/course unlocked===true қолданылады. localStorage XP, role атауы не iframe message рұқсат бермейді. Legacy source hook және /game/legacy-access.js index module сақталсын. Q2 бес lesson ID q2-01…q2-05; бөлек CodingDistrict, generic сервер evidence; импорт HTML орындалмайды.
 
 Q2/Q4 тізілімдері динамикалық: тек сервер quarter 2/4 kind=lesson қабылдаңыз; assessment қоспаңыз. Q4 DatabaseDistrict ешқашан Q1 fallback болмауы тиіс. automaticGrade тек progress.automaticGrade source=server, maxScore=10 және валид score/correct/total/attemptId арқылы көрсетіледі. Баға практика passed/unlock-пен тең емес; client grade есептемейді.
+
+## Q2 metropolis revision (2026-11-08)
+User rejects five-building village, recoloured Q1 background and repeated cast. Q2 has 14 individual lesson buildings along a canal, bridges, terracotta/glass architecture, jacaranda gardens and moving transport. Dedicated generated canal-city hero; never hue-shift the Q1 observatory for Q2. KayKit CC0 Mage/Rogue/Knight/Barbarian are Q2-only, with their authored Idle/Walking_A animations. Keep Q1/Q3 intact and server-based unlocking.

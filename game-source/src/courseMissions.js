@@ -15,7 +15,7 @@ export const Q1_LESSONS=[
 ];
 export const Q3_KEYS=['html','table','links','css','media','js','quiz','db'];
 export const Q3_LESSONS=Q3_KEYS.map((key,index)=>({id:'q3-'+String(index+1).padStart(2,'0'),number:index+1,title:['HTML құжаты','Кестелер және графика','Сілтемелер','CSS және макет','Аудио және бейне','JavaScript','Интерактивті жоба','Деректер қоры'][index],group:'q3',legacyKey:key}));
-export const Q2_LESSONS=[{id:'q2-01',number:1,title:'Функциялар және процедуралар'},{id:'q2-02',number:2,title:'Параметрлер және аргументтер'},{id:'q2-03',number:3,title:'Қайтарылатын нәтиже'},{id:'q2-04',number:4,title:'Декомпозиция және тестілеу'},{id:'q2-05',number:5,title:'Рекурсия'}].map((l,station)=>({...l,station,quarter:2,group:'q2'}));
+export const Q2_LESSONS=[{"id": "q2-01", "number": 1, "title": "Функциялар мен процедуралар"}, {"id": "q2-02", "number": 2, "title": "Параметр және аргумент"}, {"id": "q2-03", "number": 3, "title": "Мән қайтаратын функция — return"}, {"id": "q2-04", "number": 4, "title": "Декомпозиция және тестілеу"}, {"id": "q2-05", "number": 5, "title": "Рекурсия және жолдарды өңдеу"}, {"id": "q2-06", "number": 6, "title": "Жолдарды индекстеу және кесінділер"}, {"id": "q2-07", "number": 7, "title": "Жол әдістері: мәтінді тазалау"}, {"id": "q2-08", "number": 8, "title": "Файлдан ақпарат оқу"}, {"id": "q2-09", "number": 9, "title": "Файлға жазу және толықтыру"}, {"id": "q2-10", "number": 10, "title": "Көпіршікті сұрыптау"}, {"id": "q2-11", "number": 11, "title": "Таңдау және кірістіру сұрыптауы"}, {"id": "q2-12", "number": 12, "title": "Графтың төбелері мен қырлары"}, {"id": "q2-13", "number": 13, "title": "Графты іздеу: BFS және DFS"}, {"id": "q2-14", "number": 14, "title": "Ең қысқа жолды табу"}].map((l,station)=>({...l,station,quarter:2,group:'q2'}));
 export const COURSE_LESSONS=[...Q1_LESSONS,...Q2_LESSONS,...Q3_LESSONS];
 export function legacyCampusUrl(id,serverUrl){const lesson=Q3_LESSONS.find(l=>l.id===id);if(!lesson)return null;if(serverUrl){try{const url=new URL(serverUrl,'https://campus.invalid');if(url.origin==='https://campus.invalid'&&url.pathname==='/legacy-q3/game/'&&url.searchParams.get('lesson')===lesson.legacyKey)return url.pathname+url.search;}catch{}}return '/legacy-q3/game/?lesson='+lesson.legacyKey;}
 export const GROUPS=[{id:'network',label:'Желілер және қауіпсіздік'},{id:'logic',label:'Санау жүйелері және логика'},{id:'q2',label:'2-тоқсан · Сервер тізіліміндегі сабақтар'},{id:'q3',label:'3-тоқсан · Бөлек кампус'},{id:'q4',label:'4-тоқсан · Деректер ауданы'}];
@@ -24,9 +24,9 @@ export function initialLesson(search){const id=new URLSearchParams(search).get('
 export const lessonReturn=id=>'/?lesson='+encodeURIComponent(id)+'#result';
 export function registryStation(quarter,id,index){
  const n=Number(id.split('-')[1]);
- if(quarter===2&&Number.isInteger(n)&&n>=1&&n<=14)return n<=5?0:n<=7?1:n<=9?2:n<=11?3:4;
+ if(quarter===2&&Number.isInteger(n)&&n>=1&&n<=14)return n-1;
  if(quarter===4&&Number.isInteger(n)&&n>=1&&n<=10)return [1,4].includes(n)?0:[2,3].includes(n)?1:[5,6,9].includes(n)?2:3;
- return index%(quarter===2?5:4);
+ return index%(quarter===2?14:4);
 }
 export function mergeCourse(catalog){
  const lessons=catalog?.quarters?.flatMap(q=>q.lessons||[])||catalog?.lessons||[];

@@ -8,7 +8,7 @@ import {buildDatabaseDistrict} from '../src/DatabaseDistrict.js';
 import {stationCollider,roundedPatrol,routePose} from '../src/districts/q1.js';
 test('expanded Q2/Q4 registry admits server instructional lessons, groups into actual district hubs and excludes assessments',async()=>{
  const quarters=[2,4].map(number=>({number,lessons:Array.from({length:12},(_,i)=>({id:`q${number}-${String(i+1).padStart(2,'0')}`,order:i+1,kind:i===11?'assessment':'lesson',title:'Server title '+i}))}));
- const catalog=mergeCourse({quarters});for(const n of [2,4]){const lessons=catalog.filter(l=>l.group==='q'+n);assert.equal(lessons.length,11);assert.ok(lessons.every(l=>l.station>=0&&l.station<(n===2?5:4)));assert.ok(!lessons.some(l=>l.id===`q${n}-12`));}
+ const catalog=mergeCourse({quarters});for(const n of [2,4]){const lessons=catalog.filter(l=>l.group==='q'+n);assert.equal(lessons.length,11);assert.ok(lessons.every(l=>l.station>=0&&l.station<(n===2?14:4)));assert.ok(!lessons.some(l=>l.id===`q${n}-12`));}
  assert.ok(!mergeCourse({quarters:[{number:2,lessons:[{id:'q2-01',kind:'assessment',title:'Assessment'}]}]}).some(l=>l.group==='q2'));
  assert.equal(initialLesson('?lesson=q4-08').group,'q4');assert.equal(initialLesson('?lesson=q4-08').pending,true);
  const l={id:'q4-08',kind:'lesson',missionId:'db-8',mission:{questions:[{id:'q',prompt:'Server?',options:[{id:'a',label:'A'},{id:'b',label:'B'}]}]}};

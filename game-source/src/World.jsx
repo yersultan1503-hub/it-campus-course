@@ -55,7 +55,7 @@ export function World({ districtId='q1', theme='dark', avatar='engineer', follow
   function sign(p,text,w=2.7,h=1.8,x=0,y=2,z=1.8,bg='#163047'){
    const can=document.createElement('canvas');can.width=512;can.height=256;const c=can.getContext('2d');c.fillStyle=bg;c.fillRect(0,0,512,256);c.fillStyle='#f5f5e9';c.textAlign='center';c.textBaseline='middle';c.font=`700 ${text.length>5?65:125}px Arial`;c.fillText(text,256,135,480);const t=new THREE.CanvasTexture(can);t.colorSpace=THREE.SRGBColorSpace;const o=mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({map:t}),p,x,y,z);o.castShadow=false;return o;
   }
-  const {stationGroups,markers,doors,trees,lamps,signals,colliders,cameraOccluders,setTheme:districtTheme}=(districtId==='q4'?buildDatabaseDistrict:districtId==='q2'?buildCodingDistrict:buildNetworkDistrict)(scene,LESSONS,sign,{surfaceTextures});
+  const {stationGroups,markers,doors,trees,lamps,signals,colliders,cameraOccluders,setTheme:districtTheme,update:districtUpdate}=(districtId==='q4'?buildDatabaseDistrict:districtId==='q2'?buildCodingDistrict:buildNetworkDistrict)(scene,LESSONS,sign,{surfaceTextures});
   const atmosphere=districtId!=='q1'?{update(){}}:createObservatoryAtmosphere(scene);let lightingTheme='';
   // Articulated hips, knees, ankles, shoulders and elbows share a distance-driven gait.
   function person(x,z,color='#244c70',scale=1,variant=0){
@@ -78,8 +78,8 @@ export function World({ districtId='q1', theme='dark', avatar='engineer', follow
    }
    return {g,rig,body,arms,elbows,legs,knees,feet,walkDistance:0,walkBlend:0};
   }
-  const player=person(-2,16,'#496c79',1.08,2);player.rig.visible=false;player.g.rotation.y=Math.PI;
-  const target=new THREE.Vector3(-2,0,16);
+  const spawn=Q.spawn||[-2,16];const player=person(...spawn,'#496c79',1.08,2);player.rig.visible=false;player.g.rotation.y=Math.PI;
+  const target=new THREE.Vector3(spawn[0],0,spawn[1]);
   const shadowRing=mesh(new THREE.RingGeometry(.42,.5,32),new THREE.MeshBasicMaterial({color:'#f4c66a',transparent:true,opacity:.85,side:THREE.DoubleSide}),scene,-2,.14,16);shadowRing.rotation.x=-Math.PI/2;
   // Small radial contact shadows ground the cast without a screen-space AO pass.
   const shadowCanvas=document.createElement('canvas');shadowCanvas.width=shadowCanvas.height=64;
@@ -139,8 +139,8 @@ export function World({ districtId='q1', theme='dark', avatar='engineer', follow
    },undefined,()=>{if(variant)failedAvatars.add(variant);console.warn('Q1 robot model could not load');});
   }
   const service=Q.service,servicePose=routePose(PATROLS[service.route],service.offset);
-  const technician={g:group(scene,servicePose.x,.1,servicePose.z),route:service.route,distance:service.offset,speed:service.speed,actualSpeed:0};visitors.push(technician);groundShadow(technician);loadRobot(technician,service);
-  loadRobot(player,{asset:'campus-robot.glb',scale:.43,idle:'Idle',walk:'Walking',speed:1.7},'robot');
+  const technician={g:group(scene,servicePose.x,.1,servicePose.z),route:service.route,distance:service.offset,speed:service.speed,actualSpeed:0};visitors.push(technician);groundShadow(technician);if(service.kind)guest(technician,service);else loadRobot(technician,service);
+  if(Q.avatars.some(a=>a.id==='robot'))loadRobot(player,{asset:'campus-robot.glb',scale:.43,idle:'Idle',walk:'Walking',speed:1.7},'robot');
   const keys=new Set(),tapUntil=new Map();let sprint=false,speed=0,stepDistance=0;let pointerStart=null,keyboardMove=false;const raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2();const plane=new THREE.Plane(new THREE.Vector3(0,1,0),-.12);
   function keydown(e){if(e.target?.closest?.('input,textarea,select,[contenteditable]:not([contenteditable="false"]),[role="textbox"]')||props.current.paused)return;if(e.code==='ShiftLeft'||e.code==='ShiftRight')sprint=true;const key=movementKey(e);if(key){e.preventDefault();if(!keys.has(key))tapUntil.set(key,performance.now()+130);keys.add(key);if(!props.current.started)props.current.onStart();}}
   function keyup(e){if(e.code==='ShiftLeft'||e.code==='ShiftRight')sprint=false;const key=movementKey({...e,code:e.code,key:e.key,ctrlKey:false,metaKey:false,altKey:false});if(key)keys.delete(key);}
@@ -156,7 +156,7 @@ export function World({ districtId='q1', theme='dark', avatar='engineer', follow
   const ro=new ResizeObserver(resize);ro.observe(el);
   engine.current={scene,renderer,camera,player,target};props.current.onReady();
   function animate(now){raf=requestAnimationFrame(animate);if(now-previous<(props.current.paused?200:1000/(props.current.low?30:60)))return;const dt=Math.min((now-previous)/1000,.05);previous=now;elapsed+=dt;const p=props.current;controls.enabled=!p.paused;renderer.shadowMap.enabled=!p.low;const ratio=Math.min(devicePixelRatio,p.low?1:1.85);if(renderer.getPixelRatio()!==ratio)renderer.setPixelRatio(ratio);
-   if(lightingTheme!==p.theme){lightingTheme=p.theme;const night=p.theme!=='light';scene.background.set(night?(districtId==='q4'?'#071e2b':districtId==='q2'?'#171326':'#051321'):(districtId==='q4'?'#d2e6e5':districtId==='q2'?'#dbd5cd':'#dce9f2'));scene.fog.color.copy(scene.background);scene.fog.near=night?80:110;scene.fog.far=night?175:190;hemisphere.color.set(night?'#8cb2e4':'#e4f0ff');hemisphere.groundColor.set(night?'#18372e':'#7b887c');hemisphere.intensity=night?.65:1.1;sun.color.set(night?'#aacbff':'#fff1dc');sun.intensity=night?.85:3.1;back.intensity=night?.3:.4;scene.environmentIntensity=night?.16:.45;renderer.toneMappingExposure=night?1:.92;}
+   if(lightingTheme!==p.theme){lightingTheme=p.theme;const night=p.theme!=='light';scene.background.set(night?(districtId==='q4'?'#071e2b':districtId==='q2'?'#102737':'#051321'):(districtId==='q4'?'#d2e6e5':districtId==='q2'?'#bfdde5':'#dce9f2'));scene.fog.color.copy(scene.background);scene.fog.near=night?80:110;scene.fog.far=night?175:190;hemisphere.color.set(night?'#8cb2e4':'#e4f0ff');hemisphere.groundColor.set(night?'#18372e':'#7b887c');hemisphere.intensity=night?.65:1.1;sun.color.set(night?'#aacbff':'#fff1dc');sun.intensity=night?.85:3.1;back.intensity=night?.3:.4;scene.environmentIntensity=night?.16:.45;renderer.toneMappingExposure=night?1:.92;}
    districtTheme(p.theme,p.low);atmosphere.update(p.theme,p.low);
    if(p.paused){sprint=false;keys.clear();tapUntil.clear();if(keyboardMove){target.copy(player.g.position);keyboardMove=false;}}
    previousPlayer.copy(player.g.position);let movedDistance=0;
@@ -184,6 +184,7 @@ export function World({ districtId='q1', theme='dark', avatar='engineer', follow
    doors.forEach(door=>{const {hinge,i}=door;const l=LESSONS[i];const d=Math.hypot(player.g.position.x-l.entry[0],player.g.position.z-l.entry[1]);const open=p.started&&d<3.5;if(open&&!door.open&&!p.paused)campusAudio.door();door.open=open;const angle=open?-1.25:0;hinge.rotation.y=THREE.MathUtils.lerp(hinge.rotation.y,angle,p.reduced?1:1-Math.exp(-dt*6));});
    const ambient=!p.reduced&&!p.paused;
    trees.forEach((tree,i)=>{tree.rotation.z=ambient?Math.sin(elapsed*.7+i)*.012:0;});
+   districtUpdate?.(elapsed,ambient,p.low);
    signals.forEach(({packet,curve,offset})=>{packet.visible=!p.low;packet.position.copy(curve.getPointAt((ambient?elapsed*.055+offset:offset)%1));});
    function advance(person){const old=person.g.position.clone();if(ambient){person.distance+=dt*person.speed;const pose=routePose(PATROLS[person.route],person.distance);person.g.position.set(pose.x,.1,pose.z);const turn=pose.heading-person.g.rotation.y;person.g.rotation.y+=Math.atan2(Math.sin(turn),Math.cos(turn))*(1-Math.exp(-dt*12));}person.actualSpeed=person.g.position.distanceTo(old)/dt;return person.g.position.distanceTo(old);}
    bots.forEach(b=>animateWalk(b,advance(b),dt,p.reduced));visitors.forEach(advance);

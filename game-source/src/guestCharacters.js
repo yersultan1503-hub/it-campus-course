@@ -8,9 +8,11 @@ export function loadGuest({parent,asset,height=1.8,kind,onLoad,onError,isDispose
   const model=gltf.scene,root=new THREE.Group();root.add(model);
   const bind=[];model.traverse(o=>{if(o.isBone)bind.push({bone:o,q:o.quaternion.clone(),p:o.position.clone()});});
   const mixer=new THREE.AnimationMixer(model);
-  const clip=gltf.animations.find(c=>c.duration>0);
+  const clip=kind==='kaykit'?gltf.animations.find(c=>c.name==='Walking_A'):gltf.animations.find(c=>c.duration>0);
   let action=clip?mixer.clipAction(clip):null,idle=null;
-  if(kind==='naruto'&&action){
+  if(kind==='kaykit'&&action){
+   action.play();action.setEffectiveWeight(0);const idleClip=gltf.animations.find(c=>c.name==='Idle');if(idleClip){idle=mixer.clipAction(idleClip);idle.play();}mixer.update(0);
+  } else if(kind==='naruto'&&action){
    // Remove horizontal root travel, preserving authored vertical foot contact.
    const run=clip.clone();
    run.tracks=run.tracks.map(track=>{const t=track.clone();if(/Hips.*position/.test(t.name))for(let i=0;i<t.values.length;i+=3){t.values[i]=t.values[0];t.values[i+2]=t.values[2];}return t;});
@@ -42,6 +44,7 @@ export function loadGuest({parent,asset,height=1.8,kind,onLoad,onError,isDispose
   let distance=0,blend=0,time=0;
   onLoad({root,update(dt,speed,{paused=false,reduced=false}={}){
    if(paused)return;time+=dt;distance+=speed*dt;blend=THREE.MathUtils.damp(blend,Math.min(1,speed/.6),10,dt);
+   if(kind==='kaykit'&&action){action.setEffectiveWeight(blend);if(idle)idle.setEffectiveWeight(1-blend);action.timeScale=speed>.03?speed/1.5:0;mixer.update(dt);}
    if(kind==='naruto'&&action){
     // Freeze a planted stride when idle, instead of running in place.
     action.setEffectiveWeight(blend);idle.setEffectiveWeight(1-blend);action.timeScale=speed>.03?Math.max(.2,speed/3):0;mixer.update(dt);

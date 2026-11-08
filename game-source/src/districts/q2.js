@@ -1,18 +1,7 @@
-export const Q2={id:'q2',title:'Бағдарламалау және алгоритмдер · Код ауданы',view:{position:[32,24,40],target:[0,.6,0]},bounds:{x:21,z:18},
- stations:[
- {position:[-12,-7],entry:[-7,-7],rotation:Math.PI/2,width:7,depth:5,kind:'function-workshop'},
- {position:[-1,-10],entry:[-1,-5.5],rotation:0,width:7,depth:5,kind:'argument-bridge'},
- {position:[12,-5],entry:[6.5,-5],rotation:-Math.PI/2,width:6,depth:5,kind:'return-tower'},
- {position:[9,10],entry:[5,8],rotation:-Math.PI/2,width:7,depth:5,kind:'test-foundry'},
- {position:[-9,10],entry:[-4.5,8],rotation:Math.PI/2,width:7,depth:5,kind:'recursion-stack'}],
- routes:{research:[[-5,-3],[5,-3],[5,4],[-5,4]],service:[[-6,-7],[-6,8],[4.5,8],[4.5,-4]]},
- avatars:[{id:'engineer',label:'Программист',asset:'student-B.vrm'},{id:'researcher',label:'Тестілеуші',asset:'student-A.vrm'},{id:'robot',label:'Debug роботы',asset:'campus-robot.glb'}],
- civilians:[{asset:'student-A.vrm',route:'research',offset:2,speed:.85,scale:1.05},{asset:'student-C.vrm',route:'research',offset:20,speed:.8,scale:1.08}],
- service:{asset:'campus-robot.glb',route:'service',offset:9,speed:.65,scale:.43,idle:'Idle',walk:'Walking'},infrastructureColliders:[]};
-export const Q2_STATIONS=[
- {id:'q2-01',short:'f(x)',name:'Функциялар мен процедуралар',goal:'Қайталанатын әрекетті функцияға бөл.'},
- {id:'q2-02',short:'Жолдар',name:'Жолдарды өңдеу шеберханасы',goal:'Индекстер, кесінділер және жол әдістерін зертте.'},
- {id:'q2-03',short:'Файлдар',name:'Файлдар мұнарасы',goal:'Файлдан оқу және файлға жазуды зертте.'},
- {id:'q2-04',short:'Сұрыптау',name:'Сұрыптау зертханасы',goal:'Сұрыптау алгоритмдерінің қадамдарын зертте.'},
- {id:'q2-05',short:'Графтар',name:'Графтар зертханасы',goal:'Граф, іздеу және қысқа жолды зертте.'}
-].map((lesson,i)=>({...lesson,...Q2.stations[i],color:['#d7a458','#a18add','#68c4ae','#df8870','#b894df'][i]}));
+export const Q2={id:'q2',title:'Алгоритмдер мегаполисі · II тоқсан',view:{position:[58,48,66],target:[0,1,0]},bounds:{x:38,z:27},spawn:[0,8],
+ stations:Array.from({length:14},(_,i)=>{const north=i<7,x=-30+(i%7)*10,z=north?-15:15;return {position:[x,z],entry:[x,north?-9:9],rotation:north?0:Math.PI,width:7,depth:6,kind:'algorithm-'+(i+1)};}),
+ routes:{research:[[-35,-8],[35,-8],[35,8],[-35,8]],service:[[-30,-8],[30,-8],[30,-5],[-30,-5]]},
+ avatars:[{id:'engineer',label:'Код сиқыршысы',asset:'kaykit/Mage.glb',kind:'kaykit',height:1.9},{id:'researcher',label:'Алгоритм барлаушысы',asset:'kaykit/Rogue.glb',kind:'kaykit',height:1.85},{id:'guardian',label:'Код сақшысы',asset:'kaykit/Knight.glb',kind:'kaykit',height:2},{id:'builder',label:'Жүйе құрастырушысы',asset:'kaykit/Barbarian.glb',kind:'kaykit',height:2.05}],
+ civilians:[{asset:'kaykit/Rogue.glb',kind:'kaykit',height:1.8,route:'research',offset:5,speed:1.3,scale:1},{asset:'kaykit/Barbarian.glb',kind:'kaykit',height:2,route:'research',offset:42,speed:1.1,scale:1},{asset:'kaykit/Mage.glb',kind:'kaykit',height:1.85,route:'research',offset:82,speed:1.2,scale:1}],
+ service:{asset:'kaykit/Knight.glb',kind:'kaykit',height:1.95,route:'service',offset:8,speed:1.1,scale:1},infrastructureColliders:[{x:-26,z:0,hx:2.5,hz:2.7},{x:-10,z:0,hx:6.9,hz:2.7},{x:10,z:0,hx:6.9,hz:2.7},{x:26,z:0,hx:2.5,hz:2.7}]};
+export const Q2_STATIONS=[{"id": "q2-01", "short": "f(x)", "name": "Функциялар мен процедуралар", "goal": "10.5.1.1 — функциялар мен процедураларды пайдаланып бағдарламалау тілінде код жазу"}, {"id": "q2-02", "short": "Аргумент", "name": "Параметр және аргумент", "goal": "10.5.1.1 — функциялар мен процедураларды пайдаланып бағдарламалау тілінде код жазу"}, {"id": "q2-03", "short": "return", "name": "Мән қайтаратын функция — return", "goal": "10.5.1.1 — функциялар мен процедураларды пайдаланып бағдарламалау тілінде код жазу"}, {"id": "q2-04", "short": "Тест", "name": "Декомпозиция және тестілеу", "goal": "10.5.1.1 — функциялар мен процедураларды пайдаланып бағдарламалау тілінде код жазу"}, {"id": "q2-05", "short": "Рекурсия", "name": "Рекурсия және жолдарды өңдеу", "goal": "10.5.1.1; 10.5.1.2 — функциялар арқылы жолдарды өңдеу; рекурсия — тереңдету"}, {"id": "q2-06", "short": "Жолдар", "name": "Жолдарды индекстеу және кесінділер", "goal": "10.5.1.2"}, {"id": "q2-07", "short": "Кесінді", "name": "Жол әдістері: мәтінді тазалау", "goal": "10.5.1.2"}, {"id": "q2-08", "short": "Файл оқу", "name": "Файлдан ақпарат оқу", "goal": "10.5.1.3"}, {"id": "q2-09", "short": "Файл жазу", "name": "Файлға жазу және толықтыру", "goal": "10.5.1.3"}, {"id": "q2-10", "short": "Сұрыптау", "name": "Көпіршікті сұрыптау", "goal": "10.5.1.4"}, {"id": "q2-11", "short": "Алгоритм", "name": "Таңдау және кірістіру сұрыптауы", "goal": "10.5.1.4"}, {"id": "q2-12", "short": "Граф", "name": "Графтың төбелері мен қырлары", "goal": "10.5.1.5"}, {"id": "q2-13", "short": "Іздеу", "name": "Графты іздеу: BFS және DFS", "goal": "10.5.1.5"}, {"id": "q2-14", "short": "Қысқа жол", "name": "Ең қысқа жолды табу", "goal": "10.5.1.5"}].map((lesson,i)=>({...lesson,...Q2.stations[i],color:['#69d5df','#ecb878','#a9a4f7','#97d5a4'][i%4]}));

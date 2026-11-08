@@ -62,8 +62,13 @@ class GoogleIdentity:
   return claims
 
 class Store:
- def __init__(self,path,identity=None,allow_test_login=False):
+ def __init__(self,path,identity=None,allow_test_login=False,database_url=None):
   self.allow_test_login=allow_test_login;self.path=Path(path);self.path.parent.mkdir(parents=True,exist_ok=True);self.identity=identity or GoogleIdentity();self.catalog=json.loads((ROOT/'course_catalog.json').read_text()) if (ROOT/'course_catalog.json').exists() else []
+  self.database_url=database_url or os.getenv('CAMPUS_DATABASE_URL')
+  if self.database_url:
+   if allow_test_login:raise RuntimeError('Test login is forbidden for the shared database')
+   with self.db() as c:c.execute('SELECT id FROM users LIMIT 0')
+   return
   with self.db() as c:c.executescript('''
   PRAGMA journal_mode=WAL;
   CREATE TABLE IF NOT EXISTS users(id TEXT PRIMARY KEY, email TEXT UNIQUE NOT NULL, name TEXT NOT NULL, role TEXT NOT NULL CHECK(role IN ('student','teacher','admin')), password TEXT NOT NULL,class_id TEXT NOT NULL DEFAULT '10A',must_change INTEGER NOT NULL DEFAULT 0,verified INTEGER NOT NULL DEFAULT 1,google_sub TEXT UNIQUE,auth_source TEXT NOT NULL DEFAULT 'local-test');
@@ -93,10 +98,14 @@ class Store:
    c.execute('DROP TABLE IF EXISTS sms')
   os.chmod(self.path,0o600)
  def db(self):
+  if self.database_url:
+   from postgres_store import Connection
+   return Connection(self.database_url)
   c=sqlite3.connect(self.path,timeout=20);c.row_factory=sqlite3.Row;c.execute('PRAGMA foreign_keys=ON');return c
  def limit(self,key,count,seconds):
   key=token_hash(key);now=time.time()
   with self.db() as c:
+   if self.database_url:c.context(limit_key=key)
    c.execute('BEGIN IMMEDIATE');r=c.execute('SELECT * FROM limits WHERE key=?',(key,)).fetchone()
    if r and r['until']>now and r['count']>=count:fail(429,'rate_limit','Тым көп әрекет. Біраздан кейін қайталаңыз.')
    n=r['count']+1 if r and r['until']>now else 1;until=r['until'] if r and r['until']>now else now+seconds
@@ -108,6 +117,7 @@ class Store:
  def user(self,c,cookie,allow_change=False):
   try:raw=SimpleCookie(cookie or '').get('campus_session');raw=raw.value if raw else ''
   except Exception:raw=''
+  if self.database_url:c.context(session_hash=token_hash(raw))
   now=time.time();u=c.execute('SELECT u.*,s.created,s.seen,s.expires FROM users u JOIN sessions s ON u.id=s.user_id WHERE s.token_hash=?',(token_hash(raw),)).fetchone()
   if not u or not u['active'] or u['expires']<now or now-u['seen']>1800:fail(401,'login_required','Сессия аяқталды. Қайта кіріңіз.')
   c.execute('UPDATE sessions SET seen=? WHERE user_id=?',(now,u['id']))
@@ -128,8 +138,17 @@ class Store:
   item=next((x for x in self.catalog if x['id']==lid),None)
   if not item:fail(404,'lesson_missing','Сабақ табылмады.')
   return item
+ def learner_rows(self,c,uid):
+  if not hasattr(c,'learner_cache'):c.learner_cache={}
+  if uid not in c.learner_cache:
+   c.learner_cache[uid]={
+    'attempts':c.execute('SELECT * FROM attempts WHERE user_id=? ORDER BY created DESC',(uid,)).fetchall(),
+    'submissions':{x['lesson_id']:x for x in c.execute('SELECT * FROM lesson_submissions WHERE user_id=?',(uid,))},
+    'grades':{x['lesson_id']:{'score':x['score'],'feedback':x['feedback'],'gradedAt':x['graded_at']} for x in c.execute('SELECT * FROM practice_grades WHERE user_id=?',(uid,))},
+    'legacy':c.execute('SELECT * FROM submissions WHERE user_id=?',(uid,)).fetchone()}
+  return c.learner_cache[uid]
  def automatic_grade(self,c,uid,lid):
-  row=c.execute('SELECT id,evidence FROM attempts WHERE user_id=? AND lesson_id=? AND evidence IS NOT NULL ORDER BY created DESC LIMIT 1',(uid,lid)).fetchone()
+  row=next((r for r in self.learner_rows(c,uid)['attempts'] if r['lesson_id']==lid and r['evidence'] is not None),None) if self.database_url else c.execute('SELECT id,evidence FROM attempts WHERE user_id=? AND lesson_id=? AND evidence IS NOT NULL ORDER BY created DESC LIMIT 1',(uid,lid)).fetchone()
   if not row:return None
   evidence=json.loads(row['evidence'])
   if lid==LESSON:
@@ -144,15 +163,16 @@ class Store:
   correct=sum(results);total=len(results)
   return {'score':int(10*correct/total+0.5),'maxScore':10,'correct':correct,'total':total,'attemptId':row['id'],'source':'server'}
  def progress(self,c,uid,lid=LESSON):
-  passed=bool(c.execute('SELECT 1 FROM attempts WHERE user_id=? AND passed=1 AND lesson_id=? LIMIT 1',(uid,lid)).fetchone())
-  s=c.execute('SELECT * FROM lesson_submissions WHERE user_id=? AND lesson_id=?',(uid,lid)).fetchone()
-  if not s and lid==LESSON:s=c.execute('SELECT * FROM submissions WHERE user_id=?',(uid,)).fetchone()
+  cached=self.learner_rows(c,uid) if self.database_url else None
+  passed=any(r['lesson_id']==lid and r['passed'] for r in cached['attempts']) if cached else bool(c.execute('SELECT 1 FROM attempts WHERE user_id=? AND passed=1 AND lesson_id=? LIMIT 1',(uid,lid)).fetchone())
+  s=cached['submissions'].get(lid) if cached else c.execute('SELECT * FROM lesson_submissions WHERE user_id=? AND lesson_id=?',(uid,lid)).fetchone()
+  if not s and lid==LESSON:s=cached['legacy'] if cached else c.execute('SELECT * FROM submissions WHERE user_id=?',(uid,)).fetchone()
   status=s['status'] if s else 'none';assessment=any(x['id']==lid and x['kind']=='assessment' for x in self.catalog);done=(passed or assessment) and status=='approved'
-  mark=c.execute('SELECT score,feedback,graded_at AS gradedAt FROM practice_grades WHERE user_id=? AND lesson_id=?',(uid,lid)).fetchone()
+  mark=cached['grades'].get(lid) if cached else c.execute('SELECT score,feedback,graded_at AS gradedAt FROM practice_grades WHERE user_id=? AND lesson_id=?',(uid,lid)).fetchone()
   automatic=self.automatic_grade(c,uid,lid);manual=dict(mark) if mark else None
   return {'automaticGrade':automatic,'effectiveGrade':({**manual,'source':'teacher','maxScore':10} if manual else automatic),'missionPassed':passed,'reflectionSubmitted':bool(s),'reviewStatus':status,'completed':done,'nextUnlocked':done,'grade':dict(mark) if mark else None}
  def practice(self,c,uid,lid):
-  rows=c.execute('SELECT id,passed,evidence,created FROM attempts WHERE user_id=? AND lesson_id=? ORDER BY created DESC',(uid,lid)).fetchall()
+  rows=[r for r in self.learner_rows(c,uid)['attempts'] if r['lesson_id']==lid] if self.database_url else c.execute('SELECT id,passed,evidence,created FROM attempts WHERE user_id=? AND lesson_id=? ORDER BY created DESC',(uid,lid)).fetchall()
   sent=[r for r in rows if r['evidence'] is not None]
   latest=sent[0] if sent else None
   evidence=json.loads(latest['evidence']) if latest else None;answers=[]
@@ -193,6 +213,7 @@ class Store:
   state=secrets.token_urlsafe(32);nonce=secrets.token_urlsafe(32);verifier=secrets.token_urlsafe(48)
   url=self.identity.authorization_url(state,nonce,verifier)
   with self.db() as c:
+   if self.database_url:c.context(oauth_hash=token_hash(state))
    c.execute('DELETE FROM oauth_state WHERE expires<?',(time.time(),))
    c.execute('INSERT INTO oauth_state VALUES(?,?,?,?)',(token_hash(state),nonce,verifier,time.time()+600))
   return url,state
@@ -202,6 +223,7 @@ class Store:
   state=query.get('state',[''])[0]
   if not binding or not hmac.compare_digest(binding,state):fail(401,'google_state','Google кіруін осы браузерден қайта бастаңыз.')
   with self.db() as c:
+   if self.database_url:c.context(oauth_hash=token_hash(state))
    c.execute('BEGIN IMMEDIATE');r=c.execute('SELECT * FROM oauth_state WHERE token_hash=? AND expires>?',(token_hash(state),time.time())).fetchone()
    if not r:fail(401,'google_state','Google кіру мерзімі аяқталған.')
    c.execute('DELETE FROM oauth_state WHERE token_hash=?',(token_hash(state),))
@@ -210,6 +232,7 @@ class Store:
   if not code or len(code)>4096:fail(401,'google_code','Google кіру коды жоқ.')
   claims=self.identity.exchange(code,r['verifier'],r['nonce']);mail=email(claims.get('email'));subject=claims['sub']
   with self.db() as c:
+   if self.database_url:c.context(google_email=mail,google_sub=subject)
    c.execute('BEGIN IMMEDIATE');u=c.execute('SELECT * FROM users WHERE google_sub=?',(subject,)).fetchone()
    if not u:
     invited=c.execute('SELECT * FROM users WHERE email=?',(mail,)).fetchone()
@@ -243,17 +266,20 @@ class Store:
     try:viewer=self.user(c,cookie)
     except ApiError:viewer=None
     return self.course(c,viewer),None
-   if method=='GET' and path=='/api/config':return {'googleConfigured':self.identity.configured,'mode':'local-pilot','registration':'google','localTestLogin':self.allow_test_login},None
+   if method=='GET' and path=='/api/config':return {'googleConfigured':self.identity.configured,'mode':'cloud' if self.database_url else 'local-pilot','registration':'google','localTestLogin':self.allow_test_login},None
    if method=='POST' and path in ('/api/auth/google/confirm','/api/auth/google/cancel'):
     try:t=SimpleCookie(cookie).get('campus_pending');t=t.value if t else ''
     except Exception:t=''
+    if self.database_url:c.context(pending_hash=token_hash(t))
     pending=c.execute('SELECT * FROM oauth_pending WHERE token_hash=? AND expires>?',(token_hash(t),time.time())).fetchone()
     if not pending:fail(401,'google_pending_expired','Кіру растауы аяқталды. Google арқылы қайта кіріңіз.')
-    c.execute('DELETE FROM oauth_pending WHERE token_hash=?',(token_hash(t),))
-    if path.endswith('cancel'):return {'ok':True},None
+    if path.endswith('cancel'):
+     c.execute('DELETE FROM oauth_pending WHERE token_hash=?',(token_hash(t),));return {'ok':True},None
     if data.get('replaceSession') is not True:fail(400,'confirmation_required','Сессия ауыстыруды растаңыз.')
     u=c.execute('SELECT * FROM users WHERE id=?',(pending['user_id'],)).fetchone()
-    return {'user':self.public_user(u)},self.session(c,u,True,cookie)
+    issued=self.session(c,u,True,cookie)
+    c.execute('DELETE FROM oauth_pending WHERE token_hash=?',(token_hash(t),))
+    return {'user':self.public_user(u)},issued
    if method=='POST' and path=='/api/auth/login':
     if not self.allow_test_login:fail(403,'test_login_disabled','Тек Google арқылы кіріңіз.')
     p=email(data.get('email'));u=c.execute("SELECT * FROM users WHERE email=? AND auth_source='local-test'",(p,)).fetchone()

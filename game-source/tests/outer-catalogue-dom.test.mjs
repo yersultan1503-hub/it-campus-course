@@ -20,7 +20,7 @@ test('actual React catalogue disables student locked levels and direct locked Q3
   await act(async()=>{root.render(createElement(App));await settle();});
   assert.equal(dom.window.document.querySelector('iframe'),null,'locked deep link must not load legacy campus');
   await act(async()=>{[...dom.window.document.querySelectorAll('button')].find(b=>b.textContent==='Сабақтар').click();await settle();});
-  let buttons=[...dom.window.document.querySelectorAll('.catalog-lesson')];assert.equal(buttons.length,30);assert.equal(buttons.filter(b=>b.disabled).length,26);assert.equal(buttons.filter(b=>!b.disabled).length,4);assert.match(dom.window.document.body.textContent,/4-тоқсан · Деректер ауданы/);assert.match(dom.window.document.body.textContent,/Server expanded Q2/);assert.match(dom.window.document.body.textContent,/Server Q4/);
+  let buttons=[...dom.window.document.querySelectorAll('.catalog-lesson')];assert.equal(buttons.length,39);assert.equal(buttons.filter(b=>b.disabled).length,35);assert.equal(buttons.filter(b=>!b.disabled).length,4);assert.match(dom.window.document.body.textContent,/4-тоқсан · Деректер ауданы/);assert.match(dom.window.document.body.textContent,/Server expanded Q2/);assert.match(dom.window.document.body.textContent,/Server Q4/);
   role='teacher';await act(async()=>{dom.window.dispatchEvent(new dom.window.Event('focus'));await settle();});buttons=[...dom.window.document.querySelectorAll('.catalog-lesson')];assert.ok(buttons.every(b=>!b.disabled));
  }finally{await act(async()=>root.unmount());dom.window.close();for(const [key,descriptor] of saved){if(descriptor)Object.defineProperty(globalThis,key,descriptor);else delete globalThis[key];}}
 });

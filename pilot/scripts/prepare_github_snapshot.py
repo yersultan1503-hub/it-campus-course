@@ -21,7 +21,7 @@ def add(path,target):
   entry['content']=text
  except UnicodeError:entry['binary']=True
  entries.append(entry)
-for name in ['server.py','course_catalog.json','course_content.py','requirements.txt','README.md','CONTRACT.md','GOOGLE_SETUP.md','DESIGN_AUDIT.md','CLOUD_DATABASE.md','BACKUP_POLICY.md','seed_local.py','.gitignore']:
+for name in ['app.py','postgres_store.py','server.py','course_catalog.json','course_content.py','requirements.txt','README.md','CONTRACT.md','GOOGLE_SETUP.md','DESIGN_AUDIT.md','CLOUD_DATABASE.md','BACKUP_POLICY.md','seed_local.py','.gitignore']:
  add(ROOT/name,'pilot/'+name)
 for dirname in ['tests','scripts','database','legacy-game-source']:
  for p in (ROOT/dirname).rglob('*'):
