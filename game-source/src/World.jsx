@@ -1,3 +1,4 @@
+import {loadGuest} from './guestCharacters';
 import { studentFootPose } from './studentGait';
 import { VRMLoaderPlugin, VRMUtils } from '@pixiv/three-vrm';
 import { campusAudio } from './campusAudio';
@@ -81,6 +82,7 @@ export function World({ avatar='engineer', follow, artifacts, started, selected,
   const contactShadows=[];
   function groundShadow(person){const shadow=mesh(new THREE.PlaneGeometry(1.5,1.5),contactMaterial,scene);shadow.castShadow=false;shadow.rotation.x=-Math.PI/2;contactShadows.push({person,shadow});}
   groundShadow(player);
+  const guests=[];
   const actors=[],students=[],playerModels=new Map(),failedAvatars=new Set();
   const bots=Q1.civilians.map((config,index)=>{const pose=routePose(PATROLS[config.route],config.offset);const b=person(pose.x,pose.z,['#497785','#72987c'][index],config.scale,index+1);return {...b,...config,distance:config.offset};});
   bots.forEach(groundShadow);
@@ -104,7 +106,17 @@ export function World({ avatar='engineer', follow, artifacts, started, selected,
     students.push({vrm,person,bone,phase,distance:phase*.3,blend:0,thigh,shin,hips,restHipY,variant});
    },undefined,()=>{if(variant)failedAvatars.add(variant);else person.rig.visible=true;});
   }
-  bots.forEach((b,i)=>loadStudent(b,b.asset,i*2));
+  function guest(person,config,variant=null){
+   if(person.rig)person.rig.visible=false;
+   loadGuest({parent:person.g,asset:config.asset,kind:config.kind,height:config.height,isDisposed:()=>disposed,
+    onLoad:actor=>{if(variant){playerModels.set(variant,actor.root);actor.root.visible=props.current.avatar===variant;}guests.push({...actor,person,variant});},
+    onError:()=>{if(variant)failedAvatars.add(variant);else if(person.rig)person.rig.visible=true;console.warn('Character could not load:',config.asset);}});
+  }
+  bots.forEach(b=>guest(b,b));
+  Q1.avatars.filter(a=>a.kind).forEach(a=>guest(player,a,a.id));
+  const tom={g:group(scene,-5,.1,-11),actualSpeed:0};tom.g.rotation.y=Math.PI/2;guest(tom,{asset:'tom.glb',kind:'tom',height:1.8});groundShadow(tom);sign(tom.g,'TOM',1,.35,0,2.2,0);
+  const optimus={g:group(scene,8,.1,5),actualSpeed:0};guest(optimus,{asset:'optimus.glb',kind:'optimus',height:3.8});groundShadow(optimus);sign(optimus.g,'OPTIMUS',2,.4,0,4.2,0);
+
   Q1.avatars.filter(a=>a.asset.endsWith('.vrm')).forEach((a,i)=>loadStudent(player,a.asset,i*2,a.id));
   function loadRobot(person,config,variant=null){
    new GLTFLoader().load('./assets/'+config.asset,gltf=>{
@@ -187,6 +199,7 @@ export function World({ avatar='engineer', follow, artifacts, started, selected,
     vrm.expressionManager?.setValue('blink',p.reduced?0:Math.pow(Math.max(0,Math.sin(elapsed*1.2+phase*.03)),28));
     vrm.update(p.paused?0:dt);
    });
+   guests.forEach(g=>{if(!g.variant||g.variant===p.avatar)g.update(dt,g.person.actualSpeed||0,{paused:p.paused,reduced:p.reduced});});
    actors.forEach(({person,mixer,actions,walkSpeed=1.7,variant})=>{
     if(variant&&variant!==p.avatar)return;
     const v=p.paused?0:(person.actualSpeed||0);const moving=Math.min(v/(person===player?1.3:.3),1),running=THREE.MathUtils.clamp((v-2.4)/2.5,0,1);
@@ -214,7 +227,7 @@ export function World({ avatar='engineer', follow, artifacts, started, selected,
    const badge=document.getElementById('player-label');if(badge){badge.textContent=playerModels.has(p.avatar)?'СЕН · '+(Q1.avatars.find(a=>a.id===p.avatar)?.label||'Зерттеуші').toLocaleUpperCase('kk'):failedAvatars.has(p.avatar)?'СЕН · ЖЕҢІЛ АВАТАР':'КЕЙІПКЕР ЖҮКТЕЛУДЕ…';projected.copy(player.g.position).add(new THREE.Vector3(0,2.65,0)).project(camera);badge.style.transform='translate(-50%, -100%) translate('+((projected.x*.5+.5)*el.clientWidth)+'px,'+((-projected.y*.5+.5)*el.clientHeight)+'px)';badge.style.visibility=p.started&&projected.z<1&&projected.z>-1?'visible':'hidden';}renderer.render(scene,camera);
   }
   raf=requestAnimationFrame(animate);
-  return()=>{disposed=true;environment.dispose();surfaceTextures.normal.dispose();surfaceTextures.roughness.dispose();students.forEach(({vrm})=>VRMUtils.deepDispose(vrm.scene));campusAudio.ambience(20,false);occlusion.dispose();actors.forEach(a=>a.mixer.stopAllAction());cancelAnimationFrame(raf);ro.disconnect();removeEventListener('keydown',keydown);removeEventListener('keyup',keyup);removeEventListener('blur',blur);renderer.domElement.removeEventListener('pointerdown',down);renderer.domElement.removeEventListener('pointermove',move);renderer.domElement.removeEventListener('pointercancel',cancel);renderer.domElement.removeEventListener('pointerup',up);renderer.domElement.removeEventListener('wheel',wheel,true);cameraRef.current=null;controls.dispose();const allMaterials=new Set();scene.traverse(o=>{o.geometry?.dispose();if(o.material)(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>allMaterials.add(m));});allMaterials.forEach(m=>{for(const value of Object.values(m))if(value?.isTexture)value.dispose();m.dispose();});Object.values(mats).forEach(m=>m.dispose());renderer.dispose();renderer.domElement.remove();};
+  return()=>{disposed=true;guests.forEach(g=>g.dispose());environment.dispose();surfaceTextures.normal.dispose();surfaceTextures.roughness.dispose();students.forEach(({vrm})=>VRMUtils.deepDispose(vrm.scene));campusAudio.ambience(20,false);occlusion.dispose();actors.forEach(a=>a.mixer.stopAllAction());cancelAnimationFrame(raf);ro.disconnect();removeEventListener('keydown',keydown);removeEventListener('keyup',keyup);removeEventListener('blur',blur);renderer.domElement.removeEventListener('pointerdown',down);renderer.domElement.removeEventListener('pointermove',move);renderer.domElement.removeEventListener('pointercancel',cancel);renderer.domElement.removeEventListener('pointerup',up);renderer.domElement.removeEventListener('wheel',wheel,true);cameraRef.current=null;controls.dispose();const allMaterials=new Set();scene.traverse(o=>{o.geometry?.dispose();if(o.material)(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>allMaterials.add(m));});allMaterials.forEach(m=>{for(const value of Object.values(m))if(value?.isTexture)value.dispose();m.dispose();});Object.values(mats).forEach(m=>m.dispose());renderer.dispose();renderer.domElement.remove();};
  },[]);
  return <div ref={host} className="world" role="img" aria-label="Бірінші тоқсанның байланыс зерттеу ауданы">{failure&&<div className="world-failure"><h2>Жеңіл режим іске қосылды</h2><p>Бұл браузерде WebGL ашылмады. Мәтіндік балама батырмасын таңдаңыз — бірінші желі тапсырмасын орындауға болады.</p></div>}</div>;
 }

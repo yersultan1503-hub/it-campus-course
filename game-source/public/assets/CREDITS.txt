@@ -13,3 +13,12 @@ https://github.com/mrdoob/three.js/tree/dev/examples/models/gltf/RobotExpressive
 Fox — model by PixelMannen (CC0); rigging and animation by tomkranis (CC BY 4.0); glTF conversion by AsoboStudio and scurest (CC BY 4.0). Used with original mesh and clips, scaled for campus.
 https://github.com/KhronosGroup/glTF-Sample-Assets/tree/main/Models/Fox
 https://creativecommons.org/licenses/by/4.0/
+
+
+2026-11-08 — Sketchfab character additions (CC BY 4.0 as listed)
+Naruto — ronildo.facanha: https://sketchfab.com/3d-models/db14fc3de5b34b738e49ec3cdb83770a
+Jerry — Here's Annoying Orange: https://sketchfab.com/3d-models/1b778cbc0c7f4a93b05cd38a06fbd5ce
+Tom Rig V2 — Guilherme Navarro; credits DiMickFoxed64/The-DoomGuySFM, SAB64: https://sketchfab.com/3d-models/dc60af62b20c49228584fd91451008a9
+Optimus transform — DIO: https://sketchfab.com/3d-models/35f9cb09b1b248c7bd6b12912ac8cd3a
+License: https://creativecommons.org/licenses/by/4.0/
+Changes: scale/origin normalization; Naruto horizontal root motion removed; Jerry procedural gait; Tom subtle head/tail motion; Optimus ping-pong clip. Fan models, not official franchise assets.

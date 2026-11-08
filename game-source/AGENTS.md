@@ -31,3 +31,6 @@ NPCs must include ordinary campus students, not clones of the armored player. Ei
 User rejects primitive civilian NPCs. Use three distinct authored VRoid student models (A/B/C), with normalized humanoid walking, relaxed arms and blinking. Keep distinct cyan player. Avoid replacing imported characters with block/cylinder figures except load failure fallback.
 
 User requests robot, animal and military NPCs alongside the three anime students. Use authored RobotExpressive, Fox and Soldier animations. VRM normalized skeleton faces -Z: knee X must be negative; use studentGait.js distance-driven IK, not the old positive-knee sine cycle.
+
+## Q1 guest characters (2026-11-08)
+Use actual downloaded Naruto and Jerry for player/NPC selections. Tom is a stationary animated guest; Optimus has a transform showcase, not a walk cycle. Keep attribution. Preserve Naruto idle/run blend and horizontal root-motion removal. Do not relabel old civilian models as franchise characters.

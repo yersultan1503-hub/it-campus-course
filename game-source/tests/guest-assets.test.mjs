@@ -1,0 +1,6 @@
+import {readFile} from 'node:fs/promises';
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+async function asset(name){const b=await readFile(new URL('../public/assets/'+name+'.glb',import.meta.url));assert.equal(b.readUInt32LE(0),0x46546c67);assert.equal(b.readUInt32LE(8),b.length);const j=JSON.parse(b.subarray(20,20+b.readUInt32LE(12)).toString());return {b,j};}
+test('guest models are self-contained skinned GLBs with valid embedded image ranges',async()=>{for(const name of ['naruto','jerry','tom','optimus']){const {b,j}=await asset(name);assert.ok(j.skins?.length);for(const x of [...j.buffers,...j.images])assert.ok(!x.uri,'No external dependency');for(const v of j.bufferViews)assert.ok((v.byteOffset||0)+v.byteLength<=j.buffers[0].byteLength);assert.ok(b.length<11e6,'Character budget');}});
+test('Naruto has an actual run cycle; Optimus has a transform clip; Jerry is not misidentified as walk animation',async()=>{const n=(await asset('naruto')).j,o=(await asset('optimus')).j,j=(await asset('jerry')).j;const duration=d=>Math.max(...d.animations[0].samplers.map(s=>d.accessors[s.input].max[0]));assert.ok(duration(n)>.3&&duration(n)<2);assert.ok(duration(o)>5);assert.equal(duration(j),0);});

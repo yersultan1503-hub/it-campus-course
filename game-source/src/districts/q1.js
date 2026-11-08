@@ -13,8 +13,8 @@ export const Q1={
   {position:[13,12],entry:[7,12],rotation:-Math.PI/2,width:6,depth:5,kind:'expansion-pad'}
  ],
  routes:{research:[[-6,-6],[6,-6],[6,6],[-6,6]],service:[[-7,-10],[-7,1],[-7,12],[-5,12],[-5,1],[-5,-10]]},
- avatars:[{id:'engineer',label:'Желі инженері',asset:'student-B.vrm'}, {id:'researcher',label:'Зерттеуші',asset:'student-A.vrm'}, {id:'robot',label:'Сервис роботы',asset:'campus-robot.glb'}],
- civilians:[{asset:'student-A.vrm',route:'research',offset:4,speed:.8,scale:1.08},{asset:'student-C.vrm',route:'research',offset:27,speed:.9,scale:1.04}],
+ avatars:[{id:'naruto',label:'Naruto',asset:'naruto.glb',kind:'naruto',height:1.8},{id:'jerry',label:'Jerry',asset:'jerry.glb',kind:'jerry',height:1.15},{id:'engineer',label:'Желі инженері',asset:'student-B.vrm'}, {id:'researcher',label:'Зерттеуші',asset:'student-A.vrm'}, {id:'robot',label:'Сервис роботы',asset:'campus-robot.glb'}],
+ civilians:[{asset:'naruto.glb',kind:'naruto',height:1.8,route:'research',offset:4,speed:2.4,scale:1},{asset:'jerry.glb',kind:'jerry',height:1.05,route:'research',offset:27,speed:1.1,scale:1}],
  service:{asset:'campus-robot.glb',route:'service',offset:8,speed:.75,scale:.43,idle:'Idle',walk:'Walking'},
  infrastructureColliders:[{x:0,z:0,hx:1.55,hz:2.15},{x:-13,z:-5.35,hx:.75,hz:.95},{x:19,z:-16,hx:.9,hz:.9}]
 };
