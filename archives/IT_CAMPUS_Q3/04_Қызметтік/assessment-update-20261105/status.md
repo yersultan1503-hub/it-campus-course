@@ -1,0 +1,18 @@
+# Completed 2026-11-05
+- Original course only: IT_CAMPUS/01_Сайт; standalone game untouched.
+- 8 QMJ DOCX+PDF, 2 pages each, rendered and visually checked.
+- BJB: 20 minutes, 16 points, 6 tasks; TJB: 40 minutes, 24 points, 6 tasks. Student DOCX+PDF 3 pages; teacher keys 2 pages.
+- Student assessment page: https://it-club-10-course.vercel.app/assessment/index.html
+- Production deployment dpl_6G8h9BZMCU41VSeKz2Whab24xes5 READY; original project prj_5Yfa5ajgShfy7oR5zXnqzg5wYK7D.
+- All 24 changed public files plus unchanged game index fetched and hash-matched.
+- Classroom topic: 05 · Жиынтық бағалау | 3 тоқсан.
+- Published BJB ID ODk3ODAyNzc0NTEz, 16 points, PDF+DOCX.
+- Published TJB ID ODk3ODAxNjE3NTkx, 24 points, PDF+DOCX.
+- QMJ collection description updated; existing 8 PDF URLs now serve replacement documents.
+- No due dates invented; teacher determines schedule. No teacher keys published.
+- Local teacher folder: /Users/ersultan/Desktop/IT_CAMPUS/06_Бағалау_мұғалімге
+- Previous QMJ + changed HTML backed up in 04_Қызметтік/assessment-backup-20261105.
+- Form exemplar (structure only): https://ust.kz/word/html_tilinde_siltemeler_10_synyp-386697.html
+- No130 form copy: https://ikclc.kz/download/files/Khazakhstan_Respublikasy_Bilim_zhane_gylym_ministrinin_2020_zhylgy_6_sauirdegi_No_130_buyrygy..pdf
+- Original supplied DOCX absent; retained 3-page PDFs and PNGs used as structural references.
+- Formal consolidated 2026 legal compliance not certified; authored course assessment specification.

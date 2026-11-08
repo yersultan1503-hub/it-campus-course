@@ -1,0 +1,208 @@
+{
+  "date": "2026-10-27",
+  "root": "/Users/ersultan/Desktop/IT_CAMPUS",
+  "removedBytes": 59143073,
+  "removed": [
+    {
+      "path": "/Users/ersultan/Desktop/IT_CAMPUS/04_Қызметтік/__pycache__",
+      "bytes": 64249,
+      "reason": "Obsolete generation, rendering or QA files"
+    },
+    {
+      "path": "/Users/ersultan/Desktop/IT_CAMPUS/04_Қызметтік/qa",
+      "bytes": 20815773,
+      "reason": "Obsolete generation, rendering or QA files"
+    },
+    {
+      "path": "/Users/ersultan/Desktop/IT_CAMPUS/04_Қызметтік/render",
+      "bytes": 1132294,
+      "reason": "Obsolete generation, rendering or QA files"
+    },
+    {
+      "path": "/Users/ersultan/Desktop/IT_CAMPUS/04_Қызметтік/media-review",
+      "bytes": 17748034,
+      "reason": "Obsolete generation, rendering or QA files"
+    },
+    {
+      "path": "/Users/ersultan/Desktop/IT_CAMPUS/04_Қызметтік/compact",
+      "bytes": 10268491,
+      "reason": "Obsolete generation, rendering or QA files"
+    },
+    {
+      "path": "/Users/ersultan/Desktop/IT_CAMPUS/04_Қызметтік/enhanced",
+      "bytes": 1638449,
+      "reason": "Obsolete generation, rendering or QA files"
+    },
+    {
+      "path": "/Users/ersultan/Desktop/IT_CAMPUS/04_Қызметтік/visuals",
+      "bytes": 410320,
+      "reason": "Obsolete generation, rendering or QA files"
+    },
+    {
+      "path": "/Users/ersultan/Desktop/IT_CAMPUS/04_Қызметтік/lesson-refresh/before",
+      "bytes": 122427,
+      "reason": "Superseded lesson versions, old tasks or render checks"
+    },
+    {
+      "path": "/Users/ersultan/Desktop/IT_CAMPUS/04_Қызметтік/lesson-refresh/qmj-before",
+      "bytes": 441421,
+      "reason": "Superseded lesson versions, old tasks or render checks"
+    },
+    {
+      "path": "/Users/ersultan/Desktop/IT_CAMPUS/04_Қызметтік/lesson-refresh/qa",
+      "bytes": 4984653,
+      "reason": "Superseded lesson versions, old tasks or render checks"
+    },
+    {
+      "path": "/Users/ersultan/Desktop/IT_CAMPUS/04_Қызметтік/lesson-refresh/removed-public-exercises",
+      "bytes": 1330435,
+      "reason": "Superseded lesson versions, old tasks or render checks"
+    },
+    {
+      "path": "/Users/ersultan/Desktop/IT_CAMPUS/04_Қызметтік/lesson-refresh/vercel-email-confirm.jpg",
+      "bytes": 20970,
+      "reason": "Temporary login or UI inspection artifact"
+    },
+    {
+      "path": "/Users/ersultan/Desktop/IT_CAMPUS/04_Қызметтік/lesson-refresh/vercel-login.jpg",
+      "bytes": 33807,
+      "reason": "Temporary login or UI inspection artifact"
+    },
+    {
+      "path": "/Users/ersultan/Desktop/IT_CAMPUS/04_Қызметтік/lesson-refresh/classroom-verified.txt",
+      "bytes": 15726,
+      "reason": "Temporary login or UI inspection artifact"
+    },
+    {
+      "path": "/Users/ersultan/Desktop/IT_CAMPUS/04_Қызметтік/build.py",
+      "bytes": 21382,
+      "reason": "Superseded one-off generator or pre-publication status; current status retained in lesson-refresh"
+    },
+    {
+      "path": "/Users/ersultan/Desktop/IT_CAMPUS/04_Қызметтік/check_50_0.js",
+      "bytes": 424,
+      "reason": "Superseded one-off generator or pre-publication status; current status retained in lesson-refresh"
+    },
+    {
+      "path": "/Users/ersultan/Desktop/IT_CAMPUS/04_Қызметтік/check_46_0.js",
+      "bytes": 257,
+      "reason": "Superseded one-off generator or pre-publication status; current status retained in lesson-refresh"
+    },
+    {
+      "path": "/Users/ersultan/Desktop/IT_CAMPUS/04_Қызметтік/lessons.py",
+      "bytes": 57839,
+      "reason": "Superseded one-off generator or pre-publication status; current status retained in lesson-refresh"
+    },
+    {
+      "path": "/Users/ersultan/Desktop/IT_CAMPUS/04_Қызметтік/check.py",
+      "bytes": 1965,
+      "reason": "Superseded one-off generator or pre-publication status; current status retained in lesson-refresh"
+    },
+    {
+      "path": "/Users/ersultan/Desktop/IT_CAMPUS/04_Қызметтік/check_47_0.js",
+      "bytes": 286,
+      "reason": "Superseded one-off generator or pre-publication status; current status retained in lesson-refresh"
+    },
+    {
+      "path": "/Users/ersultan/Desktop/IT_CAMPUS/04_Қызметтік/render_all.py",
+      "bytes": 641,
+      "reason": "Superseded one-off generator or pre-publication status; current status retained in lesson-refresh"
+    },
+    {
+      "path": "/Users/ersultan/Desktop/IT_CAMPUS/04_Қызметтік/materials.py",
+      "bytes": 5988,
+      "reason": "Superseded one-off generator or pre-publication status; current status retained in lesson-refresh"
+    },
+    {
+      "path": "/Users/ersultan/Desktop/IT_CAMPUS/04_Қызметтік/video-replacement-2026-10-26.json",
+      "bytes": 746,
+      "reason": "Superseded one-off generator or pre-publication status; current status retained in lesson-refresh"
+    },
+    {
+      "path": "/Users/ersultan/Desktop/IT_CAMPUS/04_Қызметтік/campus-update-status.json",
+      "bytes": 1513,
+      "reason": "Superseded one-off generator or pre-publication status; current status retained in lesson-refresh"
+    },
+    {
+      "path": "/Users/ersultan/Desktop/IT_CAMPUS/04_Қызметтік/patch_build.py",
+      "bytes": 899,
+      "reason": "Superseded one-off generator or pre-publication status; current status retained in lesson-refresh"
+    },
+    {
+      "path": "/Users/ersultan/Desktop/IT_CAMPUS/04_Қызметтік/files.json",
+      "bytes": 3590,
+      "reason": "Superseded one-off generator or pre-publication status; current status retained in lesson-refresh"
+    },
+    {
+      "path": "/Users/ersultan/Desktop/IT_CAMPUS/04_Қызметтік/package_course.py",
+      "bytes": 6307,
+      "reason": "Superseded one-off generator or pre-publication status; current status retained in lesson-refresh"
+    },
+    {
+      "path": "/Users/ersultan/Desktop/IT_CAMPUS/04_Қызметтік/tighten.py",
+      "bytes": 1205,
+      "reason": "Superseded one-off generator or pre-publication status; current status retained in lesson-refresh"
+    },
+    {
+      "path": "/Users/ersultan/Desktop/IT_CAMPUS/04_Қызметтік/integrate_media.py",
+      "bytes": 3082,
+      "reason": "Superseded one-off generator or pre-publication status; current status retained in lesson-refresh"
+    },
+    {
+      "path": "/Users/ersultan/Desktop/IT_CAMPUS/04_Қызметтік/check_52_0.js",
+      "bytes": 1865,
+      "reason": "Superseded one-off generator or pre-publication status; current status retained in lesson-refresh"
+    },
+    {
+      "path": "/Users/ersultan/Desktop/IT_CAMPUS/04_Қызметтік/check_48_0.js",
+      "bytes": 286,
+      "reason": "Superseded one-off generator or pre-publication status; current status retained in lesson-refresh"
+    },
+    {
+      "path": "/Users/ersultan/Desktop/IT_CAMPUS/04_Қызметтік/PUBLISHING_STATUS_previous.txt",
+      "bytes": 229,
+      "reason": "Superseded one-off generator or pre-publication status; current status retained in lesson-refresh"
+    },
+    {
+      "path": "/Users/ersultan/Desktop/IT_CAMPUS/04_Қызметтік/cleanup-manifest.json",
+      "bytes": 2606,
+      "reason": "Superseded one-off generator or pre-publication status; current status retained in lesson-refresh"
+    },
+    {
+      "path": "/Users/ersultan/Desktop/IT_CAMPUS/04_Қызметтік/check_offline.py",
+      "bytes": 1048,
+      "reason": "Superseded one-off generator or pre-publication status; current status retained in lesson-refresh"
+    },
+    {
+      "path": "/Users/ersultan/Desktop/IT_CAMPUS/04_Қызметтік/live-media-check.json",
+      "bytes": 1719,
+      "reason": "Superseded one-off generator or pre-publication status; current status retained in lesson-refresh"
+    },
+    {
+      "path": "/Users/ersultan/Desktop/IT_CAMPUS/04_Қызметтік/make_video.swift",
+      "bytes": 1965,
+      "reason": "Superseded one-off generator or pre-publication status; current status retained in lesson-refresh"
+    },
+    {
+      "path": "/Users/ersultan/Desktop/IT_CAMPUS/04_Қызметтік/check_45_0.js",
+      "bytes": 182,
+      "reason": "Superseded one-off generator or pre-publication status; current status retained in lesson-refresh"
+    }
+  ],
+  "additionalRemovedBeforeResume": [
+    "old outputs course packages and ZIPs",
+    "old course-site build",
+    "old Desktop course contents",
+    "game node_modules and dist",
+    "temporary .env.local"
+  ],
+  "estimatedFreedMiB": 500,
+  "remainingEmptyFolder": "/Users/ersultan/Desktop/10_сынып_Интерактивті_курс",
+  "verification": {
+    "localSiteBrowser": "passed",
+    "currentQMJs": 16,
+    "slides": 64,
+    "sourceAndSiteMoveHashes": "matched before cleanup",
+    "compatibilitySymlinks": "passed"
+  }
+}

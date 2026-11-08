@@ -1,0 +1,1703 @@
+{
+  "created": "2026-11-08",
+  "source": "IT_CAMPUS",
+  "files": [
+    {
+      "path": "ОҚЫҢЫЗ.txt",
+      "sha": "1dd33199ba9be6055adf344190d3838dc543e4a2",
+      "mode": "100644",
+      "type": "blob",
+      "size": 1688
+    },
+    {
+      "path": "README.md",
+      "sha": "556c8d3e9e645d1f9f66d1907f53582bf55a45cb",
+      "mode": "100644",
+      "type": "blob",
+      "size": 2247
+    },
+    {
+      "path": "Classroom.webloc",
+      "sha": "cbe057257a17e4592904a4c5ec12cf711f04bde7",
+      "mode": "100644",
+      "type": "blob",
+      "size": 164
+    },
+    {
+      "path": ".gitignore",
+      "sha": "a2f8a26503ac72e4b820e525b788344b017d4d86",
+      "mode": "100644",
+      "type": "blob",
+      "size": 121
+    },
+    {
+      "path": "Курсты_ашу.webloc",
+      "sha": "c4b44e2aac44e25cd944e0e683e9a6a73c5239d9",
+      "mode": "100644",
+      "type": "blob",
+      "size": 249
+    },
+    {
+      "path": "03_ҚМЖ",
+      "sha": "3d3a9d944f60b76033d994db0a9d0590711bada8",
+      "mode": "120000",
+      "type": "blob",
+      "size": 15
+    },
+    {
+      "path": "Презентациялар_және_видео",
+      "sha": "70a52828e5c7f650a1bf98976b56dda34d5d98db",
+      "mode": "120000",
+      "type": "blob",
+      "size": 17
+    },
+    {
+      "path": "02_Ойын_коды/pnpm-lock.yaml",
+      "sha": "8d9943705430d8b4d641ea2d70326fdeb8b2cd4c",
+      "mode": "100644",
+      "type": "blob",
+      "size": 36684
+    },
+    {
+      "path": "02_Ойын_коды/index.html",
+      "sha": "80e3d5b71a4a4c7d63229ea26e835256dc25c536",
+      "mode": "100644",
+      "type": "blob",
+      "size": 508
+    },
+    {
+      "path": "02_Ойын_коды/vite.config.mjs",
+      "sha": "42e918155620b400d388a51cf32214840093dd16",
+      "mode": "100644",
+      "type": "blob",
+      "size": 396
+    },
+    {
+      "path": "02_Ойын_коды/serve-game.mjs",
+      "sha": "5a1427afd7e18a2b035e511ea5cabae6bc5096ce",
+      "mode": "100644",
+      "type": "blob",
+      "size": 1807
+    },
+    {
+      "path": "02_Ойын_коды/README_KK.md",
+      "sha": "69ebbc8ab63260141134ecbf5d98af91f33d47a9",
+      "mode": "100644",
+      "type": "blob",
+      "size": 8285
+    },
+    {
+      "path": "02_Ойын_коды/.npmrc",
+      "sha": "1223b5c7deb2b1053be942740dbac26b7f0954c5",
+      "mode": "100644",
+      "type": "blob",
+      "size": 23
+    },
+    {
+      "path": "02_Ойын_коды/Start_Game.cmd",
+      "sha": "70260f38bdbbf94aa8151c632fd189852af1c7ee",
+      "mode": "100644",
+      "type": "blob",
+      "size": 374
+    },
+    {
+      "path": "02_Ойын_коды/package-lock.json",
+      "sha": "56b02b9f46c8a050d549e69936f9da23f9bff22d",
+      "mode": "100644",
+      "type": "blob",
+      "size": 64295
+    },
+    {
+      "path": "02_Ойын_коды/package.json",
+      "sha": "7ee395c7de038dcca6d3c700f5a3e86c8fac8ea0",
+      "mode": "100644",
+      "type": "blob",
+      "size": 519
+    },
+    {
+      "path": "02_Ойын_коды/AGENTS.md",
+      "sha": "b81d5b6ee9273b13c4f4fd17a23deb331319b110",
+      "mode": "100644",
+      "type": "blob",
+      "size": 4056
+    },
+    {
+      "path": "02_Ойын_коды/design-qa.md",
+      "sha": "fe1f57ee3c27e0ee89a5160a226c21dabe5e82fb",
+      "mode": "100644",
+      "type": "blob",
+      "size": 10935
+    },
+    {
+      "path": "02_Ойын_коды/pnpm-workspace.yaml",
+      "sha": "00f6fc47030edf977a2e8d0f76a9ff3c4db780f2",
+      "mode": "100644",
+      "type": "blob",
+      "size": 50
+    },
+    {
+      "path": "02_Ойын_коды/tests/camera-controls.test.mjs",
+      "sha": "9c59f883d9940b9e87206e4d795c06964371edb5",
+      "mode": "100644",
+      "type": "blob",
+      "size": 2581
+    },
+    {
+      "path": "02_Ойын_коды/tests/student-gait.test.mjs",
+      "sha": "5d3b63e25ed5be6d8f480795e47d888db509b71d",
+      "mode": "100644",
+      "type": "blob",
+      "size": 781
+    },
+    {
+      "path": "02_Ойын_коды/tests/sites-worker.test.mjs",
+      "sha": "64f277e76964cd78f59ec5c31dfbd4cf1e92015f",
+      "mode": "100644",
+      "type": "blob",
+      "size": 2219
+    },
+    {
+      "path": "02_Ойын_коды/tests/walk-animation.test.mjs",
+      "sha": "6ed84ccfd5d6b843eb3521e8e3992e93353711dd",
+      "mode": "100644",
+      "type": "blob",
+      "size": 1476
+    },
+    {
+      "path": "02_Ойын_коды/tests/movement.test.mjs",
+      "sha": "b059b14154f0a13cd7c9403426d378268fdce78f",
+      "mode": "100644",
+      "type": "blob",
+      "size": 1211
+    },
+    {
+      "path": "02_Ойын_коды/tests/progress.test.mjs",
+      "sha": "492ab67654446e36aa0e114014726ec39c5bf13b",
+      "mode": "100644",
+      "type": "blob",
+      "size": 575
+    },
+    {
+      "path": "02_Ойын_коды/public/assets/byte-robot.png",
+      "sha": "805453ea037faff47555276b928924d7115c732e",
+      "mode": "100644",
+      "type": "blob",
+      "size": 1329278
+    },
+    {
+      "path": "02_Ойын_коды/public/assets/campus-robot.glb",
+      "sha": "6fec9cfb4b41cb319c70d38cf86965aba5630964",
+      "mode": "100644",
+      "type": "blob",
+      "size": 463988
+    },
+    {
+      "path": "02_Ойын_коды/public/assets/student-B.vrm",
+      "sha": "2e191bf8dd62b820dc1c8e7beccdf72960109cc7",
+      "mode": "100644",
+      "type": "blob",
+      "size": 15433736
+    },
+    {
+      "path": "02_Ойын_коды/public/assets/student-C.vrm",
+      "sha": "645b9e26c76586d72850cd5fdb5da4ceeb4e018b",
+      "mode": "100644",
+      "type": "blob",
+      "size": 13132268
+    },
+    {
+      "path": "02_Ойын_коды/public/assets/student-A.vrm",
+      "sha": "3c1266141851452f51d473cbb12caceb3ce02025",
+      "mode": "100644",
+      "type": "blob",
+      "size": 15096320
+    },
+    {
+      "path": "02_Ойын_коды/public/assets/paving-rough.jpg",
+      "sha": "c0bf6a9f3125d747ceee46302e0d99b2fdb282cb",
+      "mode": "100644",
+      "type": "blob",
+      "size": 227809
+    },
+    {
+      "path": "02_Ойын_коды/public/assets/paving-normal.jpg",
+      "sha": "bf083f5657571d757054bc91a07042235ccfd00c",
+      "mode": "100644",
+      "type": "blob",
+      "size": 1017387
+    },
+    {
+      "path": "02_Ойын_коды/public/assets/CREDITS.txt",
+      "sha": "0ada468d08fbcbf2e3796e06e664e9466c854ff9",
+      "mode": "100644",
+      "type": "blob",
+      "size": 1157
+    },
+    {
+      "path": "02_Ойын_коды/public/assets/paving-color.jpg",
+      "sha": "72a8ff882e0afdd293687a5b6c1f3c0f920c80ac",
+      "mode": "100644",
+      "type": "blob",
+      "size": 830452
+    },
+    {
+      "path": "02_Ойын_коды/public/assets/campus-fox.glb",
+      "sha": "1ef5c0d05658caea339680fe581aa2c8302b3365",
+      "mode": "100644",
+      "type": "blob",
+      "size": 162852
+    },
+    {
+      "path": "02_Ойын_коды/public/assets/club.png",
+      "sha": "805453ea037faff47555276b928924d7115c732e",
+      "mode": "100644",
+      "type": "blob",
+      "size": 1329278
+    },
+    {
+      "path": "02_Ойын_коды/public/assets/campus-guide.glb",
+      "sha": "1788f122d03bec6c3c634e7625e6cdfa960eef49",
+      "mode": "100644",
+      "type": "blob",
+      "size": 2160468
+    },
+    {
+      "path": "02_Ойын_коды/scripts/prepare-sites-build.mjs",
+      "sha": "86a9e8c1bbd01b1e379996db66b9bcfeb6b519ee",
+      "mode": "100644",
+      "type": "blob",
+      "size": 910
+    },
+    {
+      "path": "02_Ойын_коды/.openai/hosting.json",
+      "sha": "47c28cb400bdab23565c9a36f833a675266221b3",
+      "mode": "100644",
+      "type": "blob",
+      "size": 31
+    },
+    {
+      "path": "02_Ойын_коды/worker/index.js",
+      "sha": "5f35412463f5c8e96e36dda4008c267c4a7c96ce",
+      "mode": "100644",
+      "type": "blob",
+      "size": 483
+    },
+    {
+      "path": "02_Ойын_коды/src/cameraControls.js",
+      "sha": "7d6ecb7beb6822e515cbcfb6cf0057b426d56b9d",
+      "mode": "100644",
+      "type": "blob",
+      "size": 2386
+    },
+    {
+      "path": "02_Ойын_коды/src/movement.js",
+      "sha": "b6d5acc32ecac029248240adfa2a3a2b2ec73407",
+      "mode": "100644",
+      "type": "blob",
+      "size": 1283
+    },
+    {
+      "path": "02_Ойын_коды/src/styles.css",
+      "sha": "ce33b8ad4fb522b22c1aa9549716d2190ca9dc35",
+      "mode": "100644",
+      "type": "blob",
+      "size": 33074
+    },
+    {
+      "path": "02_Ойын_коды/src/studentGait.js",
+      "sha": "06b0c8ec4bbfda5182bccd1c2e29575f5f0753e6",
+      "mode": "100644",
+      "type": "blob",
+      "size": 842
+    },
+    {
+      "path": "02_Ойын_коды/src/World.jsx",
+      "sha": "a044e46ee781186d72cbd3f76ad310032ee4beda",
+      "mode": "100644",
+      "type": "blob",
+      "size": 35820
+    },
+    {
+      "path": "02_Ойын_коды/src/campusAudio.js",
+      "sha": "a5f5b7643e6731ce2c78b7eee0177a7827ef6db4",
+      "mode": "100644",
+      "type": "blob",
+      "size": 2484
+    },
+    {
+      "path": "02_Ойын_коды/src/progress.js",
+      "sha": "64670f3ea4218d80548b065589bbe822783f987f",
+      "mode": "100644",
+      "type": "blob",
+      "size": 291
+    },
+    {
+      "path": "02_Ойын_коды/src/main.jsx",
+      "sha": "78c0e05d2b00a8e971fca21460e5b6a5552bb2cb",
+      "mode": "100644",
+      "type": "blob",
+      "size": 242
+    },
+    {
+      "path": "02_Ойын_коды/src/App.jsx",
+      "sha": "20835cdf9cc44f55c6adad94721a22ddfc122604",
+      "mode": "100644",
+      "type": "blob",
+      "size": 21307
+    },
+    {
+      "path": "02_Ойын_коды/src/content.js",
+      "sha": "16a8b3f8fbc253fda373ea0cd3d527b7a15d9b82",
+      "mode": "100644",
+      "type": "blob",
+      "size": 21365
+    },
+    {
+      "path": "02_Ойын_коды/src/Games.jsx",
+      "sha": "888f2fccbad39c2f9b52e6bce402583dd2f6d4b2",
+      "mode": "100644",
+      "type": "blob",
+      "size": 22136
+    },
+    {
+      "path": "02_Ойын_коды/src/walkAnimation.js",
+      "sha": "0b0c682d7595c5bc1f2677ab2b2be96bb541e6f4",
+      "mode": "100644",
+      "type": "blob",
+      "size": 1854
+    },
+    {
+      "path": "01_Сайт/index.html",
+      "sha": "b37872a21539506f1c23c7a7a2470b154c517bec",
+      "mode": "100644",
+      "type": "blob",
+      "size": 5823
+    },
+    {
+      "path": "01_Сайт/vercel.json",
+      "sha": "500aa4988edc87c92bea83068e691a93ff7b2633",
+      "mode": "100644",
+      "type": "blob",
+      "size": 254
+    },
+    {
+      "path": "01_Сайт/.gitignore",
+      "sha": "3e94260f70e26551ad6f286e7be4b6fae0a205de",
+      "mode": "100644",
+      "type": "blob",
+      "size": 33
+    },
+    {
+      "path": "01_Сайт/07_Оқу_бағыты/03.html",
+      "sha": "a167ceef45fdc922afe657b8b592f31a8301b2dd",
+      "mode": "100644",
+      "type": "blob",
+      "size": 10814
+    },
+    {
+      "path": "01_Сайт/07_Оқу_бағыты/02.html",
+      "sha": "3c2fd4da5e1207e7aa1ecc64277e5bbae9e0e5cc",
+      "mode": "100644",
+      "type": "blob",
+      "size": 10927
+    },
+    {
+      "path": "01_Сайт/07_Оқу_бағыты/lesson.js",
+      "sha": "3beb5246e7b6b1168c9b06bd024a46f3c2be7114",
+      "mode": "100644",
+      "type": "blob",
+      "size": 5404
+    },
+    {
+      "path": "01_Сайт/07_Оқу_бағыты/05.html",
+      "sha": "ed03190d32ef735c604cda94e5e40ef0c78632b7",
+      "mode": "100644",
+      "type": "blob",
+      "size": 10988
+    },
+    {
+      "path": "01_Сайт/07_Оқу_бағыты/lesson-progress.mjs",
+      "sha": "bd49d938d183e822e3c338249318664c91bcf078",
+      "mode": "100644",
+      "type": "blob",
+      "size": 959
+    },
+    {
+      "path": "01_Сайт/07_Оқу_бағыты/08.html",
+      "sha": "0da73bbacebe75b41e3a24ce357402bf96bdf167",
+      "mode": "100644",
+      "type": "blob",
+      "size": 18448
+    },
+    {
+      "path": "01_Сайт/07_Оқу_бағыты/start.html",
+      "sha": "09cdde651906ce2cbb3ca509a59bdf51ef5e3c20",
+      "mode": "100644",
+      "type": "blob",
+      "size": 3669
+    },
+    {
+      "path": "01_Сайт/07_Оқу_бағыты/04.html",
+      "sha": "a125461ef8251d119288efa69223225739d62f68",
+      "mode": "100644",
+      "type": "blob",
+      "size": 10956
+    },
+    {
+      "path": "01_Сайт/07_Оқу_бағыты/07.html",
+      "sha": "3359ed16209176d4f7f5220ca48e771221109bf7",
+      "mode": "100644",
+      "type": "blob",
+      "size": 18277
+    },
+    {
+      "path": "01_Сайт/07_Оқу_бағыты/style.css",
+      "sha": "710b415461b0974c857e1e2c7e62156b8689028e",
+      "mode": "100644",
+      "type": "blob",
+      "size": 8069
+    },
+    {
+      "path": "01_Сайт/07_Оқу_бағыты/06.html",
+      "sha": "0826db48681bcf6dda9562ad23b63b70f8e0257b",
+      "mode": "100644",
+      "type": "blob",
+      "size": 16617
+    },
+    {
+      "path": "01_Сайт/07_Оқу_бағыты/01.html",
+      "sha": "235143342cac4d7ca7153589a4e2b4b9377b0c81",
+      "mode": "100644",
+      "type": "blob",
+      "size": 10886
+    },
+    {
+      "path": "01_Сайт/qmj/06_ҚМЖ.pdf",
+      "sha": "b6a572c53eeca49f13cef99c0daf85de7bae6b28",
+      "mode": "100644",
+      "type": "blob",
+      "size": 94163
+    },
+    {
+      "path": "01_Сайт/qmj/07_ҚМЖ.pdf",
+      "sha": "0bf7630cd457d264e38a910e979eb970fa8f9c9e",
+      "mode": "100644",
+      "type": "blob",
+      "size": 92493
+    },
+    {
+      "path": "01_Сайт/qmj/07_ҚМЖ.docx",
+      "sha": "8c5abbe0d2b33e12d9d6b4cef754aef1d674d8d1",
+      "mode": "100644",
+      "type": "blob",
+      "size": 40490
+    },
+    {
+      "path": "01_Сайт/qmj/06_ҚМЖ.docx",
+      "sha": "312ae1c8f3faea63e1490c745c7e1fae31d60452",
+      "mode": "100644",
+      "type": "blob",
+      "size": 40532
+    },
+    {
+      "path": "01_Сайт/qmj/05_ҚМЖ.pdf",
+      "sha": "b83bfc445dedc6756de3f2afe5f56c177d226467",
+      "mode": "100644",
+      "type": "blob",
+      "size": 93569
+    },
+    {
+      "path": "01_Сайт/qmj/01_ҚМЖ.docx",
+      "sha": "ad62f9633c370c60d519d706094cb542567b555f",
+      "mode": "100644",
+      "type": "blob",
+      "size": 40526
+    },
+    {
+      "path": "01_Сайт/qmj/04_ҚМЖ.pdf",
+      "sha": "8f9b9aa0d2d2563e1e752fd7a2a0ed55b43c0bf9",
+      "mode": "100644",
+      "type": "blob",
+      "size": 94303
+    },
+    {
+      "path": "01_Сайт/qmj/01_ҚМЖ.pdf",
+      "sha": "8e7668469b3f167b25c9f28e9ac2af1a2deb57cd",
+      "mode": "100644",
+      "type": "blob",
+      "size": 93415
+    },
+    {
+      "path": "01_Сайт/qmj/04_ҚМЖ.docx",
+      "sha": "e63448a2a3e5e6570dc0e7c4308ad26788b4c03d",
+      "mode": "100644",
+      "type": "blob",
+      "size": 40522
+    },
+    {
+      "path": "01_Сайт/qmj/05_ҚМЖ.docx",
+      "sha": "84ce089e3a0298695a6a9da1292a8c44927ccf03",
+      "mode": "100644",
+      "type": "blob",
+      "size": 40531
+    },
+    {
+      "path": "01_Сайт/qmj/08_ҚМЖ.pdf",
+      "sha": "258db2e616a8f716e487c8bcd743eafd78d262e0",
+      "mode": "100644",
+      "type": "blob",
+      "size": 91764
+    },
+    {
+      "path": "01_Сайт/qmj/02_ҚМЖ.pdf",
+      "sha": "2ef9159c78ef001485f2515ece9e6c98068d50d4",
+      "mode": "100644",
+      "type": "blob",
+      "size": 93672
+    },
+    {
+      "path": "01_Сайт/qmj/03_ҚМЖ.pdf",
+      "sha": "f96d364f835431606d6c23f1f05cfe5bd541a50c",
+      "mode": "100644",
+      "type": "blob",
+      "size": 94927
+    },
+    {
+      "path": "01_Сайт/qmj/03_ҚМЖ.docx",
+      "sha": "303ac1eea2f054d61cf120772215af4d134a3c03",
+      "mode": "100644",
+      "type": "blob",
+      "size": 40527
+    },
+    {
+      "path": "01_Сайт/qmj/02_ҚМЖ.docx",
+      "sha": "71d190c97eba5b71bbf5f1b60b96c722787f23e2",
+      "mode": "100644",
+      "type": "blob",
+      "size": 40516
+    },
+    {
+      "path": "01_Сайт/qmj/08_ҚМЖ.docx",
+      "sha": "457cb5cc23f59b71f009aa3388e8156216507be3",
+      "mode": "100644",
+      "type": "blob",
+      "size": 40557
+    },
+    {
+      "path": "01_Сайт/game/index.html",
+      "sha": "acc7a4093999046b1e82a17499cf51c0874b7a57",
+      "mode": "100644",
+      "type": "blob",
+      "size": 608
+    },
+    {
+      "path": "01_Сайт/game/assets/byte-robot.png",
+      "sha": "805453ea037faff47555276b928924d7115c732e",
+      "mode": "100644",
+      "type": "blob",
+      "size": 1329278
+    },
+    {
+      "path": "01_Сайт/game/assets/campus-robot.glb",
+      "sha": "6fec9cfb4b41cb319c70d38cf86965aba5630964",
+      "mode": "100644",
+      "type": "blob",
+      "size": 463988
+    },
+    {
+      "path": "01_Сайт/game/assets/student-B.vrm",
+      "sha": "2e191bf8dd62b820dc1c8e7beccdf72960109cc7",
+      "mode": "100644",
+      "type": "blob",
+      "size": 15433736
+    },
+    {
+      "path": "01_Сайт/game/assets/index-6V7Dnxpy.css",
+      "sha": "b1aaacb182c6cf69fb29b37e50f211b99211bf7e",
+      "mode": "100644",
+      "type": "blob",
+      "size": 33656
+    },
+    {
+      "path": "01_Сайт/game/assets/student-C.vrm",
+      "sha": "645b9e26c76586d72850cd5fdb5da4ceeb4e018b",
+      "mode": "100644",
+      "type": "blob",
+      "size": 13132268
+    },
+    {
+      "path": "01_Сайт/game/assets/student-A.vrm",
+      "sha": "3c1266141851452f51d473cbb12caceb3ce02025",
+      "mode": "100644",
+      "type": "blob",
+      "size": 15096320
+    },
+    {
+      "path": "01_Сайт/game/assets/paving-rough.jpg",
+      "sha": "c0bf6a9f3125d747ceee46302e0d99b2fdb282cb",
+      "mode": "100644",
+      "type": "blob",
+      "size": 227809
+    },
+    {
+      "path": "01_Сайт/game/assets/paving-normal.jpg",
+      "sha": "bf083f5657571d757054bc91a07042235ccfd00c",
+      "mode": "100644",
+      "type": "blob",
+      "size": 1017387
+    },
+    {
+      "path": "01_Сайт/game/assets/index-vpo_oyf0.js",
+      "sha": "74ba4686631aca2d02cdfabc196542e7b32e518e",
+      "mode": "100644",
+      "type": "blob",
+      "size": 1179314
+    },
+    {
+      "path": "01_Сайт/game/assets/CREDITS.txt",
+      "sha": "0ada468d08fbcbf2e3796e06e664e9466c854ff9",
+      "mode": "100644",
+      "type": "blob",
+      "size": 1157
+    },
+    {
+      "path": "01_Сайт/game/assets/paving-color.jpg",
+      "sha": "72a8ff882e0afdd293687a5b6c1f3c0f920c80ac",
+      "mode": "100644",
+      "type": "blob",
+      "size": 830452
+    },
+    {
+      "path": "01_Сайт/game/assets/campus-fox.glb",
+      "sha": "1ef5c0d05658caea339680fe581aa2c8302b3365",
+      "mode": "100644",
+      "type": "blob",
+      "size": 162852
+    },
+    {
+      "path": "01_Сайт/game/assets/club.png",
+      "sha": "805453ea037faff47555276b928924d7115c732e",
+      "mode": "100644",
+      "type": "blob",
+      "size": 1329278
+    },
+    {
+      "path": "01_Сайт/game/assets/campus-guide.glb",
+      "sha": "1788f122d03bec6c3c634e7625e6cdfa960eef49",
+      "mode": "100644",
+      "type": "blob",
+      "size": 2160468
+    },
+    {
+      "path": "01_Сайт/assessment/ТЖБ_3_тоқсан_оқушы.docx",
+      "sha": "ee32ac98a5b184ff02fa4bbca1e9b65ccbacbbbe",
+      "mode": "100644",
+      "type": "blob",
+      "size": 39573
+    },
+    {
+      "path": "01_Сайт/assessment/index.html",
+      "sha": "0f946d59294824ece80cc73fe95e122c5131de19",
+      "mode": "100644",
+      "type": "blob",
+      "size": 3149
+    },
+    {
+      "path": "01_Сайт/assessment/ТЖБ_3_тоқсан_оқушы.pdf",
+      "sha": "1f8b47a906614df46bf6bf23d33573f2da8ec40b",
+      "mode": "100644",
+      "type": "blob",
+      "size": 99516
+    },
+    {
+      "path": "01_Сайт/assessment/БЖБ_3_тоқсан_оқушы.pdf",
+      "sha": "a301ea04e1eb2f1d41c7cf388466158964c560dd",
+      "mode": "100644",
+      "type": "blob",
+      "size": 95341
+    },
+    {
+      "path": "01_Сайт/assessment/БЖБ_3_тоқсан_оқушы.docx",
+      "sha": "2bdcfaa4491d92bf6b8505ccd3202b3ea2dad04f",
+      "mode": "100644",
+      "type": "blob",
+      "size": 39238
+    },
+    {
+      "path": "01_Сайт/05_Көрнекіліктер/06_сызба.png",
+      "sha": "7b3af954711ba981772d3b27aa324e9d56657205",
+      "mode": "100644",
+      "type": "blob",
+      "size": 13249
+    },
+    {
+      "path": "01_Сайт/05_Көрнекіліктер/07_сызба.png",
+      "sha": "f5a325375238d2451817f1b29b75d446d96cb0e2",
+      "mode": "100644",
+      "type": "blob",
+      "size": 14648
+    },
+    {
+      "path": "01_Сайт/05_Көрнекіліктер/01_сызба.png",
+      "sha": "6d5d7fe022686dc840edea3f593036b74efcd288",
+      "mode": "100644",
+      "type": "blob",
+      "size": 13884
+    },
+    {
+      "path": "01_Сайт/05_Көрнекіліктер/04_сызба.png",
+      "sha": "5ca2a4750ffd8410ec25697f0a8d578c4b44e410",
+      "mode": "100644",
+      "type": "blob",
+      "size": 14455
+    },
+    {
+      "path": "01_Сайт/05_Көрнекіліктер/02_сызба.png",
+      "sha": "aca4fbf93c0fb10b895547759a9e31eaeee1d05c",
+      "mode": "100644",
+      "type": "blob",
+      "size": 14450
+    },
+    {
+      "path": "01_Сайт/05_Көрнекіліктер/05_сызба.png",
+      "sha": "0b0ce12d8c65ff0527b02fda01fe4035c5c073d5",
+      "mode": "100644",
+      "type": "blob",
+      "size": 17137
+    },
+    {
+      "path": "01_Сайт/05_Көрнекіліктер/08_сызба.png",
+      "sha": "6c9fdedd2b9a523e18bbd4d5fcc5180baeeb6c2d",
+      "mode": "100644",
+      "type": "blob",
+      "size": 18373
+    },
+    {
+      "path": "01_Сайт/05_Көрнекіліктер/03_сызба.png",
+      "sha": "4eefdb8d5d76dd058c1aca37bccb81579c31fd76",
+      "mode": "100644",
+      "type": "blob",
+      "size": 15918
+    },
+    {
+      "path": "01_Сайт/media/07_slides.pdf",
+      "sha": "d2304f25a5db8c92d15096231f1ea925c34435c1",
+      "mode": "100644",
+      "type": "blob",
+      "size": 283080
+    },
+    {
+      "path": "01_Сайт/media/01_video.mp4",
+      "sha": "781f6750f896d1b2432bdd3a2edfc1330c18301d",
+      "mode": "100644",
+      "type": "blob",
+      "size": 35803664
+    },
+    {
+      "path": "01_Сайт/media/02_slides.pdf",
+      "sha": "ba93e3e3a574fb1e39349da3dc7adb61570f3115",
+      "mode": "100644",
+      "type": "blob",
+      "size": 4658856
+    },
+    {
+      "path": "01_Сайт/media/08_slides.pptx",
+      "sha": "78d2b2dd27ec415ab6fcd96d181e5ee255112572",
+      "mode": "100644",
+      "type": "blob",
+      "size": 56941
+    },
+    {
+      "path": "01_Сайт/media/07_video.mp4",
+      "sha": "8100acf5aa63840ee519541fd7f0bc5cece2341e",
+      "mode": "100644",
+      "type": "blob",
+      "size": 24902938
+    },
+    {
+      "path": "01_Сайт/media/08_slides.pdf",
+      "sha": "bb81410aab4eb523f49e87def8a4ab219daca0a2",
+      "mode": "100644",
+      "type": "blob",
+      "size": 322386
+    },
+    {
+      "path": "01_Сайт/media/05_slides.pdf",
+      "sha": "460df3453532aca8c77742e78b043cd2f2e906c8",
+      "mode": "100644",
+      "type": "blob",
+      "size": 4503927
+    },
+    {
+      "path": "01_Сайт/media/06_video.mp4",
+      "sha": "575857d63258546085a2dd9ef3436382d715dc94",
+      "mode": "100644",
+      "type": "blob",
+      "size": 23662745
+    },
+    {
+      "path": "01_Сайт/media/07_slides.pptx",
+      "sha": "2e622ec8b1552f5a802233506b0d222d6bfb4405",
+      "mode": "100644",
+      "type": "blob",
+      "size": 56887
+    },
+    {
+      "path": "01_Сайт/media/03_slides.pdf",
+      "sha": "4d29ce2984b9e6864afcb43ba83fcd05b84231bc",
+      "mode": "100644",
+      "type": "blob",
+      "size": 4238485
+    },
+    {
+      "path": "01_Сайт/media/03_video.mp4",
+      "sha": "6d0b31ad1b43b3f298d870753b556fea8b2cbd5a",
+      "mode": "100644",
+      "type": "blob",
+      "size": 35440117
+    },
+    {
+      "path": "01_Сайт/media/08_video.mp4",
+      "sha": "c3b9235bb7a943ec5db958354a692f6d5636e8d0",
+      "mode": "100644",
+      "type": "blob",
+      "size": 32951245
+    },
+    {
+      "path": "01_Сайт/media/05_video.mp4",
+      "sha": "7b085b9877a4bc596a8347d0050dcc65efd34ee2",
+      "mode": "100644",
+      "type": "blob",
+      "size": 24269462
+    },
+    {
+      "path": "01_Сайт/media/06_slides.pdf",
+      "sha": "41103d5fbbdc97e4946c2528ba65e87627f1302f",
+      "mode": "100644",
+      "type": "blob",
+      "size": 217079
+    },
+    {
+      "path": "01_Сайт/media/06_slides.pptx",
+      "sha": "163cbd38e32c6fa284221dd180a3c009747eb798",
+      "mode": "100644",
+      "type": "blob",
+      "size": 54825
+    },
+    {
+      "path": "01_Сайт/media/01_slides.pdf",
+      "sha": "6680e845e0ded7644d8cac3123b8b78760d8f54e",
+      "mode": "100644",
+      "type": "blob",
+      "size": 3608107
+    },
+    {
+      "path": "01_Сайт/media/02_video.mp4",
+      "sha": "d1776ee60b8aa37736df21675a898d90aff02ef6",
+      "mode": "100644",
+      "type": "blob",
+      "size": 33358259
+    },
+    {
+      "path": "01_Сайт/media/04_video.mp4",
+      "sha": "4a482e3fd411b5d1f141bd693c499f026567fde2",
+      "mode": "100644",
+      "type": "blob",
+      "size": 26147637
+    },
+    {
+      "path": "01_Сайт/media/04_slides.pdf",
+      "sha": "ce959b93907d76241bf4acb0667b67c1a5871409",
+      "mode": "100644",
+      "type": "blob",
+      "size": 4662475
+    },
+    {
+      "path": "01_Сайт/media/slides/03/01.jpg",
+      "sha": "c397543fc346e1880194b2c7e68467f699bc6610",
+      "mode": "100644",
+      "type": "blob",
+      "size": 100742
+    },
+    {
+      "path": "01_Сайт/media/slides/03/03.jpg",
+      "sha": "d46af05766f4552f878ef13189fcd259da943530",
+      "mode": "100644",
+      "type": "blob",
+      "size": 90756
+    },
+    {
+      "path": "01_Сайт/media/slides/03/02.jpg",
+      "sha": "3b0e88c908e967bb6d52aaa36a87bd6a513244da",
+      "mode": "100644",
+      "type": "blob",
+      "size": 116482
+    },
+    {
+      "path": "01_Сайт/media/slides/03/06.jpg",
+      "sha": "a694b13bc9844d1cff3d18f0218c77543d004a22",
+      "mode": "100644",
+      "type": "blob",
+      "size": 80777
+    },
+    {
+      "path": "01_Сайт/media/slides/03/07.jpg",
+      "sha": "fabc56be8964415fe8c282ee3a53dad9c1675dcd",
+      "mode": "100644",
+      "type": "blob",
+      "size": 112453
+    },
+    {
+      "path": "01_Сайт/media/slides/03/05.jpg",
+      "sha": "4447fc746fdf07b43026ab11e6804fe1ebea99e0",
+      "mode": "100644",
+      "type": "blob",
+      "size": 94581
+    },
+    {
+      "path": "01_Сайт/media/slides/03/04.jpg",
+      "sha": "af7b318e8e1d5fa7395333ea35cdf4defee75a16",
+      "mode": "100644",
+      "type": "blob",
+      "size": 93612
+    },
+    {
+      "path": "01_Сайт/media/slides/03/08.jpg",
+      "sha": "efd11fef045fa36b6cc0faa22763a03e46373900",
+      "mode": "100644",
+      "type": "blob",
+      "size": 106412
+    },
+    {
+      "path": "01_Сайт/media/slides/04/01.jpg",
+      "sha": "58de5ff645e75bb755fd48778facc9912bfb38a3",
+      "mode": "100644",
+      "type": "blob",
+      "size": 97236
+    },
+    {
+      "path": "01_Сайт/media/slides/04/03.jpg",
+      "sha": "c90977a2541f874dc92290ed2efc8a91804918db",
+      "mode": "100644",
+      "type": "blob",
+      "size": 82879
+    },
+    {
+      "path": "01_Сайт/media/slides/04/02.jpg",
+      "sha": "bdff95e4b8cb451deca24a7ce4b9551cff17d3f7",
+      "mode": "100644",
+      "type": "blob",
+      "size": 91654
+    },
+    {
+      "path": "01_Сайт/media/slides/04/06.jpg",
+      "sha": "3ddbf64ff639908cdfbabe7a9b946eb2c2cdd37b",
+      "mode": "100644",
+      "type": "blob",
+      "size": 174010
+    },
+    {
+      "path": "01_Сайт/media/slides/04/07.jpg",
+      "sha": "37b7cef36eb89defc00d684301fdc92577b2afcd",
+      "mode": "100644",
+      "type": "blob",
+      "size": 132195
+    },
+    {
+      "path": "01_Сайт/media/slides/04/05.jpg",
+      "sha": "3f4c5286cefd8d40f4e4283ec3491a8309c8c19e",
+      "mode": "100644",
+      "type": "blob",
+      "size": 82383
+    },
+    {
+      "path": "01_Сайт/media/slides/04/04.jpg",
+      "sha": "f1334a96fbe7daa843d486cb907e88ca5bf45817",
+      "mode": "100644",
+      "type": "blob",
+      "size": 75602
+    },
+    {
+      "path": "01_Сайт/media/slides/04/08.jpg",
+      "sha": "854c4d97dc815568b8aa4a037db7328a666558c9",
+      "mode": "100644",
+      "type": "blob",
+      "size": 110964
+    },
+    {
+      "path": "01_Сайт/media/slides/05/01.jpg",
+      "sha": "98775faa83c8c943096c163cd8a41af4f28bbe46",
+      "mode": "100644",
+      "type": "blob",
+      "size": 97809
+    },
+    {
+      "path": "01_Сайт/media/slides/05/03.jpg",
+      "sha": "e9dca0add4d85ebb9d7100115f16201082c1b889",
+      "mode": "100644",
+      "type": "blob",
+      "size": 95486
+    },
+    {
+      "path": "01_Сайт/media/slides/05/02.jpg",
+      "sha": "b665b9371974dee5af0d4e4ea42d9cdf234d0de6",
+      "mode": "100644",
+      "type": "blob",
+      "size": 124517
+    },
+    {
+      "path": "01_Сайт/media/slides/05/06.jpg",
+      "sha": "17ab6918fcff37ba9cda4b725a250230e84ca85a",
+      "mode": "100644",
+      "type": "blob",
+      "size": 130882
+    },
+    {
+      "path": "01_Сайт/media/slides/05/07.jpg",
+      "sha": "2f84aa9235013f89cc5bc6bed050c1fe0e163f87",
+      "mode": "100644",
+      "type": "blob",
+      "size": 88802
+    },
+    {
+      "path": "01_Сайт/media/slides/05/05.jpg",
+      "sha": "35e0f2ae4a732fe8be47623ae766bcc947a387b4",
+      "mode": "100644",
+      "type": "blob",
+      "size": 96099
+    },
+    {
+      "path": "01_Сайт/media/slides/05/04.jpg",
+      "sha": "13ee191166cc222b3e64907d3e42a430a7942cca",
+      "mode": "100644",
+      "type": "blob",
+      "size": 72462
+    },
+    {
+      "path": "01_Сайт/media/slides/05/08.jpg",
+      "sha": "204ea3ae54d3371d49ff64935b3e392803cba54f",
+      "mode": "100644",
+      "type": "blob",
+      "size": 104663
+    },
+    {
+      "path": "01_Сайт/media/slides/02/01.jpg",
+      "sha": "da2dbc6b973d3bf0284a6d0780c7e7a94d0d9ddc",
+      "mode": "100644",
+      "type": "blob",
+      "size": 146720
+    },
+    {
+      "path": "01_Сайт/media/slides/02/03.jpg",
+      "sha": "2aef43ed359cf5f775a56e349b226f8dbbfe4ba8",
+      "mode": "100644",
+      "type": "blob",
+      "size": 148334
+    },
+    {
+      "path": "01_Сайт/media/slides/02/02.jpg",
+      "sha": "4825a2eb462374844fc3f096695dd66271620931",
+      "mode": "100644",
+      "type": "blob",
+      "size": 168965
+    },
+    {
+      "path": "01_Сайт/media/slides/02/06.jpg",
+      "sha": "de311d74d7324f7f13da7eda6a6d115d0e82daff",
+      "mode": "100644",
+      "type": "blob",
+      "size": 157852
+    },
+    {
+      "path": "01_Сайт/media/slides/02/07.jpg",
+      "sha": "58b0111689e1809e71593c3aef90703bb61dca85",
+      "mode": "100644",
+      "type": "blob",
+      "size": 165944
+    },
+    {
+      "path": "01_Сайт/media/slides/02/05.jpg",
+      "sha": "90a94fa2aa9f0b8d1012f5edb9ee84cad9436636",
+      "mode": "100644",
+      "type": "blob",
+      "size": 148347
+    },
+    {
+      "path": "01_Сайт/media/slides/02/04.jpg",
+      "sha": "8f4b7a9b578205e5d5e0f8a61d04305e92bf8856",
+      "mode": "100644",
+      "type": "blob",
+      "size": 103820
+    },
+    {
+      "path": "01_Сайт/media/slides/02/08.jpg",
+      "sha": "8c1d2b86d24caf21d7fdba686e0cd485e493f417",
+      "mode": "100644",
+      "type": "blob",
+      "size": 143174
+    },
+    {
+      "path": "01_Сайт/media/slides/07/01.jpg",
+      "sha": "a458874d1d2e38f1bcfc94d90a579dededb5b6c7",
+      "mode": "100644",
+      "type": "blob",
+      "size": 74274
+    },
+    {
+      "path": "01_Сайт/media/slides/07/03.jpg",
+      "sha": "ba520890b82daaeda77c95f8bfafe78b150c1d01",
+      "mode": "100644",
+      "type": "blob",
+      "size": 74074
+    },
+    {
+      "path": "01_Сайт/media/slides/07/02.jpg",
+      "sha": "cbfe7e42ea8288396796e6f5c21c1b86ab08c785",
+      "mode": "100644",
+      "type": "blob",
+      "size": 84946
+    },
+    {
+      "path": "01_Сайт/media/slides/07/06.jpg",
+      "sha": "fa0f4edd56c43b6dc3c951baa91177b74919efd0",
+      "mode": "100644",
+      "type": "blob",
+      "size": 84911
+    },
+    {
+      "path": "01_Сайт/media/slides/07/07.jpg",
+      "sha": "3fe0a1b41b8047729f42233def268b0316e54a6e",
+      "mode": "100644",
+      "type": "blob",
+      "size": 85071
+    },
+    {
+      "path": "01_Сайт/media/slides/07/05.jpg",
+      "sha": "f73bcf2cf87eb4fa2d2cc9f35c0e4eb631ad4fe3",
+      "mode": "100644",
+      "type": "blob",
+      "size": 96443
+    },
+    {
+      "path": "01_Сайт/media/slides/07/04.jpg",
+      "sha": "456ed2506e3ec77a9491eb8e800da4fa7b4c7488",
+      "mode": "100644",
+      "type": "blob",
+      "size": 95622
+    },
+    {
+      "path": "01_Сайт/media/slides/07/08.jpg",
+      "sha": "bf5ad2c01a515aa52ba0caac144f3d8a0d76f32f",
+      "mode": "100644",
+      "type": "blob",
+      "size": 79457
+    },
+    {
+      "path": "01_Сайт/media/slides/08/01.jpg",
+      "sha": "c1f6a3c1f9eb9b4df46334f24f2d791f0cff5d9d",
+      "mode": "100644",
+      "type": "blob",
+      "size": 86332
+    },
+    {
+      "path": "01_Сайт/media/slides/08/03.jpg",
+      "sha": "3cc7e6da666ffba1d3cbc1a0ef29249b45895a65",
+      "mode": "100644",
+      "type": "blob",
+      "size": 108193
+    },
+    {
+      "path": "01_Сайт/media/slides/08/02.jpg",
+      "sha": "65f98a669987c844d7f1fc946b8b32607fac272d",
+      "mode": "100644",
+      "type": "blob",
+      "size": 88234
+    },
+    {
+      "path": "01_Сайт/media/slides/08/06.jpg",
+      "sha": "ec1cab5113175d693dff8047bb43a8e453d67972",
+      "mode": "100644",
+      "type": "blob",
+      "size": 90513
+    },
+    {
+      "path": "01_Сайт/media/slides/08/07.jpg",
+      "sha": "ab761d06d680efedc03071c353a3008a6cce23e3",
+      "mode": "100644",
+      "type": "blob",
+      "size": 82223
+    },
+    {
+      "path": "01_Сайт/media/slides/08/05.jpg",
+      "sha": "7177a2ce61b14bd1a0b1300f00217d95c3c23f1b",
+      "mode": "100644",
+      "type": "blob",
+      "size": 83075
+    },
+    {
+      "path": "01_Сайт/media/slides/08/04.jpg",
+      "sha": "8c30b9f10682263032fc7006b12d11e51790ef19",
+      "mode": "100644",
+      "type": "blob",
+      "size": 82267
+    },
+    {
+      "path": "01_Сайт/media/slides/08/08.jpg",
+      "sha": "949a923153c8ae717133dfcf26ad8da30073c0e3",
+      "mode": "100644",
+      "type": "blob",
+      "size": 85131
+    },
+    {
+      "path": "01_Сайт/media/slides/01/01.jpg",
+      "sha": "463d8dd2ffe3eead47bf65068a7a13a339304006",
+      "mode": "100644",
+      "type": "blob",
+      "size": 112095
+    },
+    {
+      "path": "01_Сайт/media/slides/01/03.jpg",
+      "sha": "623009f7f4b42e40112acff849196173e02807cf",
+      "mode": "100644",
+      "type": "blob",
+      "size": 83532
+    },
+    {
+      "path": "01_Сайт/media/slides/01/02.jpg",
+      "sha": "5fda5b45cdd426bdc1f14b13f0f7b6c93bd0e067",
+      "mode": "100644",
+      "type": "blob",
+      "size": 149664
+    },
+    {
+      "path": "01_Сайт/media/slides/01/06.jpg",
+      "sha": "5e064f8f6df90ab58286e8d04756f7ad658e2bfa",
+      "mode": "100644",
+      "type": "blob",
+      "size": 94743
+    },
+    {
+      "path": "01_Сайт/media/slides/01/07.jpg",
+      "sha": "b9964a0da071e7fe69fe74121ac7d16127171bf5",
+      "mode": "100644",
+      "type": "blob",
+      "size": 66716
+    },
+    {
+      "path": "01_Сайт/media/slides/01/05.jpg",
+      "sha": "ebce93dcb6c1d6e7fa8c016126cdc41df998323c",
+      "mode": "100644",
+      "type": "blob",
+      "size": 113944
+    },
+    {
+      "path": "01_Сайт/media/slides/01/04.jpg",
+      "sha": "9becc4963f500fdb5bc7cbc07bb37baf71886776",
+      "mode": "100644",
+      "type": "blob",
+      "size": 81721
+    },
+    {
+      "path": "01_Сайт/media/slides/01/08.jpg",
+      "sha": "769dc1f4b0176164f349cbdc2aaa32fc654ed70a",
+      "mode": "100644",
+      "type": "blob",
+      "size": 123782
+    },
+    {
+      "path": "01_Сайт/media/slides/06/01.jpg",
+      "sha": "8da0f4ec097523ad1ce76f4a1a4ef197f6b696d7",
+      "mode": "100644",
+      "type": "blob",
+      "size": 45336
+    },
+    {
+      "path": "01_Сайт/media/slides/06/03.jpg",
+      "sha": "2b01c6c353ed4fb12a16e26a62b7b227957001a2",
+      "mode": "100644",
+      "type": "blob",
+      "size": 69846
+    },
+    {
+      "path": "01_Сайт/media/slides/06/02.jpg",
+      "sha": "2936d4d863f5c594c64711b2c5ea0608318002ec",
+      "mode": "100644",
+      "type": "blob",
+      "size": 95804
+    },
+    {
+      "path": "01_Сайт/media/slides/06/06.jpg",
+      "sha": "d1e58af4bfc337fee1dd9d22702bd368aabf94ba",
+      "mode": "100644",
+      "type": "blob",
+      "size": 89061
+    },
+    {
+      "path": "01_Сайт/media/slides/06/07.jpg",
+      "sha": "6fe107bddaa509e1af359c0d6154332103c1c509",
+      "mode": "100644",
+      "type": "blob",
+      "size": 76798
+    },
+    {
+      "path": "01_Сайт/media/slides/06/05.jpg",
+      "sha": "238878f6c1e0e214236efbcfb04b0562d8b484f0",
+      "mode": "100644",
+      "type": "blob",
+      "size": 85431
+    },
+    {
+      "path": "01_Сайт/media/slides/06/04.jpg",
+      "sha": "a1526a15fd13587cec393e33c9d5de4699b81d1d",
+      "mode": "100644",
+      "type": "blob",
+      "size": 75320
+    },
+    {
+      "path": "01_Сайт/media/slides/06/08.jpg",
+      "sha": "c50ff7c00fe73d645419192516052ba4c3ad522e",
+      "mode": "100644",
+      "type": "blob",
+      "size": 70403
+    },
+    {
+      "path": "04_Қызметтік/video-update-2026-10-27.json",
+      "sha": "1b40a1dc67805452714e7e306df3cdb004594b94",
+      "mode": "100644",
+      "type": "blob",
+      "size": 582
+    },
+    {
+      "path": "04_Қызметтік/cleanup-downloads-2026-10-27.json",
+      "sha": "631cb57b829cdd0235c28f2dcff343b6916280b0",
+      "mode": "100644",
+      "type": "blob",
+      "size": 999
+    },
+    {
+      "path": "04_Қызметтік/cleanup-2026-10-27.json",
+      "sha": "c29c9e90a425201b69b21f89e9ef4918c19c7fd1",
+      "mode": "100644",
+      "type": "blob",
+      "size": 8867
+    },
+    {
+      "path": "04_Қызметтік/game-review/IT_CAMPUS_3D_Game",
+      "sha": "319243c83e1b19d9e81dd481983075d7c6127089",
+      "mode": "120000",
+      "type": "blob",
+      "size": 54
+    },
+    {
+      "path": "04_Қызметтік/assessment-update-20261105/build.py",
+      "sha": "cf60896531a892f211ada07f9dbeffcf3b822925",
+      "mode": "100644",
+      "type": "blob",
+      "size": 26397
+    },
+    {
+      "path": "04_Қызметтік/assessment-update-20261105/status.md",
+      "sha": "afb707244e191631cdbd5b397af580c9dc45644e",
+      "mode": "100644",
+      "type": "blob",
+      "size": 1560
+    },
+    {
+      "path": "04_Қызметтік/assessment-update-20261105/artifact.md",
+      "sha": "40fe272d8b7df846085f5300b9b7e47f5743b2ed",
+      "mode": "100644",
+      "type": "blob",
+      "size": 1748
+    },
+    {
+      "path": "04_Қызметтік/assessment-update-20261105/published-checks.json",
+      "sha": "a1410812cb9558eb5dd063e14856eb29f138adc4",
+      "mode": "100644",
+      "type": "blob",
+      "size": 879
+    },
+    {
+      "path": "04_Қызметтік/lesson-refresh/lessons.json",
+      "sha": "68f6ce8d1af6cc928ca8dec54d7892b1040a3ccd",
+      "mode": "100644",
+      "type": "blob",
+      "size": 10390
+    },
+    {
+      "path": "04_Қызметтік/lesson-refresh/published-campus.jpg",
+      "sha": "e3665ddf2fe14478920d0a27c5672ea1f15dd1ce",
+      "mode": "100644",
+      "type": "blob",
+      "size": 81615
+    },
+    {
+      "path": "04_Қызметтік/lesson-refresh/classroom-checks.json",
+      "sha": "fdac2909ad160327d87e3413e33f8c4cafa59af0",
+      "mode": "100644",
+      "type": "blob",
+      "size": 1194
+    },
+    {
+      "path": "04_Қызметтік/lesson-refresh/status.json",
+      "sha": "8cda17e3d2f3c52c6a31f8a4e7cf4d3b9bb236b0",
+      "mode": "100644",
+      "type": "blob",
+      "size": 612
+    },
+    {
+      "path": "04_Қызметтік/lesson-refresh/production-link-checks.json",
+      "sha": "f01b3a5063e172301892fbccd5556cf9f0d49ec9",
+      "mode": "100644",
+      "type": "blob",
+      "size": 19661
+    },
+    {
+      "path": "04_Қызметтік/lesson-refresh/classroom-updated.jpg",
+      "sha": "73073b109d27214370996af67f12dad60b1bf56b",
+      "mode": "100644",
+      "type": "blob",
+      "size": 60527
+    },
+    {
+      "path": "04_Қызметтік/lesson-refresh/qmj-links.json",
+      "sha": "1e24a73a96591a48f6cce2e8f104e2c3194f7b59",
+      "mode": "100644",
+      "type": "blob",
+      "size": 3199
+    },
+    {
+      "path": "04_Қызметтік/assessment-backup-20261105/index.html",
+      "sha": "6f0d78a41496ace7f670dcdfec61d39aeab1ebf6",
+      "mode": "100644",
+      "type": "blob",
+      "size": 5495
+    },
+    {
+      "path": "04_Қызметтік/assessment-backup-20261105/07_Оқу_бағыты/08.html",
+      "sha": "f7e703f4b9b81c43349c2e084c815c42de97a755",
+      "mode": "100644",
+      "type": "blob",
+      "size": 18117
+    },
+    {
+      "path": "04_Қызметтік/assessment-backup-20261105/07_Оқу_бағыты/start.html",
+      "sha": "71ef5129537dfc888bac23375fc72431483c9787",
+      "mode": "100644",
+      "type": "blob",
+      "size": 3338
+    },
+    {
+      "path": "04_Қызметтік/assessment-backup-20261105/qmj/06_ҚМЖ.pdf",
+      "sha": "5b94e57dd9bf807b1f83d47e071c978482ebd8dc",
+      "mode": "100644",
+      "type": "blob",
+      "size": 112507
+    },
+    {
+      "path": "04_Қызметтік/assessment-backup-20261105/qmj/07_ҚМЖ.pdf",
+      "sha": "374fc9981e0f77ae27ac750b905d68919cab7c32",
+      "mode": "100644",
+      "type": "blob",
+      "size": 113324
+    },
+    {
+      "path": "04_Қызметтік/assessment-backup-20261105/qmj/07_ҚМЖ.docx",
+      "sha": "6b10ac9fb38a56a151ec1d8adb5b1387e308875a",
+      "mode": "100644",
+      "type": "blob",
+      "size": 53231
+    },
+    {
+      "path": "04_Қызметтік/assessment-backup-20261105/qmj/06_ҚМЖ.docx",
+      "sha": "55d2949c12e7cd4282fb841d363430ca2e140654",
+      "mode": "100644",
+      "type": "blob",
+      "size": 52183
+    },
+    {
+      "path": "04_Қызметтік/assessment-backup-20261105/qmj/05_ҚМЖ.pdf",
+      "sha": "55eaa95702a53cde6c4e41f9c7acae3ec88293a9",
+      "mode": "100644",
+      "type": "blob",
+      "size": 113856
+    },
+    {
+      "path": "04_Қызметтік/assessment-backup-20261105/qmj/01_ҚМЖ.docx",
+      "sha": "5175494831775c9020bff1bce23b5059f4091586",
+      "mode": "100644",
+      "type": "blob",
+      "size": 52485
+    },
+    {
+      "path": "04_Қызметтік/assessment-backup-20261105/qmj/04_ҚМЖ.pdf",
+      "sha": "768c3a81492f87c56aee36d02496adb196aaec83",
+      "mode": "100644",
+      "type": "blob",
+      "size": 112947
+    },
+    {
+      "path": "04_Қызметтік/assessment-backup-20261105/qmj/01_ҚМЖ.pdf",
+      "sha": "dafe8293e166eac4bb33181e9b2ac23e932e8105",
+      "mode": "100644",
+      "type": "blob",
+      "size": 111082
+    },
+    {
+      "path": "04_Қызметтік/assessment-backup-20261105/qmj/04_ҚМЖ.docx",
+      "sha": "54b7a350a305acd03e8cb917a2eeddb4645b6c1e",
+      "mode": "100644",
+      "type": "blob",
+      "size": 52916
+    },
+    {
+      "path": "04_Қызметтік/assessment-backup-20261105/qmj/05_ҚМЖ.docx",
+      "sha": "504e52283b58f1ddf200ce82a339a38f8063974b",
+      "mode": "100644",
+      "type": "blob",
+      "size": 55650
+    },
+    {
+      "path": "04_Қызметтік/assessment-backup-20261105/qmj/08_ҚМЖ.pdf",
+      "sha": "bff8b6142fcb4a99a4d7b6bd40e33a732988a066",
+      "mode": "100644",
+      "type": "blob",
+      "size": 113600
+    },
+    {
+      "path": "04_Қызметтік/assessment-backup-20261105/qmj/02_ҚМЖ.pdf",
+      "sha": "5b343bf7c1ae0e5928b53d1b36b32d930d4d1f6c",
+      "mode": "100644",
+      "type": "blob",
+      "size": 112989
+    },
+    {
+      "path": "04_Қызметтік/assessment-backup-20261105/qmj/03_ҚМЖ.pdf",
+      "sha": "306a68802b144584b6988c19c821c92198e1d369",
+      "mode": "100644",
+      "type": "blob",
+      "size": 114977
+    },
+    {
+      "path": "04_Қызметтік/assessment-backup-20261105/qmj/03_ҚМЖ.docx",
+      "sha": "8c3356304cf33815f57f20ace5f87f316f4c5207",
+      "mode": "100644",
+      "type": "blob",
+      "size": 54388
+    },
+    {
+      "path": "04_Қызметтік/assessment-backup-20261105/qmj/02_ҚМЖ.docx",
+      "sha": "8d7eb772b409574b316222c9266455b2dd6c4886",
+      "mode": "100644",
+      "type": "blob",
+      "size": 52919
+    },
+    {
+      "path": "04_Қызметтік/assessment-backup-20261105/qmj/08_ҚМЖ.docx",
+      "sha": "7e052b453ebf23e1986720269c5c53f91825632a",
+      "mode": "100644",
+      "type": "blob",
+      "size": 56822
+    },
+    {
+      "path": "05_YouTube_видеолар/01 — HTML негіздері және мәтінді пішімдеу.mp4",
+      "sha": "781f6750f896d1b2432bdd3a2edfc1330c18301d",
+      "mode": "100644",
+      "type": "blob",
+      "size": 35803664
+    },
+    {
+      "path": "05_YouTube_видеолар/05 — Аудио бейне және субтитр енгізу.mp4",
+      "sha": "7b085b9877a4bc596a8347d0050dcc65efd34ee2",
+      "mode": "100644",
+      "type": "blob",
+      "size": 24269462
+    },
+    {
+      "path": "05_YouTube_видеолар/03 — HTML сілтемелері және шағын сайт.mp4",
+      "sha": "6d0b31ad1b43b3f298d870753b556fea8b2cbd5a",
+      "mode": "100644",
+      "type": "blob",
+      "size": 35440117
+    },
+    {
+      "path": "05_YouTube_видеолар/04 — CSS арқылы безендіру және бейімделетін макет.mp4",
+      "sha": "4a482e3fd411b5d1f141bd693c499f026567fde2",
+      "mode": "100644",
+      "type": "blob",
+      "size": 26147637
+    },
+    {
+      "path": "05_YouTube_видеолар/06 — Дайын JavaScript скрипті және енгізуді тексеру.mp4",
+      "sha": "575857d63258546085a2dd9ef3436382d715dc94",
+      "mode": "100644",
+      "type": "blob",
+      "size": 23662745
+    },
+    {
+      "path": "05_YouTube_видеолар/07 — Интерактивті веб жоба және тестілеу.mp4",
+      "sha": "8100acf5aa63840ee519541fd7f0bc5cece2341e",
+      "mode": "100644",
+      "type": "blob",
+      "size": 24902938
+    },
+    {
+      "path": "05_YouTube_видеолар/02 — HTML кестелері және графика.mp4",
+      "sha": "d1776ee60b8aa37736df21675a898d90aff02ef6",
+      "mode": "100644",
+      "type": "blob",
+      "size": 33358259
+    },
+    {
+      "path": "05_YouTube_видеолар/08 — Веб бет және деректер базасымен әрекеттер.mp4",
+      "sha": "c3b9235bb7a943ec5db958354a692f6d5636e8d0",
+      "mode": "100644",
+      "type": "blob",
+      "size": 32951245
+    },
+    {
+      "path": "06_Бағалау_мұғалімге/ОҚЫҢЫЗ.txt",
+      "sha": "9cd5939a0c467054dee1c41f2a9e8093bd58256f",
+      "mode": "100644",
+      "type": "blob",
+      "size": 279
+    },
+    {
+      "path": "06_Бағалау_мұғалімге/ТЖБ_3_тоқсан_мұғалім.docx",
+      "sha": "336be6e9566cf30cc88e76ab908b1d4ab7e86842",
+      "mode": "100644",
+      "type": "blob",
+      "size": 39779
+    },
+    {
+      "path": "06_Бағалау_мұғалімге/ТЖБ_3_тоқсан_мұғалім.pdf",
+      "sha": "9d2dccd9a6f0cf40437b92fa6f6e79f861d11ad0",
+      "mode": "100644",
+      "type": "blob",
+      "size": 98260
+    },
+    {
+      "path": "06_Бағалау_мұғалімге/БЖБ_3_тоқсан_мұғалім.pdf",
+      "sha": "9bf09beaea876c1f2950046e0b3f956b433dbaad",
+      "mode": "100644",
+      "type": "blob",
+      "size": 96015
+    },
+    {
+      "path": "06_Бағалау_мұғалімге/БЖБ_3_тоқсан_мұғалім.docx",
+      "sha": "137485a757b258579c383adfc67cc57b477ff4d1",
+      "mode": "100644",
+      "type": "blob",
+      "size": 39693
+    }
+  ],
+  "excluded": [
+    ".git (history retained by GitHub)",
+    "node_modules",
+    "dist (rebuild from sources)",
+    ".vercel (local deployment link)",
+    ".env* (secrets)",
+    "__pycache__",
+    ".DS_Store"
+  ],
+  "restore": "git clone repository; use main for original Q3 course or year-course-pilot/archives/IT_CAMPUS_Q3 for preserved Q3 snapshot. Google Classroom and hosted websites are separate cloud resources."
+}
