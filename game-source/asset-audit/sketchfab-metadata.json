@@ -1,0 +1,262 @@
+{
+  "checkedAtUTC": "2026-11-08T10:55:06.249495+00:00",
+  "method": "Public metadata + unauthenticated official download endpoint; no model binaries acquired",
+  "results": [
+    {
+      "candidate": "naruto-run",
+      "uid": "db14fc3de5b34b738e49ec3cdb83770a",
+      "source": "https://sketchfab.com/3d-models/low-poly-naruto-with-rig-and-running-animation-db14fc3de5b34b738e49ec3cdb83770a",
+      "metadataUrl": "https://api.sketchfab.com/v3/models/db14fc3de5b34b738e49ec3cdb83770a",
+      "metadataStatus": 200,
+      "name": "Low Poly Naruto with Rig and Running Animation",
+      "description": "**Reset position to T-Pose in Blender.**\n\n<img src=\"https://i.ibb.co/bWb6jq1/screen.png\" alt=\"screen\" border=\"0\">\n\nBring the world of Naruto to life with this expertly crafted low poly 3D model, complete with rigging and a dynamic running animation. Perfect for game developers, 3D artists, and animation enthusiasts, this model captures the essence of Naruto in a simplified yet detailed style. Easily integrate this character into your projects and watch as he dashes across your scenes with his signature running pose. Download now and enhance your creations with this versatile and captivating Naruto model.",
+      "isDownloadable": true,
+      "animationCount": 1,
+      "faceCount": 9060,
+      "vertexCount": 7960,
+      "license": {
+        "uri": "https://api.sketchfab.com/v3/licenses/322a749bcfa841b29dff1e8a1bb74b0b",
+        "label": "CC Attribution",
+        "fullName": "Creative Commons Attribution",
+        "requirements": "Author must be credited. Commercial use is allowed.",
+        "url": "http://creativecommons.org/licenses/by/4.0/",
+        "slug": "by"
+      },
+      "uploader": {
+        "displayName": "ronildo.facanha",
+        "username": "ronildo.facanha",
+        "profileUrl": "https://sketchfab.com/ronildo.facanha"
+      },
+      "downloadWithoutAuthentication": {
+        "status": 401,
+        "data": {
+          "detail": "Authentication credentials were not provided."
+        }
+      }
+    },
+    {
+      "candidate": "naruto-walk",
+      "uid": "505860183544421a898c132d09dcd2b7",
+      "source": "https://sketchfab.com/3d-models/naruto-walking-3d-animation-by-sg-studio-505860183544421a898c132d09dcd2b7",
+      "metadataUrl": "https://api.sketchfab.com/v3/models/505860183544421a898c132d09dcd2b7",
+      "metadataStatus": 200,
+      "name": "Naruto Walking 3D Animation by SG Studio",
+      "description": "High-quality Naruto Uzumaki 3D model with smooth walking animation. Created by SG Studio (Sujit Guchhait), this anime-style character is fully rigged and optimized for game design, animation, and AR/VR. Ideal for fans of Naruto and anime creators.\nCompatible with Blender, FBX, GLB. Game-ready and loopable walk cycle included.",
+      "isDownloadable": true,
+      "animationCount": 1,
+      "faceCount": 10000,
+      "vertexCount": 4986,
+      "license": {
+        "uri": "https://api.sketchfab.com/v3/licenses/322a749bcfa841b29dff1e8a1bb74b0b",
+        "label": "CC Attribution",
+        "fullName": "Creative Commons Attribution",
+        "requirements": "Author must be credited. Commercial use is allowed.",
+        "url": "http://creativecommons.org/licenses/by/4.0/",
+        "slug": "by"
+      },
+      "uploader": {
+        "displayName": "Nytherix",
+        "username": "Nytherix",
+        "profileUrl": "https://sketchfab.com/Nytherix"
+      },
+      "downloadWithoutAuthentication": {
+        "status": 401,
+        "data": {
+          "detail": "Authentication credentials were not provided."
+        }
+      }
+    },
+    {
+      "candidate": "tom-whiskers",
+      "uid": "a554a10be2d64d1aac1ea401275e5357",
+      "source": "https://sketchfab.com/3d-models/tom-tom-and-jerry-a554a10be2d64d1aac1ea401275e5357",
+      "metadataUrl": "https://api.sketchfab.com/v3/models/a554a10be2d64d1aac1ea401275e5357",
+      "metadataStatus": 200,
+      "name": "Tom - Tom And Jerry",
+      "description": "Tom From Tom and Jerry in War of the Whiskers Game",
+      "isDownloadable": true,
+      "animationCount": 0,
+      "faceCount": 4420,
+      "vertexCount": 2274,
+      "license": {
+        "uri": "https://api.sketchfab.com/v3/licenses/322a749bcfa841b29dff1e8a1bb74b0b",
+        "label": "CC Attribution",
+        "fullName": "Creative Commons Attribution",
+        "requirements": "Author must be credited. Commercial use is allowed.",
+        "url": "http://creativecommons.org/licenses/by/4.0/",
+        "slug": "by"
+      },
+      "uploader": {
+        "displayName": "Guilherme Navarro",
+        "username": "guinavarro.al",
+        "profileUrl": "https://sketchfab.com/guinavarro.al"
+      },
+      "downloadWithoutAuthentication": {
+        "status": 401,
+        "data": {
+          "detail": "Authentication credentials were not provided."
+        }
+      }
+    },
+    {
+      "candidate": "jerry-whiskers",
+      "uid": "a73d5990e2da43c4a478cc15f0d7ad92",
+      "source": "https://sketchfab.com/3d-models/jerry-tom-and-jerry-a73d5990e2da43c4a478cc15f0d7ad92",
+      "metadataUrl": "https://api.sketchfab.com/v3/models/a73d5990e2da43c4a478cc15f0d7ad92",
+      "metadataStatus": 200,
+      "name": "Jerry - Tom And Jerry",
+      "description": "Jerry From Tom and Jerry in War of the Whiskers Game",
+      "isDownloadable": true,
+      "animationCount": 0,
+      "faceCount": 3751,
+      "vertexCount": 1901,
+      "license": {
+        "uri": "https://api.sketchfab.com/v3/licenses/322a749bcfa841b29dff1e8a1bb74b0b",
+        "label": "CC Attribution",
+        "fullName": "Creative Commons Attribution",
+        "requirements": "Author must be credited. Commercial use is allowed.",
+        "url": "http://creativecommons.org/licenses/by/4.0/",
+        "slug": "by"
+      },
+      "uploader": {
+        "displayName": "Guilherme Navarro",
+        "username": "guinavarro.al",
+        "profileUrl": "https://sketchfab.com/guinavarro.al"
+      },
+      "downloadWithoutAuthentication": {
+        "status": 401,
+        "data": {
+          "detail": "Authentication credentials were not provided."
+        }
+      }
+    },
+    {
+      "candidate": "tom-multiversus",
+      "uid": "dc60af62b20c49228584fd91451008a9",
+      "source": "https://sketchfab.com/3d-models/tom-rig-v2-multiversus-tom-and-jerry-dc60af62b20c49228584fd91451008a9",
+      "metadataUrl": "https://api.sketchfab.com/v3/models/dc60af62b20c49228584fd91451008a9",
+      "metadataStatus": 200,
+      "name": "Tom Rig V2 [Multiversus] (Tom And Jerry)",
+      "description": "This model was ripped by DiMickFoxed64 and The-DoomGuySFM\n\nThe model was edited by SAB64.\n\nTom From Game Multiversus",
+      "isDownloadable": true,
+      "animationCount": 0,
+      "faceCount": 19884,
+      "vertexCount": 10025,
+      "license": {
+        "uri": "https://api.sketchfab.com/v3/licenses/322a749bcfa841b29dff1e8a1bb74b0b",
+        "label": "CC Attribution",
+        "fullName": "Creative Commons Attribution",
+        "requirements": "Author must be credited. Commercial use is allowed.",
+        "url": "http://creativecommons.org/licenses/by/4.0/",
+        "slug": "by"
+      },
+      "uploader": {
+        "displayName": "Guilherme Navarro",
+        "username": "guinavarro.al",
+        "profileUrl": "https://sketchfab.com/guinavarro.al"
+      },
+      "downloadWithoutAuthentication": {
+        "status": 401,
+        "data": {
+          "detail": "Authentication credentials were not provided."
+        }
+      }
+    },
+    {
+      "candidate": "jerry-rigged",
+      "uid": "1b778cbc0c7f4a93b05cd38a06fbd5ce",
+      "source": "https://sketchfab.com/3d-models/jerry-from-tom-and-jerry-rigged-1b778cbc0c7f4a93b05cd38a06fbd5ce",
+      "metadataUrl": "https://api.sketchfab.com/v3/models/1b778cbc0c7f4a93b05cd38a06fbd5ce",
+      "metadataStatus": 200,
+      "name": "Jerry (from Tom and Jerry) (rigged)",
+      "description": "",
+      "isDownloadable": true,
+      "animationCount": 1,
+      "faceCount": 3751,
+      "vertexCount": 1901,
+      "license": {
+        "uri": "https://api.sketchfab.com/v3/licenses/322a749bcfa841b29dff1e8a1bb74b0b",
+        "label": "CC Attribution",
+        "fullName": "Creative Commons Attribution",
+        "requirements": "Author must be credited. Commercial use is allowed.",
+        "url": "http://creativecommons.org/licenses/by/4.0/",
+        "slug": "by"
+      },
+      "uploader": {
+        "displayName": "Here's Annoying Orange",
+        "username": "heresannoyingorange",
+        "profileUrl": "https://sketchfab.com/heresannoyingorange"
+      },
+      "downloadWithoutAuthentication": {
+        "status": 401,
+        "data": {
+          "detail": "Authentication credentials were not provided."
+        }
+      }
+    },
+    {
+      "candidate": "optimus-transform",
+      "uid": "35f9cb09b1b248c7bd6b12912ac8cd3a",
+      "source": "https://sketchfab.com/3d-models/bumblebee-optimus-prime-transform-animation-35f9cb09b1b248c7bd6b12912ac8cd3a",
+      "metadataUrl": "https://api.sketchfab.com/v3/models/35f9cb09b1b248c7bd6b12912ac8cd3a",
+      "metadataStatus": 200,
+      "name": "Bumblebee - Optimus Prime Transform Animation",
+      "description": "OptimusPrime Transform Animation\n\nThe Autobus,transforme,roll out.",
+      "isDownloadable": true,
+      "animationCount": 1,
+      "faceCount": 64556,
+      "vertexCount": 39955,
+      "license": {
+        "uri": "https://api.sketchfab.com/v3/licenses/322a749bcfa841b29dff1e8a1bb74b0b",
+        "label": "CC Attribution",
+        "fullName": "Creative Commons Attribution",
+        "requirements": "Author must be credited. Commercial use is allowed.",
+        "url": "http://creativecommons.org/licenses/by/4.0/",
+        "slug": "by"
+      },
+      "uploader": {
+        "displayName": "DIO",
+        "username": "dioiiiii2",
+        "profileUrl": "https://sketchfab.com/dioiiiii2"
+      },
+      "downloadWithoutAuthentication": {
+        "status": 401,
+        "data": {
+          "detail": "Authentication credentials were not provided."
+        }
+      }
+    },
+    {
+      "candidate": "optimus-animated-series",
+      "uid": "1c8b5934bc8347b9b63cb1b10e4d3726",
+      "source": "https://sketchfab.com/3d-models/optimus-prime-transformers-animated-1c8b5934bc8347b9b63cb1b10e4d3726",
+      "metadataUrl": "https://api.sketchfab.com/v3/models/1c8b5934bc8347b9b63cb1b10e4d3726",
+      "metadataStatus": 200,
+      "name": "Optimus Prime - Transformers Animated",
+      "description": "Comissions: https://www.deviantart.com/angel300lq/journal/Comissions-Open-Updated-924153406\n\nRigged in .Blend format\n\nDOESN’T Includes alt mode\n\nIf you like it, you can leave your like, follow me, comment and share, thanks for downloading\n\nYou can also find the model in Deviantart: https://www.deviantart.com/angel300lq/art/Optimus-Prime-TF-Animated-Download-FBX-SFM-891026392\n\nI don’t own this model, all credits belong to its creator The Transformers franchise is owned by Hasbro and Takara Tomy as is the Transformers Animated series.\n\nNOT for commercial use\nIt is FORBIDDEN to use it for content +18, fetishes or content that incites hate\nYou can give me credits for the port and download, that would help me a lot\nIf you find errors you can comment them to me and I’ll see if I can fix it\n\nEnjoy :D",
+      "isDownloadable": true,
+      "animationCount": 0,
+      "faceCount": 8871,
+      "vertexCount": 4765,
+      "license": {
+        "uri": "https://api.sketchfab.com/v3/licenses/bbfe3f7dbcdd4122b966b85b9786a989",
+        "label": "CC Attribution-NonCommercial",
+        "fullName": "Creative Commons Attribution-NonCommercial",
+        "requirements": "Author must be credited. No commercial use.",
+        "url": "http://creativecommons.org/licenses/by-nc/4.0/",
+        "slug": "by-nc"
+      },
+      "uploader": {
+        "displayName": "Angel300 Animations",
+        "username": "Angel300Animations",
+        "profileUrl": "https://sketchfab.com/Angel300Animations"
+      },
+      "downloadWithoutAuthentication": {
+        "status": 401,
+        "data": {
+          "detail": "Authentication credentials were not provided."
+        }
+      }
+    }
+  ]
+}

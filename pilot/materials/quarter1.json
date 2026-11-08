@@ -1,0 +1,630 @@
+[
+  {
+    "order": 1,
+    "title": "Компьютерлік желілердің жұмыс жасау принциптері",
+    "objective": "Оқу мақсаты: 10.6.1.1 желілік компоненттердің мақсатын сипаттау (тораптар, маршрутизаторлар, коммутаторлар);",
+    "sourceCourse": "https://classroom.google.com/c/ODg5MzQxNDQ4ODkw",
+    "sourceAuthor": "Classroom жариялаушысы: Мерей Тұрсынбай; файл авторын бөлек тексеру керек",
+    "resources": [
+      {
+        "title": "1-тақырып презентация.pdf",
+        "type": "slides",
+        "url": "https://drive.google.com/file/d/15n5J2-qN-6zvicVYnh4MO3BtoTBWUTb0/view",
+        "status": "downloaded-and-preview",
+        "previewUrl": "/resources/01-slides.pdf"
+      },
+      {
+        "title": "Компьютерлік желілердің жұмыс жасау принциптері. Желілік компоненттер.10-сынып Алматы,Арман,Атамұра",
+        "type": "video",
+        "url": "https://www.youtube.com/watch?v=fae2myrcVNw",
+        "status": "linked-original"
+      },
+      {
+        "title": "Геймификация",
+        "type": "game",
+        "url": "https://quizizz.com/embed/quiz/68091fb8bdafe138a217c4ec",
+        "status": "linked-original"
+      },
+      {
+        "title": "1-тақырып тапсырма жауапсыз.pdf",
+        "type": "task",
+        "url": "https://drive.google.com/file/d/1j4cpmyVImOoiTJgHjTtH2s8U5WbZx1TH/view",
+        "status": "downloaded"
+      },
+      {
+        "title": "Рефлексия",
+        "type": "reflection",
+        "url": "https://forms.gle/jqXCyB4c5ehwVHoy6",
+        "status": "linked-original"
+      },
+      {
+        "title": "10 Алматыкітап-4-6.pdf",
+        "type": "textbook",
+        "url": "https://drive.google.com/file/d/1mxTrOEhCFB6gSnKIxfXcY3sI8yyDLyUe/view",
+        "status": "downloaded"
+      },
+      {
+        "title": "1-тақырып ҚМЖ дұрысы.docx",
+        "type": "qmj",
+        "url": "https://drive.google.com/file/d/1gcuuMZd-cyAK9-zwDLEkuiL5gfNRyt64/view",
+        "status": "downloaded"
+      }
+    ]
+  },
+  {
+    "order": 2,
+    "title": "Желі. Желілік компоненттер",
+    "objective": "Оқу мақсаты: 10.6.1.1 желілік компоненттердің мақсатын сипаттау (тораптар, маршрутизаторлар, коммутаторлар); \n10.6.1.4 жеке виртуалды желінің мақсатын түсіндіру;     ",
+    "sourceCourse": "https://classroom.google.com/c/ODg5MzQxNDQ4ODkw",
+    "sourceAuthor": "Classroom жариялаушысы: Мерей Тұрсынбай; файл авторын бөлек тексеру керек",
+    "resources": [
+      {
+        "title": "Желі. Желілік компоненттер",
+        "type": "video",
+        "url": "https://www.youtube.com/watch?v=b7xxtZZUOHI",
+        "status": "linked-original"
+      },
+      {
+        "title": "2-тақырып тапсырма жауапсыз.pdf",
+        "type": "task",
+        "url": "https://drive.google.com/file/d/1TRJgRmMC7JDRCFo23whoD44KtMp39_iT/view",
+        "status": "downloaded"
+      },
+      {
+        "title": "Геймификация",
+        "type": "game",
+        "url": "https://quizizz.com/embed/quiz/64211e29c44625001d3441a8",
+        "status": "linked-original"
+      },
+      {
+        "title": "Рефлексия",
+        "type": "reflection",
+        "url": "https://forms.gle/pc4bniHKPhgWWD2h9",
+        "status": "linked-original"
+      },
+      {
+        "title": "2-тақырып презентация.pdf",
+        "type": "slides",
+        "url": "https://drive.google.com/file/d/1ktHpGVTipzyBmMDFN9ujiLKz2URQCuOt/view",
+        "status": "downloaded"
+      },
+      {
+        "title": "10 Алматыкітап-7-10.pdf",
+        "type": "textbook",
+        "url": "https://drive.google.com/file/d/1LyVWKuv6P-SPHhzlsmt-mZfe3WIZ_ipO/view",
+        "status": "downloaded"
+      },
+      {
+        "title": "2-тақырып ҚМЖ.docx",
+        "type": "qmj",
+        "url": "https://drive.google.com/file/d/1ai4VCb7oWlMRWgjXg-U5ttYCuE3-Rowx/view",
+        "status": "downloaded"
+      }
+    ]
+  },
+  {
+    "order": 3,
+    "title": "IP-адрестер",
+    "objective": "Оқу мақсаты: 10.6.1.2 IP (ай пи)-мекен-жайының мақсатын және көрсетілуін түсіндіру;",
+    "sourceCourse": "https://classroom.google.com/c/ODg5MzQxNDQ4ODkw",
+    "sourceAuthor": "Classroom жариялаушысы: Мерей Тұрсынбай; файл авторын бөлек тексеру керек",
+    "resources": [
+      {
+        "title": "10 Алматыкітап-11-15.pdf",
+        "type": "textbook",
+        "url": "https://drive.google.com/file/d/1lYavvbIa4dndBTqwHkbOAuA0jDHn4rSY/view",
+        "status": "downloaded"
+      },
+      {
+        "title": "3-тақырып тапсырма жауапсыз.pdf",
+        "type": "task",
+        "url": "https://drive.google.com/file/d/1X_nPPksMp1J2hY3-Qecyg0QeqFH00jGp/view",
+        "status": "downloaded"
+      },
+      {
+        "title": "Рефлексия",
+        "type": "reflection",
+        "url": "https://forms.gle/Zpyr1yfbhPz1bsz57",
+        "status": "linked-original"
+      },
+      {
+        "title": "Геймификация",
+        "type": "game",
+        "url": "https://quizizz.com/embed/quiz/6588046c4d5e5a2c2c38ed4a",
+        "status": "linked-original"
+      },
+      {
+        "title": "IP-адрестер.pdf",
+        "type": "slides",
+        "url": "https://drive.google.com/file/d/1sQlMmM1ulgSJoLZlZNwYFUP7_Q7xZP8o/view",
+        "status": "downloaded"
+      },
+      {
+        "title": "IP-адрес және МАСКА [Желі адресі. Компьютер номері]",
+        "type": "video",
+        "url": "https://www.youtube.com/watch?v=Zdvh7TBvZUo",
+        "status": "linked-original"
+      },
+      {
+        "title": "видео.mp4",
+        "type": "video",
+        "url": "https://drive.google.com/file/d/1TzmCBKYZN46T6yUyj5YYI-4WH2xP4cx1/view",
+        "status": "downloaded"
+      },
+      {
+        "title": "3-тақырып ҚМЖ.docx",
+        "type": "qmj",
+        "url": "https://drive.google.com/file/d/1DF0AZ6HV9DbB1ijcZAdOhkiC516sCgI7/view",
+        "status": "downloaded"
+      }
+    ]
+  },
+  {
+    "order": 4,
+    "title": "Домен жүйесі",
+    "objective": "Оқу мақсаты: 10.6.1.3 домендік атаулардың жүйесінің (DNS (ди эн эс)) мақсатын түсіндіру; \n ",
+    "sourceCourse": "https://classroom.google.com/c/ODg5MzQxNDQ4ODkw",
+    "sourceAuthor": "Classroom жариялаушысы: Мерей Тұрсынбай; файл авторын бөлек тексеру керек",
+    "resources": [
+      {
+        "title": "Компьютерлік желілердің жұмыс жасау принциптері. DNS .10-сынып [Алматы],[Арман],[Атамұра]",
+        "type": "video",
+        "url": "https://www.youtube.com/watch?v=c_8XGRpsvIs",
+        "status": "linked-original"
+      },
+      {
+        "title": "4-тақырып тапсырма жауапсыз.pdf",
+        "type": "task",
+        "url": "https://drive.google.com/file/d/1pxAeDDfSCwBzHMIeSJDqxg2hPvY4PpWV/view",
+        "status": "downloaded"
+      },
+      {
+        "title": "10 Алматыкітап-16-18.pdf",
+        "type": "textbook",
+        "url": "https://drive.google.com/file/d/1NRGrN-zXK_WaC1qJ90V8PmaOb8c-EEvW/view",
+        "status": "downloaded"
+      },
+      {
+        "title": "Рефлексия",
+        "type": "reflection",
+        "url": "https://forms.gle/Epw9XDyzAXaTudii8",
+        "status": "linked-original"
+      },
+      {
+        "title": "Геймификация",
+        "type": "game",
+        "url": "https://wayground.com/admin/quiz/672a4d5fb9b93048ff9cde00/dns-domendik-atau-zhuejesi?source=quiz_share",
+        "status": "linked-original"
+      },
+      {
+        "title": "Domain_Name_Systems.pdf",
+        "type": "slides",
+        "url": "https://drive.google.com/file/d/1i0sxjfHXkg6RXALw2NB1CBd218z2NYBo/view",
+        "status": "downloaded"
+      }
+    ]
+  },
+  {
+    "order": 5,
+    "title": "Желіде жұмыс істеу кезіндегі қауіпсіздік шаралары",
+    "objective": "Оқу мақсаты: 10.6.2.1 1 \"ақпараттық қауіпсіздік\", \"құпиялық\",\n\"тұтастық\" және \"қол жетімділік\" терминдер маңызын",
+    "sourceCourse": "https://classroom.google.com/c/ODg5MzQxNDQ4ODkw",
+    "sourceAuthor": "Classroom жариялаушысы: Мерей Тұрсынбай; файл авторын бөлек тексеру керек",
+    "resources": [
+      {
+        "title": "Ақпараттық_қауіпсіздік_негіздері.pdf",
+        "type": "slides",
+        "url": "https://drive.google.com/file/d/1KX1shtJP_Hox5PHf8OG0YyNcWnDTk_pI/view",
+        "status": "downloaded"
+      },
+      {
+        "title": "10 Алматыкітап-20-22.pdf",
+        "type": "textbook",
+        "url": "https://drive.google.com/file/d/1P3g2ibo6M4iFfdBYpzo8XwIAxMoGVvFq/view",
+        "status": "downloaded"
+      },
+      {
+        "title": "Интернет желісінде жұмыс істеу кезіндегі қауіпсіздік",
+        "type": "video",
+        "url": "https://www.youtube.com/watch?v=NqucKl6ozNg",
+        "status": "linked-original"
+      },
+      {
+        "title": "Геймификация",
+        "type": "game",
+        "url": "https://quizizz.com/embed/quiz/6612e67ac121a44f6dbcdb3c",
+        "status": "linked-original"
+      },
+      {
+        "title": "Zhelide_kauipsizdik_zhumys_paraghy-1-4.pdf",
+        "type": "task",
+        "url": "https://drive.google.com/file/d/11gi8mwAE6vlg5_FUT2wTTehjDUeY3rtK/view",
+        "status": "downloaded"
+      },
+      {
+        "title": "Рефлексия",
+        "type": "reflection",
+        "url": "https://forms.gle/QJ3RCz4wg2j41Xdx9",
+        "status": "linked-original"
+      }
+    ]
+  },
+  {
+    "order": 6,
+    "title": "Ақпаратты қорғау әдістері",
+    "objective": "Оқу мақсаты :10.6.2.2\nДеректерді шифрлау қажеттілігін бағалау",
+    "sourceCourse": "https://classroom.google.com/c/ODg5MzQxNDQ4ODkw",
+    "sourceAuthor": "Classroom жариялаушысы: Мерей Тұрсынбай; файл авторын бөлек тексеру керек",
+    "resources": [
+      {
+        "title": "10 Алматыкітап-23-26 (1).pdf",
+        "type": "textbook",
+        "url": "https://drive.google.com/file/d/1dKFTUQgg8RY37d3JcjoOyRX0gUYfatKZ/view",
+        "status": "downloaded"
+      },
+      {
+        "title": "Aqparatty_korgau_adisteri_zhumys_paraghy-1-4.pdf",
+        "type": "task",
+        "url": "https://drive.google.com/file/d/1z5wKMUtAzZ07ZO9WY3uiuo991mFCI5xf/view",
+        "status": "downloaded"
+      },
+      {
+        "title": "10 сынып. Ақпаратты қорғау әдістері.",
+        "type": "video",
+        "url": "https://www.youtube.com/watch?v=y3cR2sXJmNU",
+        "status": "linked-original"
+      },
+      {
+        "title": "Геймификация",
+        "type": "game",
+        "url": "https://quizizz.com/embed/quiz/6612f6f4e49281303eae8406",
+        "status": "linked-original"
+      },
+      {
+        "title": "Рефлексия",
+        "type": "reflection",
+        "url": "https://forms.gle/QL55YmYp1CR15mA49",
+        "status": "linked-original"
+      },
+      {
+        "title": "Ақпаратты_қорғау_әдістері.pdf",
+        "type": "slides",
+        "url": "https://drive.google.com/file/d/11-MlXyPS4GqGWLLzSwRUXnguCgF060HG/view",
+        "status": "downloaded"
+      }
+    ]
+  },
+  {
+    "order": 7,
+    "title": "БЖБ 1 — Желілер және қауіпсіздік",
+    "objective": "",
+    "sourceCourse": "https://classroom.google.com/c/ODg5MzQxNDQ4ODkw",
+    "sourceAuthor": "Classroom жариялаушысы: Мерей Тұрсынбай; файл авторын бөлек тексеру керек",
+    "resources": [
+      {
+        "title": "Бөлім бойынша жиынтық бағалау жауапсыз.pdf",
+        "type": "task",
+        "url": "https://drive.google.com/file/d/1UYftkyQWXzl_8hPiezgGL0zxuBcgM8AD/view",
+        "status": "downloaded"
+      },
+      {
+        "title": "БЖБ-1 (1).pdf",
+        "type": "task",
+        "url": "https://drive.google.com/file/d/1s73xef6oDeBqmaT5JSi4wHpcUs6Ia4M6/view",
+        "status": "downloaded"
+      }
+    ]
+  },
+  {
+    "order": 8,
+    "title": "Идентификациялау әдістері.",
+    "objective": "Оқу мақсаты : 10.6.2.3\nПайдаланушы деректерін қорғау шараларын қолдануды түсіндіру: парольдер, тіркеулік жазба, аутентификация, биометриялық аутентификация",
+    "sourceCourse": "https://classroom.google.com/c/ODg5MzQxNDQ4ODkw",
+    "sourceAuthor": "Classroom жариялаушысы: Мерей Тұрсынбай; файл авторын бөлек тексеру керек",
+    "resources": [
+      {
+        "title": "10 Алматыкітап-27-29.pdf",
+        "type": "textbook",
+        "url": "https://drive.google.com/file/d/1eP-1OBenmiO_cWwD84SJLUJGNEiuCy-t/view",
+        "status": "downloaded"
+      },
+      {
+        "title": "10 сынып   Идентификациялау әдістері.",
+        "type": "video",
+        "url": "https://www.youtube.com/watch?v=vmZ7a59-T9k",
+        "status": "linked-original"
+      },
+      {
+        "title": "8-тақықырып тапсырма жауапсыз.pdf",
+        "type": "task",
+        "url": "https://drive.google.com/file/d/1FQe-9tazi3p6L89fZAhUcV0CHX_6BPez/view",
+        "status": "downloaded"
+      },
+      {
+        "title": "Геймификация",
+        "type": "game",
+        "url": "https://quizizz.com/embed/quiz/66137cdb6c3d839151fcd425",
+        "status": "linked-original"
+      },
+      {
+        "title": "Рефлексия",
+        "type": "reflection",
+        "url": "https://forms.gle/x6UChJJ1RfVS6KJbA",
+        "status": "linked-original"
+      },
+      {
+        "title": "User_Identification_and_Authentication.pdf",
+        "type": "slides",
+        "url": "https://drive.google.com/file/d/1PJhjhsyblNBUOVOJHoRtxo4-7Gqss1VA/view",
+        "status": "downloaded"
+      }
+    ]
+  },
+  {
+    "order": 9,
+    "title": "Бір санау жүйесінен екінші санау жүйесіне сандарды аудару",
+    "objective": "Оқу мақсаты: 10.2.2.1 ондық жүйедегі бүтін сандарды екілік, сегіздік, он алтылық санау жүйесіне және кері аудару",
+    "sourceCourse": "https://classroom.google.com/c/ODg5MzQxNDQ4ODkw",
+    "sourceAuthor": "Classroom жариялаушысы: Мерей Тұрсынбай; файл авторын бөлек тексеру керек",
+    "resources": [
+      {
+        "title": "10 Алматыкітап-30-35.pdf",
+        "type": "textbook",
+        "url": "https://drive.google.com/file/d/10CvdSX4CdzKQgcrFpeSKiugpnFQKFif5/view",
+        "status": "downloaded"
+      },
+      {
+        "title": "Sanau_zhuieleri_zhumys_paraghy-1-4.pdf",
+        "type": "task",
+        "url": "https://drive.google.com/file/d/1yzRN__oxB40DOUnIksQfF3L1j6x8yMAP/view",
+        "status": "downloaded"
+      },
+      {
+        "title": "Санау жүйесі | Информатика және ЖИ | ҰБТ 2027 | 1 сағатта толық үйреніп ал!",
+        "type": "video",
+        "url": "https://www.youtube.com/watch?v=hYxlnhwo0vA",
+        "status": "linked-original"
+      },
+      {
+        "title": "Санау_жүйелерін_түрлендіру.pdf",
+        "type": "slides",
+        "url": "https://drive.google.com/file/d/1pb2saIbVVC24YvILRjR28oj9qXpMR-VV/view",
+        "status": "downloaded"
+      },
+      {
+        "title": "Рефлексия",
+        "type": "reflection",
+        "url": "https://forms.gle/fxUiFoMxRfUVLusi9",
+        "status": "linked-original"
+      },
+      {
+        "title": "Геймификация",
+        "type": "game",
+        "url": "https://quizizz.com/embed/quiz/6421377ed9ec71001e9599de",
+        "status": "linked-original"
+      }
+    ]
+  },
+  {
+    "order": 10,
+    "title": "Бір санау жүйесінен екінші санау жүйесіне\nсандарды аудару",
+    "objective": "Оқу мақсаты: 10.2.2.1 ондық жүйедегі бүтін сандарды екілік,\nсегіздік, он алтылық санау жүйесіне және кері аудару",
+    "sourceCourse": "https://classroom.google.com/c/ODg5MzQxNDQ4ODkw",
+    "sourceAuthor": "Classroom жариялаушысы: Мерей Тұрсынбай; файл авторын бөлек тексеру керек",
+    "resources": [
+      {
+        "title": "10 Алматыкітап-36-39.pdf",
+        "type": "textbook",
+        "url": "https://drive.google.com/file/d/1FPhYy8dfm15oc761Hj81VRd3e0skRBx0/view",
+        "status": "downloaded"
+      },
+      {
+        "title": "Санау жүйесі | Информатика және ЖИ | ҰБТ 2027 | 1 сағатта толық үйреніп ал!",
+        "type": "video",
+        "url": "https://www.youtube.com/watch?v=hYxlnhwo0vA",
+        "status": "linked-original"
+      },
+      {
+        "title": "Рефлексия",
+        "type": "reflection",
+        "url": "https://forms.gle/FoeU2A4rprg2KuYC9",
+        "status": "linked-original"
+      },
+      {
+        "title": "Геймификация",
+        "type": "game",
+        "url": "https://quizizz.com/embed/quiz/6421377ed9ec71001e9599de",
+        "status": "linked-original"
+      },
+      {
+        "title": "Sanau_zhuieleri_zhumys_paraghy_2_nuska-1-4.pdf",
+        "type": "task",
+        "url": "https://drive.google.com/file/d/1HheWnHWwGvlnIogxb54ngMVdxnKpaGdN/view",
+        "status": "downloaded"
+      },
+      {
+        "title": "Сегіздік және он алтылық санау жүйелері.pdf",
+        "type": "slides",
+        "url": "https://drive.google.com/file/d/1zjA43_9SK2q7L5-uNDW0icgH7Sl9TPnf/view",
+        "status": "downloaded"
+      }
+    ]
+  },
+  {
+    "order": 11,
+    "title": "Логикалық операциялар (дизъюнкция, конъюнкция, инверсия)",
+    "objective": "Оқу мақсаты: 10.2.2.1\nлогикалық операцияларды қолдану (дизъюнкция, конъюнкция, инверсия)",
+    "sourceCourse": "https://classroom.google.com/c/ODg5MzQxNDQ4ODkw",
+    "sourceAuthor": "Classroom жариялаушысы: Мерей Тұрсынбай; файл авторын бөлек тексеру керек",
+    "resources": [
+      {
+        "title": "10 Алматыкітап-40-43.pdf",
+        "type": "textbook",
+        "url": "https://drive.google.com/file/d/1G-OnixEbbrFAvc_LUp1DwLlO5iBrdt5h/view",
+        "status": "downloaded"
+      },
+      {
+        "title": "Logikalyk_operatsiyalar_zhumys_paraghy-1-4.pdf",
+        "type": "task",
+        "url": "https://drive.google.com/file/d/14S-p0gn965ouezj8muMSyJdsA_U3mbJE/view",
+        "status": "downloaded"
+      },
+      {
+        "title": "Рефлексия",
+        "type": "reflection",
+        "url": "https://forms.gle/itW9DpoPWibMKuU36",
+        "status": "linked-original"
+      },
+      {
+        "title": "Геймификация",
+        "type": "game",
+        "url": "https://quizizz.com/embed/quiz/64247c94e65514001fc357c3",
+        "status": "linked-original"
+      },
+      {
+        "title": "ЛОГИКАЛЫҚ ОПЕРАЦИЯЛАР | КОНЪЮНКЦИЯ ДИЗЪЮНКЦИЯ ИНВЕРСИЯ | ИНФОРМАТИКА ҰБТ-ҒА ДАЙЫНДЫҚ",
+        "type": "video",
+        "url": "https://www.youtube.com/watch?v=nyC2_r9kN6c",
+        "status": "linked-original"
+      },
+      {
+        "title": "Логикалық_операциялар.pdf",
+        "type": "slides",
+        "url": "https://drive.google.com/file/d/120nhi5GiY0joBKw4Ylj14qohPwG-0oGa/view",
+        "status": "downloaded"
+      }
+    ]
+  },
+  {
+    "order": 12,
+    "title": "Ақиқат кестесін құру",
+    "objective": "Оқу мақсаты: 10.2.2.2\nберілген логикалық элементтер үшін ақиқат кестесін құру",
+    "sourceCourse": "https://classroom.google.com/c/ODg5MzQxNDQ4ODkw",
+    "sourceAuthor": "Classroom жариялаушысы: Мерей Тұрсынбай; файл авторын бөлек тексеру керек",
+    "resources": [
+      {
+        "title": "Рефлексия",
+        "type": "reflection",
+        "url": "https://forms.gle/QTxvNzwpSMtw15eA6",
+        "status": "linked-original"
+      },
+      {
+        "title": "10 Алматыкітап-44-46.pdf",
+        "type": "textbook",
+        "url": "https://drive.google.com/file/d/1kidF1JN16AEojQY-fY69ep1F9hdO3tGc/view",
+        "status": "downloaded"
+      },
+      {
+        "title": "Akyk_kestesin_kuru_zhumys_paraghy-1-5.pdf",
+        "type": "task",
+        "url": "https://drive.google.com/file/d/13G4IkVPVOCKMf9hV-ikdUJ_NqOt5qAie/view",
+        "status": "downloaded"
+      },
+      {
+        "title": "ЛОГИКАЛЫҚ ОПЕРАЦИЯЛАР | КОНЪЮНКЦИЯ ДИЗЪЮНКЦИЯ ИНВЕРСИЯ | ИНФОРМАТИКА ҰБТ-ҒА ДАЙЫНДЫҚ",
+        "type": "video",
+        "url": "https://www.youtube.com/watch?v=nyC2_r9kN6c",
+        "status": "linked-original"
+      },
+      {
+        "title": "Геймификация",
+        "type": "game",
+        "url": "https://quizizz.com/embed/quiz/644a3d0d8cd872001dc2a5d6",
+        "status": "linked-original"
+      },
+      {
+        "title": "Ақиқат_кестесін_құру.pdf",
+        "type": "slides",
+        "url": "https://drive.google.com/file/d/1798sZle6NjPadths8S_mnG6k8h54wLtc/view",
+        "status": "downloaded"
+      }
+    ]
+  },
+  {
+    "order": 13,
+    "title": "БЖБ 2 — Санау жүйелері және логика",
+    "objective": "",
+    "sourceCourse": "https://classroom.google.com/c/ODg5MzQxNDQ4ODkw",
+    "sourceAuthor": "Classroom жариялаушысы: Мерей Тұрсынбай; файл авторын бөлек тексеру керек",
+    "resources": [
+      {
+        "title": "Санау_жүйелері_және_логика_жиынтық_бағалау.pdf",
+        "type": "task",
+        "url": "https://drive.google.com/file/d/1kRBcpv68cb4ejn-w4byBeKxAYgUZWSCX/view",
+        "status": "downloaded"
+      },
+      {
+        "title": "БЖБ-2 (1).pdf",
+        "type": "task",
+        "url": "https://drive.google.com/file/d/1-Pfhx9kSUOxqSRVzWHlAGoUF6Wyhp7BU/view",
+        "status": "downloaded"
+      }
+    ]
+  },
+  {
+    "order": 14,
+    "title": "Компьютердің логикалық негіздері",
+    "objective": "Оқу мақсаты: 10.2.2.4 логикалық өрнекті логикалық сызбаға өзгерту немесе керісінше;",
+    "sourceCourse": "https://classroom.google.com/c/ODg5MzQxNDQ4ODkw",
+    "sourceAuthor": "Classroom жариялаушысы: Мерей Тұрсынбай; файл авторын бөлек тексеру керек",
+    "resources": [
+      {
+        "title": "10 Алматыкітап-47-50.pdf",
+        "type": "textbook",
+        "url": "https://drive.google.com/file/d/1MUHWn6jur369fu7xJzEnijy5Rkz0_Pt_/view",
+        "status": "downloaded"
+      },
+      {
+        "title": "Логикалық_өрнек_және_сұлба_жұмыс_парағы.pdf",
+        "type": "task",
+        "url": "https://drive.google.com/file/d/1qNVmsR0P_kBzZJgE0DeLtcPgXuC1s1RE/view",
+        "status": "downloaded"
+      },
+      {
+        "title": "Компьютердің логикалық негіздері.pdf",
+        "type": "slides",
+        "url": "https://drive.google.com/file/d/10Za5RhgaEwr9YyTTEmfgt4AEJb-lVau_/view",
+        "status": "downloaded"
+      },
+      {
+        "title": "Геймификация",
+        "type": "game",
+        "url": "https://quizizz.com/embed/quiz/644a3d0d8cd872001dc2a5d6",
+        "status": "linked-original"
+      },
+      {
+        "title": "Компьютердің логикалық элементі (AND, OR, NOT)",
+        "type": "video",
+        "url": "https://www.youtube.com/watch?v=m9mVD9M14v4",
+        "status": "linked-original"
+      },
+      {
+        "title": "Рефлексия",
+        "type": "reflection",
+        "url": "https://forms.gle/jGBBv3YcyZmknyMi8",
+        "status": "linked-original"
+      }
+    ]
+  },
+  {
+    "order": 15,
+    "title": "Информатика пәнінен 1-тоқсан бойынша тоқсандық жиынтық бағалау\nИнформатика_тоқсандық_жиынтық_бағалау_40_балл.pdf\nТЖБ (1).pdf",
+    "objective": "",
+    "sourceCourse": "https://classroom.google.com/c/ODg5MzQxNDQ4ODkw",
+    "sourceAuthor": "Classroom жариялаушысы: Мерей Тұрсынбай; файл авторын бөлек тексеру керек",
+    "resources": [
+      {
+        "title": "Информатика_тоқсандық_жиынтық_бағалау_40_балл.pdf",
+        "type": "task",
+        "url": "https://drive.google.com/file/d/1Eo8hKrEcNegIhTeHN7BCf3kLceg-hIta/view",
+        "status": "downloaded"
+      },
+      {
+        "title": "ТЖБ (1).pdf",
+        "type": "task",
+        "url": "https://drive.google.com/file/d/1Jhaqct2byQTguP4LUOCJlr8FCjdlgxJh/view",
+        "status": "downloaded"
+      }
+    ]
+  }
+]
