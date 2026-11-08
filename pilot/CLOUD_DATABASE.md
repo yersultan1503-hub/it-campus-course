@@ -1,11 +1,30 @@
-# Shared cloud database: 2026-11-08
+# Жылдық курстың ортақ базасы
 
-Supabase project IT CAMPUS Year Course (gtckwzqbrwhaesjacjau). The new campus_live schema is separate from the unused campus staging schema. Server connections use TLS verify-full and the transaction pooler. campus_runtime has explicit limited DML grants and request-scoped RLS; no ownership, DDL or bypassrls. Policies resolve authenticated sessions, verified Google identity and staff class scope. Credentials are in private data/cloud-private.json (0600) and Vercel sensitive environment variables, never GitHub or public files.
+[← Сайт / сервер нұсқаулығы](README.md) · [Жоба картасы](../README.md)
 
-Migration backup: data/pre-cloud-backup.sqlite3 (0600). Migrated and verified: 3 users, 9 attempts, 1 lesson reflection, 17 audit entries. No manual grades existed; automatic grades are calculated server-side from submitted evidence. Active sessions were not copied: sign in again at the new domain. Existing original project remains unchanged.
+## Қолданыстағы орта
 
-Checks: student sees only own profile; teacher cannot see admin; admin sees all three. Two independent database connections returned identical progress/grades for 47 lessons. Manual zero-grade readback was verified in a rolled-back transaction. No fake accounts or test grades were retained.
+- Production: https://it-campus-year-course.vercel.app/
+- Vercel жобасы: `it-campus-year-course`.
+- Supabase: **IT CAMPUS Year Course**, project `gtckwzqbrwhaesjacjau`.
+- Жылдық курс кестелері: **campus_live**. Бұрынғы `campus` staging схемасы бөлек.
+- Сервер: `postgres_store.py`, TLS `verify-full`, transaction pooler.
+- `campus_runtime` — шектелген оқу/жазу құқықтары мен сұрау контекстіне байланысты RLS. DDL, ownership және bypassrls құқығы берілмеген.
 
-Supabase advisor: no campus_live findings. Six INFO no-policy notices belong to intentionally closed, unused campus staging tables.
+Production нәтижелері браузердің localStorage қоймасына ғана тәуелді емес. Бір Google аккаунтымен кіргендегі прогресс пен баға сервер базасынан алынады. Жергілікті SQLite іске қосу режимі бөлек; ол production-мен автоматты синхрондалмайды.
 
-HTTPS deployment and actual Google sign-in verification are tracked separately. Do not claim public availability until deployment validation is complete.
+## 2026-11-08 көшіру және тексеру
+
+3 аккаунт, 9 әрекет, 1 рефлексия және 17 аудит жазбасы көшіріліп салыстырылды. Сессиялар көшірілмеді. Қолмен қойылған баға болмаған; автоматты балл сақталған жауаптардан есептеледі.
+
+Оқушы тек өз профилін көруі, мұғалім сынып ауқымы, әкімші қолжетімділігі тексерілді. Екі тәуелсіз база қосылымы 47 сабақтың бірдей нәтиже жазбаларын қайтарды. Қолмен 0 балл жазу/оқу кері қайтарылатын транзакцияда тексерілді; жалған баға сақталмады.
+
+Production Google кіруі мұғалім аккаунтымен браузерде тексерілді. Журналда көшірілген оқушы әрекеттері мен автоматты бағалар көрінді. Аккаунтсыз жеке API/ҚМЖ/legacy ойын сұраулары 401, бөгде origin жазуы 403 қайтарды. Екі нақты құрылғымен толық сынақ әлі жасалмаған.
+
+## Құпиялар және қалпына келтіру
+
+Vercel серверінің жеке баптаулары: `CAMPUS_DATABASE_URL`, `CAMPUS_ORIGIN`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REDIRECT_URI`. Олардың мәндерін README-ге, GitHub-қа, public файлдарына не чатқа салмаңыз.
+
+GitHub-та код, ресурс файлдары мен база сызбасы сақталған. Аккаунттар, оқушы жұмыстары және бағалар GitHub көшірмесіне кірмейді: база үшін бөлек backup/restore саясаты керек. Кесте көшіру не тазалау алдында ағымдағы базаның сақтық көшірмесін тексеріңіз. Тарихи жергілікті `data/pre-cloud-backup.sqlite3` — бастапқы көшіру алдындағы көшірме, қазіргі бұлт деректерінің баламасы емес.
+
+Бұрынғы III тоқсанның жеке статикалық сайты мен Classroom деректері бұл схеманың орнына қолданылмайды.
