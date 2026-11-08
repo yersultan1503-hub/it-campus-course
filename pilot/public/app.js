@@ -9,7 +9,7 @@ async function api(path, data) {
   try { response = await fetch(path, {credentials:'same-origin', cache:'no-store', ...(data === undefined ? {} : {method:'POST',headers:{'Content-Type':'application/json','X-Campus-Request':'1'},body:JSON.stringify(data)})}); }
   catch { throw Object.assign(new Error('Сервермен байланыс орнатылмады. Интернетті тексеріп, қайта көріңіз.'), {code:'network'}); }
   let body;
-  try { body = await response.json(); } catch { throw new Error('Серверден дұрыс жауап келмеді. Сайтты пилот сервері арқылы ашыңыз.'); }
+  try { body = await response.json(); } catch { throw new Error('Сервермен байланыс үзілді. Бетті қайта жүктеп көріңіз.'); }
   if (!response.ok) {
     if(response.status === 401 && state.me) { state.me = null; shell(); }
     throw Object.assign(new Error(body.error || 'Сұрауды орындау мүмкін болмады.'), {code:body.code,status:response.status});

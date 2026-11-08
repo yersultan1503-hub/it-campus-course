@@ -4,6 +4,8 @@ import shutil,json
 ROOT=Path(__file__).resolve().parents[1];OUT=ROOT.parent/'year-cloud-release';OUT.mkdir(exist_ok=True)
 for name in ['app.py','server.py','postgres_store.py','course_content.py','course_catalog.json','requirements.txt']:
  shutil.copy2(ROOT/name,OUT/name)
+(OUT/'materials').mkdir(exist_ok=True)
+shutil.copy2(ROOT/'materials/extended-content.json',OUT/'materials/extended-content.json')
 (OUT/'database').mkdir(exist_ok=True);shutil.copy2(ROOT/'database/supabase-ca.crt',OUT/'database/supabase-ca.crt')
 shutil.copytree(ROOT/'public',OUT/'public',dirs_exist_ok=True,ignore=shutil.ignore_patterns('resources'))
 shutil.copytree(ROOT/'public/resources',OUT/'private_resources',dirs_exist_ok=True)
