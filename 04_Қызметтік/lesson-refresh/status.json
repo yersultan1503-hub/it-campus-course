@@ -1,0 +1,26 @@
+{
+  "lessons": 8,
+  "qmj": 8,
+  "pagesPerQMJ": 2,
+  "flow": [
+    "theory",
+    "slides",
+    "video",
+    "mission",
+    "reflection"
+  ],
+  "localLinks": "passed",
+  "progressAssertions": 6,
+  "reflectionReload": "passed",
+  "slides": "64 rendered slides; next/previous tested",
+  "deployed": true,
+  "classroomUpdated": true,
+  "productionUrl": "https://it-club-10-course.vercel.app",
+  "deploymentId": "dpl_E5VMs49XSMk4tZnMSqY4vwYZFo3w",
+  "publishedDate": "2026-10-27",
+  "publicLinkChecks": 93,
+  "publicLinkFailures": 0,
+  "classroomLessonsVerified": 8,
+  "qmjPDFsPublished": 8,
+  "qmjDOCXsPublished": 8
+}

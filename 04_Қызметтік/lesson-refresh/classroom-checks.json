@@ -1,0 +1,74 @@
+[
+  {
+    "lesson": 1,
+    "mission": true,
+    "instructions": true,
+    "qmj": true,
+    "slides": true,
+    "video": true,
+    "oldPDF": false
+  },
+  {
+    "lesson": 2,
+    "mission": true,
+    "instructions": true,
+    "qmj": true,
+    "slides": true,
+    "video": true,
+    "oldPDF": false
+  },
+  {
+    "lesson": 3,
+    "mission": true,
+    "instructions": true,
+    "qmj": true,
+    "slides": true,
+    "video": true,
+    "oldPDF": false
+  },
+  {
+    "lesson": 4,
+    "mission": true,
+    "instructions": true,
+    "qmj": true,
+    "slides": true,
+    "video": true,
+    "oldPDF": false
+  },
+  {
+    "lesson": 5,
+    "mission": true,
+    "instructions": true,
+    "qmj": true,
+    "slides": true,
+    "video": true,
+    "oldPDF": false
+  },
+  {
+    "lesson": 6,
+    "mission": true,
+    "instructions": true,
+    "qmj": true,
+    "slides": true,
+    "video": true,
+    "oldPDF": false
+  },
+  {
+    "lesson": 7,
+    "mission": true,
+    "instructions": true,
+    "qmj": true,
+    "slides": true,
+    "video": true,
+    "oldPDF": false
+  },
+  {
+    "lesson": 8,
+    "mission": true,
+    "instructions": true,
+    "qmj": true,
+    "slides": true,
+    "video": true,
+    "oldPDF": false
+  }
+]
