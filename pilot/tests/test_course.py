@@ -9,7 +9,7 @@ class CourseTests(unittest.TestCase):
   student=self.login('student1@it-campus.invalid');admin=self.login('admin4@it-campus.invalid')
   h=object.__new__(Handler);h.server=SimpleNamespace(store=self.s);results=[]
   h.json_response=lambda status,payload:results.append(status)
-  for path,cookie,allowed in [('/resources/course/q1/07-01.pdf',student,False),('/x/../resources/course/q1/07-01.pdf',student,False),('/resources/course/q1/07-01.pdf',admin,True),('/resources/course/q1/01-01.pdf','',False)]:
+  for path,cookie,allowed in [('/resources/course/q1/07-01.pdf',student,False),('/x/../resources/course/q1/07-01.pdf',student,False),('/resources/course/q1/07-01.pdf',admin,True),('/resources/course/q1/01-01.pdf','',False),('/resources/qmj/q2-01.pdf',student,False),('/resources/qmj/q2-01.pdf',admin,True),('/resources/qmj/q2-01.pdf','',False),('/resources/qmj/Q2_ҚМЖ_жинағы.pdf',student,False),('/resources/qmj/Q2_ҚМЖ_жинағы.pdf',admin,True)]:
    h.path=path;h.headers={'Cookie':cookie};self.assertEqual(h.resource_access(),allowed)
  setUp=support.PilotTests.setUp
  tearDown=support.PilotTests.tearDown
@@ -34,7 +34,7 @@ class CourseTests(unittest.TestCase):
   self.req('/api/submissions',{**data,'confidence':'partial'},student);self.assertFalse(self.req('/api/progress',{},student,'GET')[0]['completed'])
  def test_catalog_all_materials_and_server_missions(self):
   admin=self.login('admin4@it-campus.invalid');student=self.login('student1@it-campus.invalid')
-  c=self.req('/api/course',{},admin,'GET')[0];self.assertEqual([len(q['lessons']) for q in c['quarters']],[15,5,8,0])
+  c=self.req('/api/course',{},admin,'GET')[0];self.assertEqual([len(q['lessons']) for q in c['quarters']],[15,14,8,10])
   for quarter in c['quarters']:
    for meta in quarter['lessons']:
     d=self.req('/api/lesson/'+meta['id'],{},admin,'GET')[0];self.assertTrue(d['resources']);self.assertNotIn('"correct"',json.dumps(d['mission']))

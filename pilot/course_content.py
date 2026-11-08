@@ -132,3 +132,11 @@ def grade(lesson_id,answers):
  if not isinstance(answers,dict) or not questions:return False,[]
  criteria=[{'id':x['id'],'passed':answers.get(x['id'])==x['correct'],'feedback':('Дұрыс. ' if answers.get(x['id'])==x['correct'] else 'Қайта қара: ')+x['feedback']} for x in questions]
  return all(x['passed'] for x in criteria),criteria
+
+# Original expanded units are private; only sanitized questions reach learners.
+import json as _json
+from pathlib import Path as _Path
+_expanded=_json.loads((_Path(__file__).parent/'materials/extended-content.json').read_text())
+for _id,_unit in _expanded.items():
+ BANK[_id]=_unit['questions']
+ SUMMARIES[_id]=_unit['summary']+'\n\nПрактикалық нәтиже: '+_unit['task']

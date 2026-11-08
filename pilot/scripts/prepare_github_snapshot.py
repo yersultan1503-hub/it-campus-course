@@ -35,8 +35,9 @@ for lesson in registry:
  for r in lesson.get('resources',[]):r.pop('localPath',None)
 content=json.dumps(registry,ensure_ascii=False,indent=2)
 entries.append({'path':'pilot/materials/quarter1.json','content':content,'sha':hashlib.sha1(b'blob '+str(len(content.encode())).encode()+b'\0'+content.encode()).hexdigest(),'existing':False,'size':len(content.encode())})
-for name in ['quarter2.json','classroom-q2-raw.json']:
+for name in ['quarter2.json','classroom-q2-raw.json','extended-content.json']:
  add(ROOT/'materials'/name,'pilot/materials/'+name)
+for p in (ROOT/'materials/legal').glob('*'):add(p,'pilot/materials/legal/'+p.name)
 for dirname in ['src','public','tests','scripts','worker','asset-audit','integration']:
  for p in (GAME/dirname).rglob('*'):
   if not any(x.startswith('.') for x in p.relative_to(GAME).parts):add(p,'game-source/'+str(p.relative_to(GAME)))

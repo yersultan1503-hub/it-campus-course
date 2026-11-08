@@ -10,6 +10,8 @@ import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
 import {createOcclusionFade} from './cameraOcclusion';
 import { LESSONS as NETWORK_STATIONS } from './content';
 import {Q2,Q2_STATIONS} from './districts/q2';
+import {Q4,Q4_STATIONS} from './districts/q4';
+import {buildDatabaseDistrict} from './DatabaseDistrict';
 import {buildCodingDistrict} from './CodingDistrict';
 import { createCameraActions, wheelIntent, districtOverview } from './cameraControls';
 import { movementKey, slideMove } from './movement';
@@ -19,7 +21,7 @@ import {buildNetworkDistrict} from './NetworkDistrict';
 import {createObservatoryAtmosphere} from './observatoryAtmosphere';
 
 export function World({ districtId='q1', theme='dark', avatar='engineer', follow, artifacts, started, selected, completed, low, reduced, paused, onSelect, onNear, onReady, onStart, cameraRef }) {
- const Q=districtId==='q2'?Q2:Q1,LESSONS=districtId==='q2'?Q2_STATIONS:NETWORK_STATIONS;
+ const Q=districtId==='q4'?Q4:districtId==='q2'?Q2:Q1,LESSONS=districtId==='q4'?Q4_STATIONS:districtId==='q2'?Q2_STATIONS:NETWORK_STATIONS;
  const host=useRef(null), engine=useRef(null), props=useRef({theme,avatar,follow,artifacts,started,selected,completed,low,reduced,paused,onSelect,onNear,onReady,onStart});
  props.current={theme,avatar,follow,artifacts,started,selected,completed,low,reduced,paused,onSelect,onNear,onReady,onStart};
  const [failure,setFailure]=useState(false);
@@ -53,8 +55,8 @@ export function World({ districtId='q1', theme='dark', avatar='engineer', follow
   function sign(p,text,w=2.7,h=1.8,x=0,y=2,z=1.8,bg='#163047'){
    const can=document.createElement('canvas');can.width=512;can.height=256;const c=can.getContext('2d');c.fillStyle=bg;c.fillRect(0,0,512,256);c.fillStyle='#f5f5e9';c.textAlign='center';c.textBaseline='middle';c.font=`700 ${text.length>5?65:125}px Arial`;c.fillText(text,256,135,480);const t=new THREE.CanvasTexture(can);t.colorSpace=THREE.SRGBColorSpace;const o=mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({map:t}),p,x,y,z);o.castShadow=false;return o;
   }
-  const {stationGroups,markers,doors,trees,lamps,signals,colliders,cameraOccluders,setTheme:districtTheme}=(districtId==='q2'?buildCodingDistrict:buildNetworkDistrict)(scene,LESSONS,sign,{surfaceTextures});
-  const atmosphere=districtId==='q2'?{update(){}}:createObservatoryAtmosphere(scene);let lightingTheme='';
+  const {stationGroups,markers,doors,trees,lamps,signals,colliders,cameraOccluders,setTheme:districtTheme}=(districtId==='q4'?buildDatabaseDistrict:districtId==='q2'?buildCodingDistrict:buildNetworkDistrict)(scene,LESSONS,sign,{surfaceTextures});
+  const atmosphere=districtId!=='q1'?{update(){}}:createObservatoryAtmosphere(scene);let lightingTheme='';
   // Articulated hips, knees, ankles, shoulders and elbows share a distance-driven gait.
   function person(x,z,color='#244c70',scale=1,variant=0){
    const g=group(scene,x,.1,z);g.scale.setScalar(scale);const rig=group(g),body=group(rig,0,.78,0);
@@ -154,7 +156,7 @@ export function World({ districtId='q1', theme='dark', avatar='engineer', follow
   const ro=new ResizeObserver(resize);ro.observe(el);
   engine.current={scene,renderer,camera,player,target};props.current.onReady();
   function animate(now){raf=requestAnimationFrame(animate);if(now-previous<(props.current.paused?200:1000/(props.current.low?30:60)))return;const dt=Math.min((now-previous)/1000,.05);previous=now;elapsed+=dt;const p=props.current;controls.enabled=!p.paused;renderer.shadowMap.enabled=!p.low;const ratio=Math.min(devicePixelRatio,p.low?1:1.85);if(renderer.getPixelRatio()!==ratio)renderer.setPixelRatio(ratio);
-   if(lightingTheme!==p.theme){lightingTheme=p.theme;const night=p.theme!=='light';scene.background.set(night?(districtId==='q2'?'#171326':'#051321'):(districtId==='q2'?'#dbd5cd':'#dce9f2'));scene.fog.color.copy(scene.background);scene.fog.near=night?80:110;scene.fog.far=night?175:190;hemisphere.color.set(night?'#8cb2e4':'#e4f0ff');hemisphere.groundColor.set(night?'#18372e':'#7b887c');hemisphere.intensity=night?.65:1.1;sun.color.set(night?'#aacbff':'#fff1dc');sun.intensity=night?.85:3.1;back.intensity=night?.3:.4;scene.environmentIntensity=night?.16:.45;renderer.toneMappingExposure=night?1:.92;}
+   if(lightingTheme!==p.theme){lightingTheme=p.theme;const night=p.theme!=='light';scene.background.set(night?(districtId==='q4'?'#071e2b':districtId==='q2'?'#171326':'#051321'):(districtId==='q4'?'#d2e6e5':districtId==='q2'?'#dbd5cd':'#dce9f2'));scene.fog.color.copy(scene.background);scene.fog.near=night?80:110;scene.fog.far=night?175:190;hemisphere.color.set(night?'#8cb2e4':'#e4f0ff');hemisphere.groundColor.set(night?'#18372e':'#7b887c');hemisphere.intensity=night?.65:1.1;sun.color.set(night?'#aacbff':'#fff1dc');sun.intensity=night?.85:3.1;back.intensity=night?.3:.4;scene.environmentIntensity=night?.16:.45;renderer.toneMappingExposure=night?1:.92;}
    districtTheme(p.theme,p.low);atmosphere.update(p.theme,p.low);
    if(p.paused){sprint=false;keys.clear();tapUntil.clear();if(keyboardMove){target.copy(player.g.position);keyboardMove=false;}}
    previousPlayer.copy(player.g.position);let movedDistance=0;

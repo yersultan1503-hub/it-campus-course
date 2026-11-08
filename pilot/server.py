@@ -128,13 +128,29 @@ class Store:
   item=next((x for x in self.catalog if x['id']==lid),None)
   if not item:fail(404,'lesson_missing','Сабақ табылмады.')
   return item
+ def automatic_grade(self,c,uid,lid):
+  row=c.execute('SELECT id,evidence FROM attempts WHERE user_id=? AND lesson_id=? AND evidence IS NOT NULL ORDER BY created DESC LIMIT 1',(uid,lid)).fetchone()
+  if not row:return None
+  evidence=json.loads(row['evidence'])
+  if lid==LESSON:
+   links=evidence.get('links');norm=set()
+   if isinstance(links,list) and len(links)<=10:
+    for link in links:
+     if isinstance(link,list) and len(link)==2 and all(isinstance(x,str) for x in link):norm.add(tuple(sorted(link)))
+   results=[evidence.get('roles')=={'switch':'local','router':'networks','node':'endpoint'},isinstance(links,list) and len(links)==3 and norm=={tuple(sorted(x)) for x in [('pc1','switch'),('pc2','switch'),('switch','router')]},evidence.get('fault')=='cable']
+  else:
+   _,criteria=grade(lid,evidence.get('answers') if isinstance(evidence.get('answers'),dict) else {});results=[x['passed'] for x in criteria]
+  if not results:return None
+  correct=sum(results);total=len(results)
+  return {'score':int(10*correct/total+0.5),'maxScore':10,'correct':correct,'total':total,'attemptId':row['id'],'source':'server'}
  def progress(self,c,uid,lid=LESSON):
   passed=bool(c.execute('SELECT 1 FROM attempts WHERE user_id=? AND passed=1 AND lesson_id=? LIMIT 1',(uid,lid)).fetchone())
   s=c.execute('SELECT * FROM lesson_submissions WHERE user_id=? AND lesson_id=?',(uid,lid)).fetchone()
   if not s and lid==LESSON:s=c.execute('SELECT * FROM submissions WHERE user_id=?',(uid,)).fetchone()
   status=s['status'] if s else 'none';assessment=any(x['id']==lid and x['kind']=='assessment' for x in self.catalog);done=(passed or assessment) and status=='approved'
   mark=c.execute('SELECT score,feedback,graded_at AS gradedAt FROM practice_grades WHERE user_id=? AND lesson_id=?',(uid,lid)).fetchone()
-  return {'missionPassed':passed,'reflectionSubmitted':bool(s),'reviewStatus':status,'completed':done,'nextUnlocked':done,'grade':dict(mark) if mark else None}
+  automatic=self.automatic_grade(c,uid,lid);manual=dict(mark) if mark else None
+  return {'automaticGrade':automatic,'effectiveGrade':({**manual,'source':'teacher','maxScore':10} if manual else automatic),'missionPassed':passed,'reflectionSubmitted':bool(s),'reviewStatus':status,'completed':done,'nextUnlocked':done,'grade':dict(mark) if mark else None}
  def practice(self,c,uid,lid):
   rows=c.execute('SELECT id,passed,evidence,created FROM attempts WHERE user_id=? AND lesson_id=? ORDER BY created DESC',(uid,lid)).fetchall()
   sent=[r for r in rows if r['evidence'] is not None]
@@ -146,7 +162,7 @@ class Store:
    for question in mission_for(self.lesson(lid))['questions']:
     selected=next((x['label'] for x in question['options'] if x['id']==selected_answers.get(question['id'])),'Жауап жоқ')
     answers.append({'question':question['prompt'],'selected':selected,**by_id.get(question['id'],{})})
-  return {'attemptCount':len(rows),'submittedCount':len(sent),'passed':any(r['passed'] for r in rows),'latestAttempt':{'id':latest['id'],'passed':bool(latest['passed']),'createdAt':latest['created'],'evidence':evidence,'answers':answers} if latest else None}
+  return {'automaticGrade':self.automatic_grade(c,uid,lid),'attemptCount':len(rows),'submittedCount':len(sent),'passed':any(r['passed'] for r in rows),'latestAttempt':{'id':latest['id'],'passed':bool(latest['passed']),'createdAt':latest['created'],'evidence':evidence,'answers':answers} if latest else None}
  def previous(self,item):
   prior=[x for x in self.catalog if x['quarter']==item['quarter'] and x['order']<item['order'] and x['kind']=='lesson']
   return prior[-1]['id'] if prior else None
@@ -157,7 +173,7 @@ class Store:
   return all(self.progress(c,u['id'],x['id'])['completed'] for x in prior)
  def course(self,c,u):
   quarters=[]
-  for n,title in [(1,'Желілер, қауіпсіздік және логика'),(2,'Алгоритмдер және программалау'),(3,'Веб-жобалау'),(4,'Жобалау және қорытынды')]:
+  for n,title in [(1,'Желілер, қауіпсіздік және логика'),(2,'Алгоритмдер және программалау'),(3,'Веб-жобалау'),(4,'Ақпараттық жүйелер')]:
    items=[x for x in self.catalog if x['quarter']==n];lessons=[]
    for x in items:
     lessons.append({k:x[k] for k in ['id','order','title','objective','kind']}|{'unlocked':self.unlocked(c,u,x),'progress':self.progress(c,u['id'],x['id']) if u else None,'gameUrl':'/game/?lesson='+x['id'] if x['kind']=='lesson' else None})
@@ -443,10 +459,12 @@ class Handler(SimpleHTTPRequestHandler):
      if not self.server.store.unlocked(c,u,item):fail(403,'locked','Алдыңғы сабақ әлі аяқталмаған.')
     return True
    except ApiError as e:self.json_response(e.status,{'error':e.code,'message':e.message});return False
-  if not path.startswith('/resources/course/'):return True
+  if not path.startswith(('/resources/course/','/resources/qmj/')):return True
   try:
    with self.server.store.db() as c:
     u=self.server.store.user(c,self.headers.get('Cookie',''))
+    if path.startswith('/resources/qmj/Q') and u['role'] not in ('teacher','admin'):fail(403,'forbidden','ҚМЖ мұғалімге арналған.')
+    if path.startswith('/resources/qmj/Q') and u['role'] in ('teacher','admin'):return True
     matches=[(item,r) for item in self.server.store.catalog for r in item['resources'] if path in [urllib.parse.unquote(r.get(k,'')) for k in ('url','previewUrl','downloadUrl')]]
     if not matches:fail(404,'resource_missing','Материал табылмады.')
     if not any((not r.get('staffOnly') or u['role'] in ('teacher','admin')) and self.server.store.unlocked(c,u,item) for item,r in matches):fail(403,'forbidden','Бұл материалға рұқсат жоқ.')

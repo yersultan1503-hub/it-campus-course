@@ -1,3 +1,27 @@
+# Берілген толық Q2/Q4 тізімімен дайын handoff
+
+2026-11-08: **Q2 14 ID + Q4 10 ID қолдауы дайын; 62/62 тест өтті.** Ата-чат жіберген тақырып тізімі тексерілді, backend /api/course атаулары әрқашан басым. Ойын source осы чаттың өз бумасында ғана өзгертілді; parent integration өзгертілмеді.
+
+- Q2: q2-01…05 функциялар hub; 06…07 жолдар; 08…09 файлдар; 10…11 сұрыптау; 12…14 графтар. Әр ID жеке server mission/attempt/automaticGrade алады. Title/order/objective/questions API-ден келеді.
+- Q4: q4-01 Big Data және 04 дерек типтері — мұрағат; 02 реляциялық қор және 03 кілт — байланыстар; 05/06/09 SQL — сұраныстар; 07 формалар, 08 есептер, 10 Web/ДҚ — қойма. Жеке DatabaseDistrict қолданылады, Q1 scene/title fallback жоқ.
+- Canonical artifact: `dist/client/` толық мазмұны, жаңа entry атын `index.html` анықтайды. `legacy-access.js` және оның shared assets-ін сақтаңыз. Q3 legacy guard source/index hook бұрынғыдай міндетті, өзгермеді.
+- Баға интерфейсі backend-тің `progress.automaticGrade` score/maxScore/correct/total/attemptId/source келісіміне тексерілді. Сервер бағасын көрсетеді; практика completion/approval/unlock бөлек. First NetworkMission/campusApi exact evidence және guestCharacters source SHA сақталған.
+- Қабылдау дәлелі: `tests/full-course-registry.test.mjs` нақты берілген 14+10 ID/title fixture, барлық ID бойынша GET lesson / POST attempts / answer-only submit / grade=7 while passed=false. Бұл frontend contract тесті; нақты толық live bank submit E2E ата-чат интеграциясында орындалады. Осы тексеру кезінде parent course_catalog.json файлында әлі бастапқы Q2 бес сабағы ғана болды; бұл frontend дайын болуына blocker емес.
+- Ресми syllabus-ті бұл чат қайта зерттемейді және ата-чаттан бөлек official provenance мәлімдемейді. Resource материалдары сайттың сабақ бетінде; ойын сол серверлік сабаққа қайту сілтемесін береді, импорт HTML орындалмайды.
+
+Төменде архитектура мен бұрынғы тексерулердің тарихи жазбалары сақталған.
+
+# Кеңейтілген Q2/Q4 және автоматты баға — дайын архитектура
+
+2026-11-08. **60/60 тест өтті. Q2/Q4 динамикалық тізілім және Q4 scene дайын.** Ресми толық тақырыптар ата-чаттың сервер тізілімінен күтіледі; бұл чат оларды ойдан енгізбеген. Соңғы canonical build: `dist/client/` толық мазмұны → `/game/`. `index.html` көрсеткен жаңа main entry мен CSS-ті пайдаланыңыз; ескі entry hash-тер төмендегі тарихи жазбаларда ғана болуы мүмкін.
+
+- Q2 expanded `/api/course` quarter 2 және Q4 quarter 4: `kind:'lesson'` ғана қабылданады. IDs `q2-*`/`q4-*`, server title/order/objective/progress, өз missionId/questions. Белгілі ескі Q2 ID assessment-ке өзгерсе де каталогтан шығарылады. Instructional missions саны hardcode емес. Ешбір Q2/Q4 HTML орындалмайды.
+- Q2 бес physical hub, Q4 төрт physical hub бойынша server lesson order кезекпен бөлінеді. Бір hub бірнеше бөлек миссияны ұстайды, бәрі каталогтан жеке ашылады. Әр lesson attempt және grade жеке. Тікелей `?lesson=q4-xx` тек Q4 деректер айлағын ашады; серверде lesson жоқ болса mission жабық, Q1 fallback жоқ.
+- Q4 scene: `src/DatabaseDistrict.js`, `src/districts/q4.js`. Су арналары, көтерілген pier жолдары, архив цилиндрлері, relation hall, query console, data vault, index plaza, harbor masts; бөлек VRM roster/patrol. Концептуалды hub атаулары ресми syllabus деп көрсетілмейді.
+- Grade UI: `src/serverGrades.js` тек `progress.automaticGrade={score,maxScore:10,correct,total,attemptId,source:'server'}` валид мәнін қабылдайды. GenericMission нәтижеде/қайта ашқанда, outer quest/catalog серверлік бағаны көрсетеді. Passed=false + grade=7/10 DOM тесті өтті: практика расталмайды, client unlock жоқ. Submit-тен соң course refresh барлық нәтижеге жүреді. Backend autoGrade әлі келмесе баға ойдан көрсетілмейді.
+- Existing Q3 legacy guard source patch, index module және authoritative flags сақталған. Q1 Naruto/Jerry/Tom/Optimus және бірінші NetworkMission/campusApi evidence файлдарының SHA өзгермеді.
+- Тексеру: толық 60 tests pass; expanded actual React catalogue student 26 locked /4 open (30 fixture instructional lessons), staff server flags барлық 30 open. Q4 headless geometry, paths, low-light bound; browser console errors жоқ. `qa/q4-database-harbor.jpg` — сервер Q4 registry әлі жібермеген кездегі scene proof, миссиялар жабық. Ресми толық backend тізілім/бағалармен live submit E2E бұл чатта жасалмады.
+
 # Соңғы handoff: Q2 және Q3 серверлік құлыптар
 
 2026-11-08: **dist/client соңғы build дайын, 56/56 тест өтті.** Көшіруге болады; нақты blocker жоқ.

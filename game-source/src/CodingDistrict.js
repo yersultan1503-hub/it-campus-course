@@ -21,7 +21,7 @@ export function buildCodingDistrict(scene,lessons,sign){
  Q2.stations.forEach((s,i)=>{const lesson=lessons[i],g=group(scene,s.position[0],0,s.position[1]);g.rotation.y=s.rotation;g.userData.station=i;g.userData.kind=s.kind;stationGroups.push(g);box(g,s.width+.4,.2,s.depth+.4,'#776f7e',0,.1,0);
   if(i===0){box(g,7,3.2,5,'#c3b9a8',0,1.8,0);const roof=box(g,7.4,.2,5.6,'#68536a',0,3.6,0);roof.rotation.z=.12;sign(g,'f(x)',2,1.2,0,4.4,0,'#68536a');}
   if(i===1){for(const x of [-2.1,2.1])box(g,2.8,3.4,5,'#a69baf',x,1.9,0);box(g,4,1.2,2,'#6f5c88',0,3.5,0);for(const x of [-1.2,0,1.2])mesh(new THREE.CylinderGeometry(.18,.18,.45,12),mat('#d9af66'),g,x,4.2,0);}
-  if(i===2){box(g,4.8,4.5,4.5,'#b6aaa1',0,2.5,0);for(let j=0;j<3;j++)box(g,5.4,.2,5,'#587a73',0,1.4+j*1.5,0);sign(g,'return',3.8,.8,0,5.5,0,'#587a73');}
+  if(i===2){box(g,4.8,4.5,4.5,'#b6aaa1',0,2.5,0);for(let j=0;j<3;j++)box(g,5.4,.2,5,'#587a73',0,1.4+j*1.5,0);sign(g,'I/O',3.8,.8,0,5.5,0,'#587a73');}
   if(i===3){box(g,7,2.8,5,'#aa9b91',0,1.6,0);for(const x of [-2.3,0,2.3]){box(g,1.5,1.4,.25,'#545663',x,3.6,0);sign(g,x===0?'✓':'test',1.2,.8,x,3.6,.15,'#4c5e57');}}
   if(i===4){for(let level=0;level<4;level++)box(g,6-level*.9,1.1,4.5-level*.6,level%2?'#8c799f':'#b7a7b8',-.25*level,.8+level*1.1,-.25*level);sign(g,'↻',2.2,1.5,0,5.4,0,'#695475');}
   for(const side of [-1,1])for(let z=-1.4;z<=1.4;z+=1.4){const pane=mesh(new THREE.PlaneGeometry(1,1.15),windowMaterial,g,side*(s.width/2+.06),1.9,z);pane.rotation.y=side*Math.PI/2;}

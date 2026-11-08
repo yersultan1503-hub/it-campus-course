@@ -108,3 +108,5 @@
 .legacy-access-state{position:absolute;inset:158px 0 0;display:grid;align-content:center;justify-items:center;padding:30px;background:#10293e;color:#e9f2f6;text-align:center;gap:12px}.legacy-access-state h2{margin:0}.legacy-access-state p{max-width:560px;line-height:1.8}
 .access-hint{font-size:11px!important}.access-notice p{line-height:1.8}.coding-shell .intro-copy{border-top-color:#b395d3}.coding-shell .intro-copy h1 em{color:#d6bdf4}.coding-shell .pilot-intro-actions .start-button{background:#b293cd;border-color:#d5bce9;color:#231c31;box-shadow:0 4px 0 #705780}
 @media(max-width:700px){.legacy-access-state{inset:202px 0 0}}
+
+.database-shell .intro-copy{border-top-color:#75d5cb}.database-shell .intro-copy h1 em{color:#70cfc6}.database-shell .pilot-intro-actions .start-button{background:#73c4ba;border-color:#abe6dc;color:#123c42;box-shadow:0 4px 0 #397f7b}

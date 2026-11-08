@@ -18,15 +18,22 @@ export const Q3_LESSONS=Q3_KEYS.map((key,index)=>({id:'q3-'+String(index+1).padS
 export const Q2_LESSONS=[{id:'q2-01',number:1,title:'Функциялар және процедуралар'},{id:'q2-02',number:2,title:'Параметрлер және аргументтер'},{id:'q2-03',number:3,title:'Қайтарылатын нәтиже'},{id:'q2-04',number:4,title:'Декомпозиция және тестілеу'},{id:'q2-05',number:5,title:'Рекурсия'}].map((l,station)=>({...l,station,quarter:2,group:'q2'}));
 export const COURSE_LESSONS=[...Q1_LESSONS,...Q2_LESSONS,...Q3_LESSONS];
 export function legacyCampusUrl(id,serverUrl){const lesson=Q3_LESSONS.find(l=>l.id===id);if(!lesson)return null;if(serverUrl){try{const url=new URL(serverUrl,'https://campus.invalid');if(url.origin==='https://campus.invalid'&&url.pathname==='/legacy-q3/game/'&&url.searchParams.get('lesson')===lesson.legacyKey)return url.pathname+url.search;}catch{}}return '/legacy-q3/game/?lesson='+lesson.legacyKey;}
-export const GROUPS=[{id:'network',label:'Желілер және қауіпсіздік'},{id:'logic',label:'Санау жүйелері және логика'},{id:'q2',label:'2-тоқсан · Сервер тізіліміндегі сабақтар'},{id:'q3',label:'3-тоқсан · Бөлек кампус'}];
+export const GROUPS=[{id:'network',label:'Желілер және қауіпсіздік'},{id:'logic',label:'Санау жүйелері және логика'},{id:'q2',label:'2-тоқсан · Сервер тізіліміндегі сабақтар'},{id:'q3',label:'3-тоқсан · Бөлек кампус'},{id:'q4',label:'4-тоқсан · Деректер ауданы'}];
 export const courseLesson=(id,catalog=COURSE_LESSONS)=>catalog.find(lesson=>lesson.id===id);
-export function initialLesson(search){const id=new URLSearchParams(search).get('lesson');return courseLesson(id)||(/^q2-[a-z0-9-]+$/.test(id||'')?{id,title:'Екінші тоқсан',group:'q2',quarter:2,pending:true}:Q1_LESSONS[0]);}
+export function initialLesson(search){const id=new URLSearchParams(search).get('lesson');return courseLesson(id)||(/^q[24]-[a-z0-9-]+$/.test(id||'')?{id,title:id.startsWith('q4-')?'Төртінші тоқсан':'Екінші тоқсан',group:id.slice(0,2),quarter:Number(id[1]),pending:true}:Q1_LESSONS[0]);}
 export const lessonReturn=id=>'/?lesson='+encodeURIComponent(id)+'#result';
+export function registryStation(quarter,id,index){
+ const n=Number(id.split('-')[1]);
+ if(quarter===2&&Number.isInteger(n)&&n>=1&&n<=14)return n<=5?0:n<=7?1:n<=9?2:n<=11?3:4;
+ if(quarter===4&&Number.isInteger(n)&&n>=1&&n<=10)return [1,4].includes(n)?0:[2,3].includes(n)?1:[5,6,9].includes(n)?2:3;
+ return index%(quarter===2?5:4);
+}
 export function mergeCourse(catalog){
  const lessons=catalog?.quarters?.flatMap(q=>q.lessons||[])||catalog?.lessons||[];
  const known=COURSE_LESSONS.map(local=>{const server=lessons.find(l=>l.id===local.id);return {...local,...server,id:local.id,station:local.station,group:local.group};});
- const q2=(catalog?.quarters?.find(q=>Number(q.number)===2)?.lessons||[]).filter(l=>/^q2-[a-z0-9-]+$/.test(l.id||'')&&!known.some(k=>k.id===l.id)&&l.kind==='lesson'&&typeof l.title==='string').map(l=>({...l,number:l.order,quarter:2,group:'q2',registered:true}));
- return [...known,...q2];
+ const registered=[2,4].flatMap(quarter=>(catalog?.quarters?.find(q=>Number(q.number)===quarter)?.lessons||[]).filter(l=>new RegExp('^q'+quarter+'-[a-z0-9-]+$').test(l.id||'')&&l.kind==='lesson'&&typeof l.title==='string').map((l,index)=>({...l,number:l.order??index+1,station:registryStation(quarter,l.id,index),quarter,group:'q'+quarter,registered:true})));
+ const registeredQuarters=new Set((catalog?.quarters||[]).filter(q=>[2,4].includes(Number(q.number))).map(q=>Number(q.number)));
+ return [...known.filter(l=>!registeredQuarters.has(Number(l.id[1]))),...registered];
 }
 export function validateMission(lesson,catalog=COURSE_LESSONS){
  if(!courseLesson(lesson?.id,catalog)||lesson.id==='q1-network-01'||/assessment|bjb|tjb/i.test(lesson.kind||''))throw new Error('Бұл сабаққа ойын миссиясы берілмеген.');

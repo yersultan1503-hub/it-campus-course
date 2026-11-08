@@ -1,4 +1,4 @@
-export const Q2={id:'q2',title:'Функциялар және рекурсия · Код ауданы',view:{position:[32,24,40],target:[0,.6,0]},bounds:{x:21,z:18},
+export const Q2={id:'q2',title:'Бағдарламалау және алгоритмдер · Код ауданы',view:{position:[32,24,40],target:[0,.6,0]},bounds:{x:21,z:18},
  stations:[
  {position:[-12,-7],entry:[-7,-7],rotation:Math.PI/2,width:7,depth:5,kind:'function-workshop'},
  {position:[-1,-10],entry:[-1,-5.5],rotation:0,width:7,depth:5,kind:'argument-bridge'},
@@ -11,8 +11,8 @@ export const Q2={id:'q2',title:'Функциялар және рекурсия �
  service:{asset:'campus-robot.glb',route:'service',offset:9,speed:.65,scale:.43,idle:'Idle',walk:'Walking'},infrastructureColliders:[]};
 export const Q2_STATIONS=[
  {id:'q2-01',short:'f(x)',name:'Функциялар мен процедуралар',goal:'Қайталанатын әрекетті функцияға бөл.'},
- {id:'q2-02',short:'Аргумент',name:'Параметрлер және аргументтер',goal:'Функцияға берілетін мәндерді таңда.'},
- {id:'q2-03',short:'return',name:'Қайтарылатын нәтиже',goal:'Функция нәтижесінің жолын зертте.'},
- {id:'q2-04',short:'Тестілеу',name:'Декомпозиция және тестілеу',goal:'Міндетті бөліп, шекаралық жағдайларды тексер.'},
- {id:'q2-05',short:'Рекурсия',name:'Рекурсия шеберханасы',goal:'Базалық жағдай мен рекурсивті қадамды ажырат.'}
+ {id:'q2-02',short:'Жолдар',name:'Жолдарды өңдеу шеберханасы',goal:'Индекстер, кесінділер және жол әдістерін зертте.'},
+ {id:'q2-03',short:'Файлдар',name:'Файлдар мұнарасы',goal:'Файлдан оқу және файлға жазуды зертте.'},
+ {id:'q2-04',short:'Сұрыптау',name:'Сұрыптау зертханасы',goal:'Сұрыптау алгоритмдерінің қадамдарын зертте.'},
+ {id:'q2-05',short:'Графтар',name:'Графтар зертханасы',goal:'Граф, іздеу және қысқа жолды зертте.'}
 ].map((lesson,i)=>({...lesson,...Q2.stations[i],color:['#d7a458','#a18add','#68c4ae','#df8870','#b894df'][i]}));

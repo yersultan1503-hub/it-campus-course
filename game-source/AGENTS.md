@@ -46,3 +46,5 @@ server checkpoint; iframe XP/messages/localStorage never unlock lessons.
 
 ## Серверлік рұқсат және Q2
 Барлық каталог/станция/iframe/legacy zone entry үшін тек fresh /api/me + /api/course unlocked===true қолданылады. localStorage XP, role атауы не iframe message рұқсат бермейді. Legacy source hook және /game/legacy-access.js index module сақталсын. Q2 бес lesson ID q2-01…q2-05; бөлек CodingDistrict, generic сервер evidence; импорт HTML орындалмайды.
+
+Q2/Q4 тізілімдері динамикалық: тек сервер quarter 2/4 kind=lesson қабылдаңыз; assessment қоспаңыз. Q4 DatabaseDistrict ешқашан Q1 fallback болмауы тиіс. automaticGrade тек progress.automaticGrade source=server, maxScore=10 және валид score/correct/total/attemptId арқылы көрсетіледі. Баға практика passed/unlock-пен тең емес; client grade есептемейді.

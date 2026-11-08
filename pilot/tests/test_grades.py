@@ -36,3 +36,14 @@ class GradeTests(unittest.TestCase):
   h.headers={'Cookie':s};h.path='/legacy-q3/game/?lesson=links';self.assertFalse(h.resource_access())
   h.path='/legacy-q3/game/?lesson=html';self.assertTrue(h.resource_access())
   h.headers={'Cookie':a};h.path='/legacy-q3/game/?lesson=links';self.assertTrue(h.resource_access())
+
+ def test_automatic_score_is_server_derived_and_manual_override(self):
+  student=self.login('student1@it-campus.invalid');teacher=self.login('teacher3@it-campus.invalid')
+  self.assertIsNone(self.req('/api/progress',{},student,'GET')[0]['automaticGrade'])
+  aid=self.req('/api/attempts',{'lessonId':LESSON,'missionId':MISSION},student)[0]['attemptId']
+  for evidence,score in [({'score':10,'automaticGrade':{'score':10}},0),({'fault':'cable','score':10},3),({'fault':'cable','roles':{'switch':'local','router':'networks','node':'endpoint'}},7)]:
+   result=self.req('/api/attempts/'+aid+'/submit',evidence,student)[0]['progress']
+   self.assertEqual(result['automaticGrade']['score'],score);self.assertFalse(result['nextUnlocked'])
+  self.req('/api/teacher/grade',{'studentId':self.a,'lessonId':LESSON,'score':0},teacher)
+  result=self.req('/api/progress',{},student,'GET')[0]
+  self.assertEqual(result['effectiveGrade']['score'],0);self.assertEqual(result['effectiveGrade']['source'],'teacher');self.assertEqual(result['automaticGrade']['score'],7)
